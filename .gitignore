@@ -11,3 +11,6 @@
 !catkin_ws/*
 .catkin_workspace
 !catkin_ws/src/**
+
+!arena_control/
+!arena_control/**
