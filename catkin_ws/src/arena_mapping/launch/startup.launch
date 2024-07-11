@@ -6,7 +6,7 @@
     <node name="aruco_detector"  pkg="arena_mapping"    type="aruco_detector.py" output="screen" respawn="true"/>
     <node name="obstacles_detector" pkg="arena_mapping" type="obstacles_detector.py" output="screen" />
 
-    <!--node name="serial_node" pkg="rosserial_python" type="serial_node.py" required="true" output="screen">
+    <node name="relays_controller" pkg="rosserial_python" type="serial_node.py" required="true" output="screen">
         <param name="port" value="/dev/ttyACM0" />
-    </node-->	
+    </node>	
 </launch>
