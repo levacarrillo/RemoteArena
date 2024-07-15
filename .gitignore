@@ -14,3 +14,5 @@
 
 !arena_control/
 !arena_control/**
+
+arena_control/relays_controller/.*
