@@ -1,10 +1,10 @@
 # Arena Control Directory
 
-**Description:** This directory contains code to compile and upload firmware to micro-controller Arduino Mega using arduino-mk tools. This firmware controls a relays bank for turning on/off arena's lights and the chargers state.
+**Description:** This directory contains code to compile and upload firmware to micro-controller Arduino UNO using arduino-mk tools. This firmware controls a relays bank for turning on/off arena's lights and the chargers state.
 
 ## Prerrequisites
 
-1. Arduino Mega connected properly via USB port.
+1. Arduino UNO connected properly via USB port.
 2. Dependencies
     1. `arduino-mk`
     2. `screen`
@@ -19,4 +19,4 @@ make
 make upload clean
 
 ```
-**IMPORTANT:** Makefile is made for Arduino Mega 2560, if you want to use another Arduino distribution you have to specify it into.
+**IMPORTANT:** Makefile is made for Arduino UNO, if you want to use another Arduino distribution you have to specify it inside.
