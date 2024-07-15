@@ -1,17 +1,21 @@
 #include <ros.h>
 #include <std_msgs/Int8MultiArray.h>
 
+// SET THE RATE COMUNICATION
 #define BAUD 200000 
 
+// OBJECT NODE
 ros::NodeHandle nh;
 
-int led[6] = {2, 3, 4, 5, 6, 7};
+// ARDUINO'S PINES
+int pin[6] = {2, 3, 4, 5, 6, 7};
 
 void disconnect_chargers()
 {
-  
+  // TURN OFF THE TWO CHARGERS 
   digitalWrite(4, LOW); 
   digitalWrite(5, LOW); 
+  // TURN ON THE TWO CHARGERS
   delay(1000);
   digitalWrite(4, HIGH); 
   digitalWrite(5, HIGH); 
@@ -21,20 +25,20 @@ void lightsCallback(const std_msgs::Int8MultiArray& msg) {
 
   nh.loginfo("---------------------");
   if(msg.data[0]) {
-    digitalWrite(led[0], LOW);
+    digitalWrite(pin[0], LOW);
     nh.loginfo("Light 1 turned ON");
   }
   else {
-    digitalWrite(led[0], HIGH);
+    digitalWrite(pin[0], HIGH);
     nh.loginfo("Light 1 turned OFF");
   }
 
   if(msg.data[1]) {
-    digitalWrite(led[1], LOW);
+    digitalWrite(pin[1], LOW);
     nh.loginfo("Light 2 turned ON");
   }
   else {
-    digitalWrite(led[1], HIGH);
+    digitalWrite(pin[1], HIGH);
     nh.loginfo("Light 2 turned OFF");
   }
 }
@@ -52,11 +56,10 @@ ros::Subscriber<std_msgs::Int8MultiArray> subLights("/turn_lights", &lightsCallb
 ros::Subscriber<std_msgs::Int8MultiArray> subChargers("/chargers_relays", &chargersCallback);
 
 void setup() {
-
-  //Setting and turning off all relays
+  // SETTING AND TURNNING OFF ALL RELAYS
   for(int i=0; i<6; i++) {
-     pinMode(led[i], OUTPUT);
-     digitalWrite(led[i], HIGH); 
+     pinMode(pin[i], OUTPUT);
+     digitalWrite(pin[i], HIGH); 
   }
 
   nh.initNode();
