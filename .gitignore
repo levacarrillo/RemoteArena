@@ -15,4 +15,7 @@
 !arena_control/
 !arena_control/**
 
+!assets/
+!assets/**
+
 arena_control/relays_controller/.*
