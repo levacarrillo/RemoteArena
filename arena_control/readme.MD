@@ -20,4 +20,5 @@ make upload clean
 
 ```
 **IMPORTANT:** Makefile is made for Arduino UNO, if you want to use another Arduino distribution you have to specify it inside.
+## Electrical diagram
 ![Relays electric diagram](https://github.com/levacarrillo/RemoteArena/blob/master/assets/images/relays_electrical_diagram.png)
