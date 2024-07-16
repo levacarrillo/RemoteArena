@@ -19,3 +19,4 @@
 !assets/**
 
 arena_control/relays_controller/.*
+arena_control/relays_controller/build-uno/
