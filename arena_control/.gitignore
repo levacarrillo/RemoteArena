@@ -7,6 +7,6 @@
 !readme.MD
 
 # And these subdirectories
-!catkin_ws/
-!arena_control/
-!assets/
+!relays_controller
+!relays_controller/relays_controller.ino
+!relays_controller/Makefile

@@ -5,8 +5,11 @@
 !.gitignore
 !LICENSE
 !readme.MD
+!package.xml
+!CMakeLists.txt
 
 # And these subdirectories
-!catkin_ws/
-!arena_control/
-!assets/
+!src/
+!scripts/
+!launch/
+!launch/*.launch
