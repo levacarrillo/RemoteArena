@@ -11,5 +11,6 @@
 # And these subdirectories
 !src/
 !scripts/
+!rosbags/
 !launch/
 !launch/*.launch

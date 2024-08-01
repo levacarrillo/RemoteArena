@@ -1,0 +1,5 @@
+<launch>
+    <!--node name="play_bag" pkg="rosbag" type="play" args="$(find arena_web_server)/rosbags/test.bag" output="screen" respawn="true" /-->
+    <node name="web_video_server" pkg="web_video_server" type="web_video_server" output="screen" />
+    <node name="web_server" pkg="arena_web_server" type="web_server.py" output="screen" />
+</launch>
