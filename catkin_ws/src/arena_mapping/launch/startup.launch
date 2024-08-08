@@ -1,6 +1,5 @@
 <launch>
     <param name="/camera_id" value="0"/>
-
     <node name="arena_camera_node" pkg="arena_camera" type="arena_camera_node" output="screen"/>
 
     <node name="aruco_detector"  pkg="arena_mapping"    type="aruco_detector.py" output="screen" respawn="true"/>

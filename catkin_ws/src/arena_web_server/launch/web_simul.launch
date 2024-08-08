@@ -1,0 +1,5 @@
+<launch>
+    <include file="$(find arena_mapping)/launch/demo_simul.launch" />
+    <node name="web_video_server" pkg="web_video_server" type="web_video_server" output="screen" />
+    <node name="web_server_node" pkg="arena_web_server" type="web_server_node.py" output="screen" />
+</launch>
