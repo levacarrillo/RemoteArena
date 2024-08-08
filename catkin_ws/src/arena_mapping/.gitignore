@@ -5,17 +5,12 @@
 !.gitignore
 !LICENSE
 !readme.MD
-!package.xml
-!CMakeLists.txt
 
 # And these subdirectories
-!src/
-!scripts/
-!scripts/*.py
-!rosbags/
-!launch/
-!launch/*.launch
 !assets/
 !assets/**
-!templates/
-!templates/**
+!launch/
+!launch/**
+
+!scripts/
+!scripts/**
