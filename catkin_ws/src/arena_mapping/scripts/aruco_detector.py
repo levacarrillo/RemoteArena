@@ -11,6 +11,7 @@ import argparse
 import cv2
 import sys
 import math
+import os
 
 #Marker  class declaration
 class marker:
@@ -64,7 +65,8 @@ def main():
     bridge = CvBridge()
     
     rospy.Subscriber("/camera/image", Image, image_callback)
-    pub = rospy.Publisher('robotPoseByAruco', PoseStamped, queue_size=10)
+    pub = rospy.Publisher('/robotPoseByAruco', PoseStamped, queue_size=10)
+    image_pub = rospy.Publisher('/img_map_detection', Image, queue_size=10)
     rospy.init_node('aruco_detector', anonymous=True)
     rate = rospy.Rate(10)
 
@@ -78,6 +80,13 @@ def main():
     locHReal = 1.15
     locIds = [1,2,3,4] #Aruco's ids for references
     isH = False
+
+    cv_no_image = cv2.imread(os.path.dirname(os.path.abspath(os.path.dirname(__file__))) + '/assets/no_image.jpg')
+    image_message = bridge.cv2_to_imgmsg(cv_no_image , "bgr8")
+
+    if cv_no_image is None:
+        rospy.logerr('Image not found')
+        return
 
     while not rospy.is_shutdown():
         pose = PoseStamped();
@@ -156,7 +165,8 @@ def main():
             robotsList = []
             sqrHomoLoc = {}
 
-            im_orto = cv2.warpPerspective(frame, h, (img_width,img_height))
+            im_orto = cv2.warpPerspective(frame, h, (680,580))
+            # im_orto = cv2.warpPerspective(frame, h, (img_width,img_height))
 
             # detect ArUco markers in the trasformed frame
             (corners, ids, rejected) = cv2.aruco.detectMarkers(im_orto,arucoDict, parameters=arucoParams)
@@ -242,16 +252,15 @@ def main():
                     pose.pose.orientation.z = quaternion[2]
                     pose.pose.orientation.w = quaternion[3]
 
-            cv2.imshow("orto", im_orto)
-
-
+            #cv2.imshow("orto", im_orto)
+            image_message = bridge.cv2_to_imgmsg(cv2.resize(im_orto, (640, 480)), "bgr8")
         if not pose.pose.position.x == 0.0 and not pose.pose.position.y == 0.0:
             pub.publish(pose)
         rate.sleep()
 
         # show the output frame
         #cv2.imshow("Frame", frame)
-
+        image_pub.publish(image_message)
         key = cv2.waitKey(1) & 0xFF
         # if the `q` key was pressed, break from the loop
         if key == ord("q"):
