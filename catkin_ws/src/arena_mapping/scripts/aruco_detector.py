@@ -81,7 +81,7 @@ def main():
     locIds = [1,2,3,4] #Aruco's ids for references
     isH = False
 
-    cv_no_image = cv2.imread(os.path.dirname(os.path.abspath(os.path.dirname(__file__))) + '/assets/no_image.jpg')
+    cv_no_image = cv2.imread(os.path.dirname(os.path.abspath(os.path.dirname(__file__))) + '/assets/images/no_image.jpg')
     image_message = bridge.cv2_to_imgmsg(cv_no_image , "bgr8")
 
     if cv_no_image is None:
