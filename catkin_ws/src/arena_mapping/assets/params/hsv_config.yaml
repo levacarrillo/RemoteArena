@@ -1,0 +1,8 @@
+lower_hsv:
+  H: 11
+  S: 10
+  V: 45
+upper_hsv:
+  H: 255
+  S: 65
+  V: 114
