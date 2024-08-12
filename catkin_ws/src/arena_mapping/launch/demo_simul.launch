@@ -1,6 +1,6 @@
 <launch>
     <node name="play_bag" pkg="rosbag" type="play" args="$(find arena_mapping)/rosbags/session3_only_camera.bag" respawn="true" />
 
-    <node name="aruco_detector"  pkg="arena_mapping"    type="aruco_detector.py" output="screen" respawn="true"/>
-    <!--node name="obstacles_detector" pkg="arena_mapping" type="obstacles_detector.py" output="screen" /-->
+    <node name="aruco_detector"  pkg="arena_mapping"    type="aruco_detector.py" output="screen" respawn="true" />
+    <node name="obstacles_color_detector" pkg="arena_mapping" type="obstacles_color_detector.py" output="screen" respawn="true" />
 </launch>
