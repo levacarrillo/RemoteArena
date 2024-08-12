@@ -5,7 +5,7 @@ from std_msgs.msg import String
 
 app = Flask(__name__, static_folder = '../templates/static', template_folder = '../templates')
 
-@app.route('/')
+@app.route('/viewer')
 def home():
     return render_template('index.html')
 
