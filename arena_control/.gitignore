@@ -10,3 +10,7 @@
 !relays_controller
 !relays_controller/relays_controller.ino
 !relays_controller/Makefile
+
+!relays_controller_server
+!relays_controller_server/relays_controller_server.ino
+!relays_controller_server/Makefile
