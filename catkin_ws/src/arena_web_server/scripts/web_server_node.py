@@ -3,6 +3,7 @@ import rospy
 import os
 from flask import Flask, render_template, request, jsonify
 from std_msgs.msg import String
+from std_msgs.msg import Int8MultiArray
 
 app = Flask(__name__, static_folder = '../templates/static', template_folder = '../templates')
 
@@ -29,6 +30,10 @@ def robot_control_command(command):
 @app.route('/light_control_command/<id>/<status>', methods=['POST'])
 def light_control_command(id, status):
     print('lights: ' + id + ' status: ' + status)
+    light_msg = Int8MultiArray()
+    light_msg.data = [1, 1]
+    rospy.error(light_msg)
+    light_pub(light_msg)
     #if not rospy.is_shutdown():
     #    pub.publish(command)
     return jsonify(message='Command->')
@@ -59,9 +64,10 @@ def upload_file():
     return 'file successfully added'
 
 def start_ros_node():
-    global pub
+    global pub, light_pub
     rospy.init_node('web_server_node', anonymous=True)
-    pub = rospy.Publisher('ros_publisher', String, queue_size=10)
+    pub = rospy.Publisher('/ros_publisher', String, queue_size=10)
+    light_pub = rospy.Publisher('/turn_lights', Int8MultiArray, queue_size=1)
 
 if __name__ == '__main__':
     start_ros_node()
