@@ -7,6 +7,7 @@ from std_msgs.msg import Int8MultiArray
 
 app = Flask(__name__, static_folder = '../templates/static', template_folder = '../templates')
 
+data = [0, 0]
 
 @app.route('/viewer')
 def viewer():
@@ -31,9 +32,22 @@ def robot_control_command(command):
 def light_control_command(id, status):
     print('lights: ' + id + ' status: ' + status)
     light_msg = Int8MultiArray()
-    light_msg.data = [1, 1]
-    rospy.error(light_msg)
-    light_pub(light_msg)
+    #data = [0, 0]
+    if id == 'checkLight1':
+        print('status', status)
+        if status == 'true':
+            data[0] = 1
+        else:
+            data[0] = 0
+    else:
+        if status == 'true':
+            data[1] = 1
+        else:
+            data[1] = 0
+    #print('data', data)
+    light_msg.data = data
+    #print('light_msg', light_msg)
+    light_pub.publish(light_msg)
     #if not rospy.is_shutdown():
     #    pub.publish(command)
     return jsonify(message='Command->')
