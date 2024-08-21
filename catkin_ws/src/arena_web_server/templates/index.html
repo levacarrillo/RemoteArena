@@ -10,6 +10,7 @@
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!--script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2uOY6eKYbEIdD4kc5lnnGLx3NEueprPz6dKdG3zLfXgDS4jqqY4XJDfWv8P" crossorigin="anonymous"></script-->
 </head>
 <body>
     <h1 class="title">Arena viewer</h1>
@@ -17,9 +18,9 @@
         <div class="left-panel">
             <div id="carouselExampleIndicators" class="carousel slide arena-view">
                 <ol class="carousel-indicators">
-                  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                  <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                  <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                  <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
+                  <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
+                  <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></li>
                 </ol>
                 <div class="carousel-inner">
                   <div class="carousel-item active">
@@ -76,8 +77,8 @@
                 </div>
             </div>
             <div class="mini-container">
-                <button class="btn btn btn-primary" onclick="sendCommand('upload')">Upload</button>
-                <button class="btn btn btn-primary" disabled onclick="sendCommand('compile')">Compile</button>
+                <!--button class="btn btn btn-primary" onclick="uploadFile()">Upload</button-->
+                <button class="btn btn btn-primary" disabled onclick="uploadFile()">Compile</button>
                 <div class="check-container">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" onchange="handleClick(this)" value="" id="checkLight1">
@@ -89,10 +90,14 @@
                     </div>
                 </div>
             </div>
-            <div class="input-group mb-3">
+            <form id="uploadForm" class="form-uploader" enctype="multipart/form-data">
+                <input id="inputUploader" onchange="changed()" type="file" class="form-control" name="file" />
+                <button id="uploadButton" type="button" onclick="uploadFile()" class="btn btn-primary">Upload</button>
+            </form>            
+            <!--div class="input-group mb-3">
                 <input type="file" class="form-control" id="inputGroupFile02" />
                 <!--label class="input-group-text" for="inputGroupFile02">Upload</label-->
-            </div>
+            </div-->
             <div class="progress-container">
                 <label class="progress-label">Battery Charge:</label>
                 <div class="progress">
@@ -108,6 +113,11 @@
                     interval: false
                 });
             });
+            const inputUploader = document.getElementById('inputUploader');
+            const uploadButton = document.getElementById('uploadButton');
+
+            uploadButton.disabled = !inputUploader.files.length;
+            console.log(inputUploader.files)
         </script>
     </section>
 </body>

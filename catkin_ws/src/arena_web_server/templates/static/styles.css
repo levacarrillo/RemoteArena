@@ -67,13 +67,20 @@ body {
                     }
                 }
             }
-            .input-group {
+            .form-uploader {
+                display: flex;
+                flex-direction: column;
+                input {
+                    margin-bottom: 10px;
+                }
+            }
+            /* .input-group {
                 height: fit-content;
                 max-width: fit-content;
                 .form-control {
                     height: fit-content;
                 }
-            }
+            } */
             .progress-container {
                 display: flex;
                 flex-direction: column;
