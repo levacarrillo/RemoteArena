@@ -5,9 +5,12 @@
 !.gitignore
 !LICENSE
 !readme.MD
+!CMakeLists.txt
+!package.xml
 
 # And these subdirectories
-!arena_camera/
-!arena_mapping/
-!arena_web_server/
-!arena_control/
+!src/
+!srv/
+!include/
+!include/arena_control/
+!arduino_firmware/

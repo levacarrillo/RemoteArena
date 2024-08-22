@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(arena_camera)
+project(arena_control)
 
 find_package(catkin REQUIRED COMPONENTS
   cv_bridge
@@ -8,16 +8,26 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   sensor_msgs
   std_msgs
+  message_generation
 )
 
+add_service_files(
+  FILES
+  control_lights.srv
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
+
+
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES arena_camera
   CATKIN_DEPENDS roscpp rospy std_msgs
-#  DEPENDS system_lib
 )
 
 find_package(OpenCV)
+
 
 include_directories(
   include

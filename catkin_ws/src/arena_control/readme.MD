@@ -1,4 +1,4 @@
-# ARENA_CAMERA PACKAGE
+# ARENA_CONTROL PACKAGE
 
 This package contains mainly the node used for connectig with the arena's camera connected to server. The default camera id is set in 0, use `rosparam set /camera_id _NUMBER_` to change it via command line or changeit into launch file.
 
