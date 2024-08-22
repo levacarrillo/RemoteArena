@@ -8,4 +8,3 @@
 
 # And these subdirectories
 !ros_lib/
-!ros_lib/*
