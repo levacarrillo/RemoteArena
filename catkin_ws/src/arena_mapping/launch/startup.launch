@@ -1,11 +1,12 @@
 <launch>
+    <!-- Node for hardware's camera -->
     <param name="/camera_id" value="0"/>
     <node name="arena_camera_node" pkg="arena_camera" type="arena_camera_node" output="screen"/>
-
-    <node name="aruco_detector"  pkg="arena_mapping"    type="aruco_detector.py" output="screen" respawn="true"/>
-    <node name="obstacles_detector" pkg="arena_mapping" type="obstacles_detector.py" output="screen" />
-
+    <!-- Node to connect with micro-controller -->
     <node name="relays_controller" pkg="rosserial_python" type="serial_node.py" required="true" output="screen">
         <param name="port" value="/dev/ttyACM0" />
     </node>	
+    <!-- Nodes to detect features in arena -->
+    <node name="aruco_detector"  pkg="arena_mapping"    type="aruco_detector.py" output="screen" respawn="true"/>
+    <node name="obstacles_detector" pkg="arena_mapping" type="obstacles_detector.py" output="screen" />
 </launch>
