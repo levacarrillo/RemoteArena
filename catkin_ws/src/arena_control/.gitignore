@@ -1,0 +1,16 @@
+# Ignore everything
+*
+
+# But these files
+!.gitignore
+!LICENSE
+!readme.MD
+!CMakeLists.txt
+!package.xml
+
+# And these subdirectories
+!src/
+!srv/
+!include/
+!include/arena_control/
+!arduino_firmware/

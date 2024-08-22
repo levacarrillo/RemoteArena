@@ -1,0 +1,11 @@
+# Ignore everything
+*
+
+# But these files
+!.gitignore
+!LICENSE
+!readme.MD
+
+# And these subdirectories
+!ros_lib/
+!ros_lib/*
