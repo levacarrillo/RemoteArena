@@ -5,22 +5,23 @@
 ros::NodeHandle nh;
 
 // ARDUINO'S PINES
-const int light_pins[2]   = {2, 3};
-const int charger_pins[2] = {4, 5};
+int light_pins[]   = {2, 3};
+int charger_pins[] = {4, 5};
 
 bool light_callback(arena_control::control_lights::Request &req, arena_control::control_lights::Response &res) {
   nh.loginfo("-------------------");
-  char buffer[10];
-  for(int i=0; i<sizeof(light_pins); i++) {
+  char buffer[20];
+  for(int i=0; i<(sizeof(light_pins) / sizeof(light_pins[0])); i++) {
     if((int)req.light_states[i] == 1) {
       digitalWrite(light_pins[i], LOW);
-      sprintf(buffer, "Light %d turned on", i);
+      sprintf(buffer, "Light %d turned on", i+1);
     } else {
       digitalWrite(light_pins[i], HIGH);
-      sprintf(buffer, "Light %d turned off", i);
+      sprintf(buffer, "Light %d turned off", i+1);
     }
     nh.loginfo(buffer);
   }
+  res.success = true;
   return true;
 }
 
