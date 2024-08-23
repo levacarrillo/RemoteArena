@@ -1,5 +1,6 @@
 #include <ros.h>
 #include <arena_control/control_lights.h>
+#include <arena_control/control_chargers.h>
 
 // OBJECT NODE
 ros::NodeHandle nh;
@@ -8,7 +9,7 @@ ros::NodeHandle nh;
 int light_pins[]   = {2, 3};
 int charger_pins[] = {4, 5};
 
-bool light_callback(arena_control::control_lights::Request &req, arena_control::control_lights::Response &res) {
+bool lights_callback(arena_control::control_lights::Request &req, arena_control::control_lights::Response &res) {
   nh.loginfo("-------------------");
   char buffer[20];
   for(int i=0; i<(sizeof(light_pins) / sizeof(light_pins[0])); i++) {
@@ -22,15 +23,34 @@ bool light_callback(arena_control::control_lights::Request &req, arena_control::
     nh.loginfo(buffer);
   }
   res.success = true;
-  return true;
+  return res.success;
+}
+
+bool chargers_callback(arena_control::control_chargers::Request &req, arena_control::control_chargers::Response &res) {
+  nh.loginfo("-------------------");
+  char buffer[21];
+  for(int i=0; i<(sizeof(charger_pins) / sizeof(charger_pins[0])); i++) {
+    if((int)req.light_states[i] == 1) {
+      digitalWrite(charger_pins[i], LOW);
+      sprintf(buffer, "Charger %d turned off", i+1);
+    } else {
+      digitalWrite(charger_pins[i], HIGH);
+      sprintf(buffer, "Charger %d turned on", i+1);
+    }
+    nh.loginfo(buffer);
+  }
+  res.success = true;
+  return res.success;
 }
 
 
-ros::ServiceServer<arena_control::control_lights::Request, arena_control::control_lights::Response> light_server("lights_control", &light_callback);
+ros::ServiceServer<arena_control::control_lights::Request, arena_control::control_lights::Response> lights_server("lights_control", &lights_callback);
+ros::ServiceServer<arena_control::control_chargers::Request, arena_control::control_chargers::Response> chargers_server("chargers_control", &chargers_callback);
 
 void setup() {
   nh.initNode();
-  nh.advertiseService(light_server);
+  nh.advertiseService(lights_server);
+  nh.advertiseService(chargers_server);
   
   // SETTING PINS MODE
   for(int i=0; i<sizeof(light_pins); i++) {
