@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
   FILES
   control_lights.srv
+  control_chargers.srv
 )
 
 generate_messages(
