@@ -8,5 +8,4 @@
 
 # And these subdirectories
 !catkin_ws/
-!arena_control/
 !assets/
