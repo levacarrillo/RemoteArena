@@ -1,4 +1,7 @@
 <launch>
-    <node name="play_bag" pkg="rosbag" type="play" args="$(find arena_mapping)/rosbags/session3_only_camera.bag" respawn="true" />
+    <!-- Node for hardware's camera -->
+    <param name="/camera_id" value="0"/>
+    <node name="arena_camera_node" pkg="arena_control" type="arena_camera_node" output="screen"/>
+    <!-- Node to calibrate hsv params -->
     <node name="obstacles_color_calibrator" pkg="arena_mapping" type="obstacles_color_calibrator.py" output="screen" />
 </launch>
