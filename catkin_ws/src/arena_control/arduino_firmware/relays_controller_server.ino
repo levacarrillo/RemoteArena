@@ -30,7 +30,7 @@ bool chargers_callback(arena_control::control_chargers::Request &req, arena_cont
   nh.loginfo("-------------------");
   char buffer[21];
   for(int i=0; i<(sizeof(charger_pins) / sizeof(charger_pins[0])); i++) {
-    if((int)req.chargers_states[i] == 1) {
+    if((int)req.chargers_states[i] == 0) {
       digitalWrite(charger_pins[i], LOW);
       sprintf(buffer, "Charger %d turned off", i+1);
     } else {
@@ -43,24 +43,39 @@ bool chargers_callback(arena_control::control_chargers::Request &req, arena_cont
   return res.success;
 }
 
-
 ros::ServiceServer<arena_control::control_lights::Request, arena_control::control_lights::Response> lights_server("lights_control", &lights_callback);
 ros::ServiceServer<arena_control::control_chargers::Request, arena_control::control_chargers::Response> chargers_server("chargers_control", &chargers_callback);
 
-void setup() {
-  nh.initNode();
-  nh.advertiseService(lights_server);
-  nh.advertiseService(chargers_server);
-  
-  // SETTING PINS MODE
-  for(int i=0; i<sizeof(light_pins); i++) {
+// SETTING PINS MODE
+void pins_setup() {
+  for(int i=0; i<(sizeof(light_pins) / sizeof(light_pins[0])); i++) {
     pinMode(light_pins[i], OUTPUT);
     digitalWrite(light_pins[i], HIGH);
   }
-  for(int i=0; i<sizeof(charger_pins); i++) {
+  for(int i=0; i<(sizeof(charger_pins) / sizeof(charger_pins[0])); i++) {
     pinMode(charger_pins[i], OUTPUT);
     digitalWrite(charger_pins[i], HIGH);
   }
+}
+
+// RESETTING CHARGERS
+void reset_chargers() {
+  // TURNING OFF CHARGERS
+  for(int i=0; i<(sizeof(charger_pins) / sizeof(charger_pins[0])); i++) {
+    digitalWrite(charger_pins[i], LOW);
+  }
+  // TURNING ON CHARGERS AGAIN
+  for(int i=0; i<(sizeof(charger_pins) / sizeof(charger_pins[0])); i++) {
+    digitalWrite(charger_pins[i], HIGH);
+  }
+}
+
+void setup() {
+  pins_setup();
+  nh.initNode();
+  nh.advertiseService(lights_server);
+  nh.advertiseService(chargers_server);
+  reset_chargers();
 }
 
 void loop() {
