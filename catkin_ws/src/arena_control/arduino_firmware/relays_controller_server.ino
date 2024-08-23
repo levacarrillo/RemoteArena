@@ -10,18 +10,15 @@ const int charger_pins[2] = {4, 5};
 
 bool light_callback(arena_control::control_lights::Request &req, arena_control::control_lights::Response &res) {
   nh.loginfo("-------------------");
-  char buffer[20];
-  sprintf(buffer, "Turn on/off lights: %d", (int)req.light_states[0]);
-  nh.loginfo(buffer);
-  sprintf(buffer, "Turn on/off lights: %d", (int)req.light_states[1]);
-  nh.loginfo(buffer);
-
   for(int i=0; i<sizeof(light_pins); i++) {
     if((int)req.light_states[i] == 1) {
       digitalWrite(light_pins[i], LOW);
+      sprintf(buffer, "Light %d turned on", i);
     } else {
       digitalWrite(light_pins[i], HIGH);
+      sprintf(buffer, "Light %d turned off", i);
     }
+    nh.loginfo(buffer);
   }
   return true;
 }
