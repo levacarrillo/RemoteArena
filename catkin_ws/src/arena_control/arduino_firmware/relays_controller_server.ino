@@ -9,7 +9,9 @@ const int light_pins[2] = {2, 3};
 
 
 bool callback(arena_control::control_lights::Request & req, arena_control::control_lights::Response & res) {
-  nh.loginfo("-------------------")
+  nh.loginfo("-------------------");
+  nh.loginfo(decltype(1));
+  nh.loginfo(decltype(req.light_states[0]));
   digitalWrite(light_pins[0], req.light_states[0] ? HIGH : LOW);
   digitalWrite(light_pins[1], req.light_states[1] ? HIGH : LOW);
   return true;
