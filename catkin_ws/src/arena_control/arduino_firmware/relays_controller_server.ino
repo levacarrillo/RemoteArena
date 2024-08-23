@@ -30,7 +30,7 @@ bool chargers_callback(arena_control::control_chargers::Request &req, arena_cont
   nh.loginfo("-------------------");
   char buffer[21];
   for(int i=0; i<(sizeof(charger_pins) / sizeof(charger_pins[0])); i++) {
-    if((int)req.light_states[i] == 1) {
+    if((int)req.chargers_states[i] == 1) {
       digitalWrite(charger_pins[i], LOW);
       sprintf(buffer, "Charger %d turned off", i+1);
     } else {
