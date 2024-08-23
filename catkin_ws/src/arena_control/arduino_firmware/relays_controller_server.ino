@@ -10,6 +10,7 @@ const int charger_pins[2] = {4, 5};
 
 bool light_callback(arena_control::control_lights::Request &req, arena_control::control_lights::Response &res) {
   nh.loginfo("-------------------");
+  char buffer[10];
   for(int i=0; i<sizeof(light_pins); i++) {
     if((int)req.light_states[i] == 1) {
       digitalWrite(light_pins[i], LOW);
