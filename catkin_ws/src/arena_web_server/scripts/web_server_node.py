@@ -2,8 +2,7 @@
 import rospy
 import os
 from flask import Flask, render_template, request, jsonify
-from std_msgs.msg import String
-from std_msgs.msg import Int8MultiArray
+# from control_lights.srv import *
 
 app = Flask(__name__, static_folder = '../templates/static', template_folder = '../templates')
 
@@ -30,26 +29,15 @@ def robot_control_command(command):
 
 @app.route('/light_control_command/<id>/<status>', methods=['POST'])
 def light_control_command(id, status):
-    print('lights: ' + id + ' status: ' + status)
-    light_msg = Int8MultiArray()
-    #data = [0, 0]
-    if id == 'checkLight1':
-        print('status', status)
-        if status == 'true':
-            data[0] = 1
-        else:
-            data[0] = 0
-    else:
-        if status == 'true':
-            data[1] = 1
-        else:
-            data[1] = 0
-    #print('data', data)
-    light_msg.data = data
-    #print('light_msg', light_msg)
-    light_pub.publish(light_msg)
-    #if not rospy.is_shutdown():
-    #    pub.publish(command)
+    print('light: ' + id + ' turn on: ' + status)
+    rospy.wait_for_service('lights_control')
+    try:
+        lights_control = rospy.ServiceProxy('lights_control', LightsControl)
+        resp = lights_control([1, 1])
+        print('resp' + resp)
+    except rospy.ServiceException as e:
+        print("Service call failed: %s"%e)
+
     return jsonify(message='Command->')
 
 @app.route('/upload', methods=['POST'])
@@ -80,8 +68,6 @@ def upload_file():
 def start_ros_node():
     global pub, light_pub
     rospy.init_node('web_server_node', anonymous=True)
-    pub = rospy.Publisher('/ros_publisher', String, queue_size=10)
-    light_pub = rospy.Publisher('/turn_lights', Int8MultiArray, queue_size=1)
 
 if __name__ == '__main__':
     start_ros_node()
