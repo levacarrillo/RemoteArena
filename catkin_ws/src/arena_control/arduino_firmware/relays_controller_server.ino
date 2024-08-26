@@ -1,6 +1,6 @@
 #include <ros.h>
-#include <arena_control/control_lights.h>
-#include <arena_control/control_chargers.h>
+#include <arena_control/LightBulbsControl.h>
+#include <arena_control/RobotChargersControl.h>
 
 // OBJECT NODE
 ros::NodeHandle nh;
@@ -9,16 +9,16 @@ ros::NodeHandle nh;
 int light_pins[]   = {2, 3};
 int charger_pins[] = {4, 5};
 
-bool lights_callback(arena_control::control_lights::Request &req, arena_control::control_lights::Response &res) {
-  nh.loginfo("-------------------");
-  char buffer[20];
+bool lights_callback(arena_control::LightBulbsControl::Request &req, arena_control::LightBulbsControl::Response &res) {
+  nh.loginfo("------------------------");
+  char buffer[25];
   for(int i=0; i<(sizeof(light_pins) / sizeof(light_pins[0])); i++) {
-    if((int)req.light_states[i] == 1) {
+    if((int)req.bulbs_state[i] == 1) {
       digitalWrite(light_pins[i], LOW);
-      sprintf(buffer, "Light %d turned on", i+1);
+      sprintf(buffer, "Light bulb %d turned on", i+1);
     } else {
       digitalWrite(light_pins[i], HIGH);
-      sprintf(buffer, "Light %d turned off", i+1);
+      sprintf(buffer, "Light bulb %d turned off", i+1);
     }
     nh.loginfo(buffer);
   }
@@ -26,11 +26,11 @@ bool lights_callback(arena_control::control_lights::Request &req, arena_control:
   return res.success;
 }
 
-bool chargers_callback(arena_control::control_chargers::Request &req, arena_control::control_chargers::Response &res) {
-  nh.loginfo("-------------------");
-  char buffer[21];
+bool chargers_callback(arena_control::RobotChargersControl::Request &req, arena_control::RobotChargersControl::Response &res) {
+  nh.loginfo("------------------------");
+  char buffer[25];
   for(int i=0; i<(sizeof(charger_pins) / sizeof(charger_pins[0])); i++) {
-    if((int)req.chargers_states[i] == 0) {
+    if((int)req.chargers_state[i] == 0) {
       digitalWrite(charger_pins[i], LOW);
       sprintf(buffer, "Charger %d turned off", i+1);
     } else {
@@ -43,8 +43,8 @@ bool chargers_callback(arena_control::control_chargers::Request &req, arena_cont
   return res.success;
 }
 
-ros::ServiceServer<arena_control::control_lights::Request, arena_control::control_lights::Response> lights_server("lights_control", &lights_callback);
-ros::ServiceServer<arena_control::control_chargers::Request, arena_control::control_chargers::Response> chargers_server("chargers_control", &chargers_callback);
+ros::ServiceServer<arena_control::LightBulbsControl::Request, arena_control::LightBulbsControl::Response> lights_server("light_bulbs_state", &lights_callback);
+ros::ServiceServer<arena_control::RobotChargersControl::Request, arena_control::RobotChargersControl::Response> chargers_server("chargers_state", &chargers_callback);
 
 // SETTING PINS MODE
 void pins_setup() {
