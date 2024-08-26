@@ -2,11 +2,11 @@
 import rospy
 import os
 from flask import Flask, render_template, request, jsonify
-# from control_lights.srv import *
+from arena_control.srv import LightBulbsControl
 
 app = Flask(__name__, static_folder = '../templates/static', template_folder = '../templates')
 
-data = [0, 0]
+lightBulbsState = [0, 0]
 
 @app.route('/viewer')
 def viewer():
@@ -27,14 +27,19 @@ def robot_control_command(command):
         pub.publish(command)
     return jsonify(message='Command->' + command)
 
-@app.route('/light_control_command/<id>/<status>', methods=['POST'])
-def light_control_command(id, status):
-    print('light: ' + id + ' turn on: ' + status)
-    rospy.wait_for_service('lights_control')
+@app.route('/light_control_command/<id>/<state>', methods=['POST'])
+def light_control_command(id, state):
+    print('light: ' + id + ' turn on: ' + state)
+    rospy.wait_for_service('light_bulbs_state')
     try:
-        lights_control = rospy.ServiceProxy('lights_control', LightsControl)
-        resp = lights_control([1, 1])
-        print('resp' + resp)
+        lights_control = rospy.ServiceProxy('light_bulbs_state', LightBulbsControl)
+        if id == "bulb_1":
+            lightBulbsState[0] = int(state.lower() in ["true"])
+        else:
+            lightBulbsState[1] = int(state.lower() in ["true"])
+
+        resp = lights_control(lightBulbsState)
+        print(resp)
     except rospy.ServiceException as e:
         print("Service call failed: %s"%e)
 

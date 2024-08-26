@@ -10,9 +10,13 @@ function controlCommand(command) {
 function handleChecked(cb) {
     console.log(cb.id,cb.checked);
     const id = cb.id;
-    const status = cb.checked;
-    fetch(`/light_control_command/${id}/${status}`, {
+    const state = cb.checked;
+    fetch(`/light_control_command/${id}/${state}`, {
         method: 'POST',
+	body: JSON.stringify({
+	    id: cb.id,
+	    state: cb.checked
+	})
     }).then(response => response.json())
     .then(data => {
         console.log(data);
