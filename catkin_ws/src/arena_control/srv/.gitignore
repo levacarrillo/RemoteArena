@@ -7,5 +7,7 @@
 !readme.MD
 !control_lights.srv
 !control_chargers.srv
+!LightBulbsControl.srv
+!RobotChargersControl.srv
 
 # And these subdirectories
