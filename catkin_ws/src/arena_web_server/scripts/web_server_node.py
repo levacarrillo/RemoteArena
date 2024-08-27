@@ -6,13 +6,13 @@ from arena_control.srv import LightBulbsControl
 
 app = Flask(__name__, static_folder = '../templates/static', template_folder = '../templates')
 
-lightBulbsState = [0, 0]
+lightBulbsState = [False, False]
 
 @app.route('/viewer')
 def viewer():
     return render_template('viewer.html')
 
-@app.route('/home')
+@app.route('/')
 def home():
     return render_template('home.html')
 
@@ -27,23 +27,31 @@ def robot_control_command(command):
         pub.publish(command)
     return jsonify(message='Command->' + command)
 
-@app.route('/light_control_command/<id>/<state>', methods=['POST'])
-def light_control_command(id, state):
-    print('light: ' + id + ' turn on: ' + state)
+@app.route('/light_bulbs_control', methods=['POST'])
+def light_control_command():
+    global lightBulbsState
+    request_data = request.get_json()
+    #print(request_data)
+    id = request_data['id']
+    state = request_data['state']
+    #print("id->", id, 'state->', state)
+
     rospy.wait_for_service('light_bulbs_state')
+
     try:
         lights_control = rospy.ServiceProxy('light_bulbs_state', LightBulbsControl)
         if id == "bulb_1":
-            lightBulbsState[0] = int(state.lower() in ["true"])
+            lightBulbsState[0] = state
+        elif id == "bulb_2":
+            lightBulbsState[1] = state
         else:
-            lightBulbsState[1] = int(state.lower() in ["true"])
+            lightBulbsState = [False, False]
 
-        resp = lights_control(lightBulbsState)
-        print(resp)
+        response = lights_control(lightBulbsState)
     except rospy.ServiceException as e:
         print("Service call failed: %s"%e)
 
-    return jsonify(message='Command->')
+    return jsonify(message='Command success: ' + str(response.success))
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -61,10 +69,10 @@ def upload_file():
     
     if file: 
         user_name = os.getlogin()
-        abspath = f'/home/{user_name}/ProgramsFile'
+        abspath = f'/home/{user_name}/GlusterMR/Programs'
         if not os.path.exists(abspath):
             os.makedirs(abspath)
-        print('Saving file->', file.filename, 'at->', abspath)
+        #print('Saving file->', file.filename, 'at->', abspath)
         file_path = os.path.join(abspath, file.filename)
         file.save(file_path)
 
