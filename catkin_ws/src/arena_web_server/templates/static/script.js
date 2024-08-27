@@ -11,8 +11,11 @@ function handleChecked(cb) {
     console.log(cb.id,cb.checked);
     const id = cb.id;
     const state = cb.checked;
-    fetch(`/light_control_command/${id}/${state}`, {
+    fetch(`/light_bulbs_control`, {
         method: 'POST',
+	headers: {
+            'Content-Type': 'application/json'	
+	},
 	body: JSON.stringify({
 	    id: cb.id,
 	    state: cb.checked
@@ -43,6 +46,8 @@ function fileUploaderChanged() {
     const inputUploader = document.getElementById('inputUploader');
     const uploadButton = document.getElementById('uploadButton');
     if (inputUploader.files.length > 0) {
+        uploadButton.disabled = false;
+    } else {
         uploadButton.disabled = true;
     }
     console.log(uploadButton)
