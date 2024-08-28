@@ -1,25 +1,27 @@
-function controlCommand(command) {
-    console.log('command:', command);
-    fetch(`/robot_control_command/${command}`, {
+function moveRobotCommand(movement) {
+    fetch('/move_robot_command', {
         method: 'POST',
+        headers: {
+                'Content-Type': 'application/json'	
+        },
+        body: JSON.stringify({
+            movement: movement
+        })
     }).then(response => response.json())
     .then(data => {
         console.log(data);
     });
 }
 function handleChecked(cb) {
-    console.log(cb.id,cb.checked);
-    const id = cb.id;
-    const state = cb.checked;
-    fetch(`/light_bulbs_control`, {
+    fetch('/light_bulbs_control', {
         method: 'POST',
-	headers: {
-            'Content-Type': 'application/json'	
-	},
-	body: JSON.stringify({
-	    id: cb.id,
-	    state: cb.checked
-	})
+        headers: {
+                'Content-Type': 'application/json'	
+        },
+        body: JSON.stringify({
+            id: cb.id,
+            state: cb.checked
+        })
     }).then(response => response.json())
     .then(data => {
         console.log(data);

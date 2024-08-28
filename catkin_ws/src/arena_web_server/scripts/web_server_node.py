@@ -20,21 +20,31 @@ def home():
 def index():
     return render_template('index.html')
 
-@app.route('/robot_control_command/<command>', methods=['POST'])
-def robot_control_command(command):
-    print('ros-command:' + command)
-    if not rospy.is_shutdown():
-        pub.publish(command)
-    return jsonify(message='Command->' + command)
+@app.route('/move_robot_command', methods=['POST'])
+def move_robot_command():
+    request_data = request.get_json()
+    print(request_data)
+    movement = request_data['movement']
+    print(movement)
+
+    # rospy.wait_for_service('move_robot_command')
+    # try:
+    #     robot_command = rospy.ServiceProxy('move_robot_command', MoveRobotCommand)
+    #     response = robot_command(movement)
+    # except rospy.ServiceException as e:
+    #     print("Service call failed: %s"%e)
+
+    # return jsonify(message='Command success: ' + str(response.success))
+    return jsonify(message='Command success: ' + movement)
 
 @app.route('/light_bulbs_control', methods=['POST'])
 def light_control_command():
     global lightBulbsState
     request_data = request.get_json()
-    #print(request_data)
+    # print(request_data)
     id = request_data['id']
     state = request_data['state']
-    #print("id->", id, 'state->', state)
+    # print("id->", id, 'state->', state)
 
     rospy.wait_for_service('light_bulbs_state')
 
@@ -79,7 +89,6 @@ def upload_file():
     return 'file successfully added'
 
 def start_ros_node():
-    global pub, light_pub
     rospy.init_node('web_server_node', anonymous=True)
 
 if __name__ == '__main__':
