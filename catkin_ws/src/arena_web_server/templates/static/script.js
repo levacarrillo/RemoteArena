@@ -57,8 +57,6 @@ async function uploadFile() {
         if (response.status === 200) {
             console.log('hi')
             inputUploader.value = '';
-            uploadButton.disabled = true;
-            clearButton.disabled = true;
             showToast('File manager', 'Se ha subido el archivo exitosamente!');
         } else {
             showToast('File manager', 'No se ha subido el archivo');
@@ -81,11 +79,13 @@ function fileUploaderChanged() {
     }
 }
 function clearFileInput() {
+    const closeModalButton = document.getElementById('closeModalButton');
     const inputUploader = document.getElementById('inputUploader');
-    const clearButton = document.getElementById('clearButton');
+
+    // const clearButton = document.getElementById('clearButton');
     inputUploader.value = '';
-    uploadButton.disabled = true;
-    clearButton.disabled = true;
+    // uploadButton.disabled = true;
+    // clearButton.disabled = true;
 }
 
 function showToast(header, message) {

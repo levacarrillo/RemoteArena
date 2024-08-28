@@ -1,97 +1,11 @@
 body { 
-    background-color: gainsboro;
-    .title {
-        width: 100%;
-        padding: 5px 20px;
-    }
-    .section {
-        display: flex!important;
-        flex-wrap: wrap;
-        .left-panel {
-            width: fit-content;
-            margin: 0 20px;
-            display: flex;
-            .arena-view {
-                width: 640px;
-                height: 480px;
-                justify-content: center;
-                background-color: gray;
-            }
+    /* background-color: gainsboro; */
+    main {
+        .table {
+            max-height: 100px;
+            overflow: auto;
+            /* display:inline-block; */
+            background-color: red;
         }
-        .right-panel {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 10px 15px;
-            h2 {
-                font-size: 20px;
-            }
-            .buttons-container {
-                display: flex;
-                .control-buttons {
-                    width: fit-content;
-                    height: fit-content;
-                    margin: 10px 20px;
-                    .control-label {
-                        width: 100%;
-                        text-align: center;
-                        margin-bottom: 10px;
-                        font-weight: bold;
-                    }
-                    .upper {
-                        text-align: center;
-                    }
-                    .bottom {
-                        text-align: center;
-                    }
-                }
-                .other-buttons {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: end;
-                    margin: 0 auto;
-                    button {
-                        margin-top: 5px;
-                    }
-                }
-            }
-            .mini-container {
-                display: flex;
-                justify-content: space-around;
-                .check-container {
-                    display: flex;
-                    flex-direction: column;
-                    /*justify-content: space-around;*/
-                    .form-check {
-                        margin-right: 15px;
-                    }
-                }
-            }
-            .form-uploader {
-                display: flex;
-                flex-direction: column;
-                input {
-                    margin-bottom: 10px;
-                }
-            }
-            /* .input-group {
-                height: fit-content;
-                max-width: fit-content;
-                .form-control {
-                    height: fit-content;
-                }
-            } */
-            .progress-container {
-                display: flex;
-                flex-direction: column;
-                padding: 10px;
-                .progress-label {
-                    background-color: inherit;
-                    margin-bottom: 2px;
-                }
-            }
-
-        }
-
     }
 }
