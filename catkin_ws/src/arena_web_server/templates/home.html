@@ -117,21 +117,22 @@
                                                     <h5>Algorithms</h5>
                                                 </div>
                                                 <div class="d-flex flex-column h-75 justify-content-center">
-                                                    <button disabled class="mb-1">Run algorithm</button>
-                                                    <button disabled class="mb-1">Run and record</button>
-                                                    <button disabled class="mb-1">Stop algorithm</button>
-                                                    <button disabled class="mb-1">Return home</button>
+                                                    <button onclick="runCommand('run')" class="mb-1">Run algorithm</button>
+                                                    <button onclick="runCommand('runAndRecord')" class="mb-1">Run and record</button>
+                                                    <button onclick="runCommand('stopRunning')" class="mb-1">Stop algorithm</button>
+                                                    <button onclick="runCommand('returnHome')" class="mb-1">Return home</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- Battery status -->
+                                    <!-- Robot status -->
                                     <div class="col-12 col-md-6">
                                         <div class="card h-100">
                                             <div class="card-body d-flex flex-column justify-content-between">
                                                 <div>
-                                                    <h5>Robot's battery level</h5>
+                                                    <h5>Robot status</h5>
                                                     <p class="mx-auto">Robot selected: 1</p>
+                                                    <p class="mx-auto">Algorithm id: 2</p>
                                                 </div>
                                                 <div class="progress" role="progressbar" aria-label="Danger example" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
                                                     <div style="width: 100%">100%</div>
@@ -169,64 +170,35 @@
                                 <table class="table">
                                     <!-- Columns -->
                                     <thead>
-                                      <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">User</th>
-                                        <th scope="col">Document name</th>
-                                        <th scope="col">Algorithm</th>
-                                        <th scope="col">Status</th>
-                                        <th scope="col">Compilation</th>
-                                        <th scope="col">Run algorithm</th>
-                                        <th scope="col">Upload date</th>
-                                      </tr>
+                                        <tr>
+                                          <th scope="col">#</th>
+                                          <th scope="col">User</th>
+                                          <th scope="col">Document name</th>
+                                          <th scope="col">Algorithm</th>
+                                          <th scope="col">Status</th>
+                                          <th scope="col">Compilation</th>
+                                          <th scope="col">Upload date</th>
+                                        </tr>
                                     </thead>
                                     <!-- Records -->
                                     <tbody>
-                                      <tr>
-                                        <th scope="row">1</th>
-                                        <td>Mark</td>
-                                        <td>algorithm.cpp</td>
-                                        <td>Avoid obstacles</td>
-                                        <td>Compiled</td>
-                                        <td>
-                                            <button>Compile</button>
-                                        </td>
-                                        <td>
-                                            <button>Run</button>
-                                        </td>
-                                        <td>22/03/1999 5:06:07 AM</td>
-                                      </tr>
-                                      <tr>
-                                        <th scope="row">2</th>
-                                        <td>Jacob</td>
-                                        <td>algorithm2.cpp</td>
-                                        <td>Light follower</td>
-                                        <td>Compilation error</td>
-                                        <td>
-                                            <button>Compile</button>
-                                        </td>
-                                        <td>
-                                            <button>Run</button>
-                                        </td>
-                                        <td>23/07/2020 2:01:08 PM</td>
-                                      </tr>
-                                      <tr>
-                                        <th scope="row">3</th>
-                                        <td>Larry</td>
-                                        <td>algorithm3.cpp</td>
-                                        <td>Reactive behaviors</td>
-                                        <td>Not compiled</td>
-                                        <td>
-                                            <button>Compile</button>
-                                        </td>
-                                        <td>
-                                            <button>Run</button>
-                                        </td>
-                                        <td>16/11/2021 3:11:12 AM</td>
-                                      </tr>
+                                        {% for programFile in programFiles %}
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>Mark</td>
+                                            <td>{{ programFile }}</td>
+                                            <td>Avoid obstacles</td>
+                                            <td>Compiled</td>
+                                            <td>
+                                                <button onclick="showToast('Compilation', 'File compiled successfully')">Compile</button>
+                                            </td>
+                                            <td>22/03/1999 5:06:07 AM</td>
+                                        </tr>
+                                        {% endfor %}
                                     </tbody>
-                                  </table>
+                                </table>
                             </div>
+
                         </div>
                     </div>
                 </div>

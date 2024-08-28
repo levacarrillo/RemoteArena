@@ -12,6 +12,20 @@ function moveRobotCommand(movement) {
         console.log(data);
     });
 }
+function runCommand(command) {
+    fetch('/run_command', {
+        method: 'POST',
+        headers: {
+                'Content-Type': 'application/json'	
+        },
+        body: JSON.stringify({
+            command: command
+        })
+    }).then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
+}
 function handleChecked(cb) {
     fetch('/light_bulbs_control', {
         method: 'POST',

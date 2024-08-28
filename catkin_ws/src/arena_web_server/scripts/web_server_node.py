@@ -8,17 +8,33 @@ app = Flask(__name__, static_folder = '../templates/static', template_folder = '
 
 lightBulbsState = [False, False]
 
-@app.route('/viewer')
-def viewer():
-    return render_template('viewer.html')
-
 @app.route('/')
 def home():
-    return render_template('home.html')
+    programFiles =[]
+    user_name = os.getlogin()
+    abspath = f'/home/{user_name}/GlusterMR/Programs'
+    programFiles = [f for f in os.listdir(abspath) if os.path.isfile(os.path.join(abspath, f))]
+    print(programFiles)
+    
+    # programs = ['program 1', 'program 2']
+    return render_template('home.html', programFiles=programFiles)
 
-@app.route('/index')
-def index():
-    return render_template('index.html')
+@app.route('/run_command', methods=['POST'])
+def run_command():
+    request_data = request.get_json()
+    print(request_data)
+    command = request_data['command']
+    print(command)
+
+    # rospy.wait_for_service('move_robot_command')
+    # try:
+    #     robot_command = rospy.ServiceProxy('move_robot_command', MoveRobotCommand)
+    #     response = robot_command(movement)
+    # except rospy.ServiceException as e:
+    #     print("Service call failed: %s"%e)
+
+    # return jsonify(message='Command success: ' + str(response.success))
+    return jsonify(message='Command success: ' + command)
 
 @app.route('/move_robot_command', methods=['POST'])
 def move_robot_command():
