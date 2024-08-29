@@ -11,7 +11,6 @@
 # And these subdirectories
 !src/
 !scripts/
-!scripts/*.py
 !rosbags/
 !launch/
 !launch/*.launch

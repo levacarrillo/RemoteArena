@@ -1,0 +1,11 @@
+# Ignore everything
+*
+
+# But these files
+!.gitignore
+!LICENSE
+!readme.MD
+
+!web_server_node.py
+!models.py
+# And these subdirectories
