@@ -178,17 +178,17 @@
                                     </thead>
                                     <!-- Records -->
                                     <tbody>
-                                        {% for programFile in programFiles %}
+                                        {% for file in programFiles %}
                                             <tr>    
                                                 <th scope="row">1</th>
-                                                <td>Mark</td>
-                                                <td>{{ programFile }}</td>
-                                                <td>Avoid obstacles</td>
-                                                <td>Compiled</td>
+						<td>{{ file.username }}</td>
+                                                <td>{{ file.document_name }}</td>
+						<td>{{ file.algorithm }}</td>
+						<td>{{ file.status }}</td>
                                                 <td>
                                                     <button onclick="showToast('Compilation', 'File compiled successfully')">Compile</button>
                                                 </td>
-                                                <td>22/03/1999 5:06:07 AM</td>
+						<td>{{ file.upload_date }}</td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>
@@ -215,7 +215,7 @@
                         <div class="form-group">
                             <div class="d-flex">
                                 <label for="algorithmInput" class="w-50">Algorithm type: </label>
-                                <input type="text" class="form-control mb-3" id="algorithmInput" aria-describedby="algorithmInput" placeholder="Enter algorithm type">
+                                <input  id="algorithmInput" type="text" class="form-control mb-3" aria-describedby="algorithmInput" placeholder="Enter algorithm type">
                             </div>
 
                                 <input id="inputUploader" name="file" onchange="fileUploaderChanged()" type="file" class="form-control mb-3" />

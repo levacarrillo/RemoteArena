@@ -43,8 +43,31 @@ function handleChecked(cb) {
 }
 async function uploadFile() {
     const inputUploader = document.getElementById('inputUploader');
+    const algorithmInput = document.getElementById('algorithmInput');
     const form = document.getElementById('uploadForm');
     const formData = new FormData(form);
+    console.log(form);
+    console.log(formData);
+    console.log(form.elements["algorithmInput"].value);
+
+    obj = {
+    	"user": "Cosme",
+	"document_name": "new_document.txt",
+	"algorithm": "light follower",
+	"status": 1,
+	"path": "GlusterMR/programs/",
+	"upload_date": "today"
+    };
+    data = {
+    	"username": "Cosme",
+	"document_name": "new_document.txt",
+	"algorithm": form["algorithmInput"].value,
+	"status": "Not compiled",
+	"file_path": "GlusterMR/programs/",
+    };
+
+    const json = JSON.stringify(data);
+    formData.append('jsonData', json);
     console.log(formData);
     try {
         const response = await fetch('/upload', {
@@ -52,7 +75,7 @@ async function uploadFile() {
             body: formData
         })
         const result = await response.text()
-        console.log(result);
+	//console.log(result);
         console.log(response);
         if (response.status === 200) {
             console.log('hi')

@@ -4,6 +4,7 @@ import os
 from flask import Flask, render_template, request, jsonify
 from arena_control.srv import LightBulbsControl
 from models import db, Files
+import json
 
 app = Flask(__name__, static_folder = '../templates/static', template_folder = '../templates')
 port = 5000
@@ -11,13 +12,15 @@ app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql+psycopg2://usuario:password@l
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 
 lightBulbsState = [False, False]
+programFiles = []
 
 @app.route('/')
 def home():
-    programFiles =[]
+    #programFiles =[]
     user_name = os.getlogin()
     abspath = f'/home/{user_name}/GlusterMR/Programs'
-    programFiles = [f for f in os.listdir(abspath) if os.path.isfile(os.path.join(abspath, f))]
+    #programFiles = [f for f in os.listdir(abspath) if os.path.isfile(os.path.join(abspath, f))]
+    programFiles = get_file_list()
     print(programFiles)
     
     # programs = ['program 1', 'program 2']
@@ -86,6 +89,8 @@ def light_control_command():
 @app.route('/upload', methods=['POST'])
 def upload_file():
 
+    #data = request.files["file"]
+    
     if 'file' not in request.files:
         print('No file part')
         return 'No file part'
@@ -97,40 +102,60 @@ def upload_file():
         print('No selecte file')
         return 'No selected file'
     
-    if file: 
-        user_name = os.getlogin()
-        abspath = f'/home/{user_name}/GlusterMR/Programs'
-        if not os.path.exists(abspath):
-            os.makedirs(abspath)
-        #print('Saving file->', file.filename, 'at->', abspath)
-        file_path = os.path.join(abspath, file.filename)
-        file.save(file_path)
-
-    return 'file successfully added'
-
-@app.route('/programFile', methods=['POST'])
-def add_program_file():
     try:
-        data = request.json
-        print(data)
-        user = data.get('user')
-        document_name = data.get('document_name')
-        algorithm = data.get('algorithm')
-        status = data.get('status')
-        path = data.get('path')
-        upload_date = data.get('upload_date')
+        dataForm = json.loads(request.form["jsonData"])
+        print(dataForm)
+
+        username = dataForm['username']
+        document_name = dataForm['document_name']
+        algorithm = dataForm['algorithm']
+        status = dataForm['status']
+        file_path = dataForm['file_path']
+
         if not document_name:
-            return jsonify({'message': 'Bad request, isbn or name or cantPages or author not found'}), 400
-        new_file = Files(user=user, document_name=document_name, algorithm=algorithm, status=status, path=path, upload_date=upload_date)
+            return jsonify({'message': 'Bad request, please check data.'}), 400
+
+        new_file = Files(username=username, document_name=document_name, algorithm=algorithm, status=status, file_path=file_path)
         db.session.add(new_file)
         db.session.commit()
-        return jsonify({'File': {'id': new_file.id, 'user': new_file.user, 'document_name': new_file.document_name, 'algorithm': new_file.algorithm, 'status': new_file.status, 'path': new_file.path, 'upload_date': new_file.upload_date}})
+
+        if file: 
+            user_name = os.getlogin()
+            abspath = f'/home/{user_name}/GlusterMR/Programs'
+            if not os.path.exists(abspath):
+                os.makedirs(abspath)
+            #print('Saving file->', file.filename, 'at->', abspath)
+            file_path = os.path.join(abspath, file.filename)
+            file.save(file_path)
+        return jsonify('message', 'File added successfully.'), 200 
+
     except Exception as error:
         print('Error', error)
-        return jsonify({'message': 'Internal server error'}), 500
+        return jsonify({'message', 'Internal server error.'}), 500
+        
+def get_file_list():
+    try:
+        files = Files.query.all()
+        files_data = []
+        
+        for file in files:
+            file_data = {
+                'id': file.id,
+                'username': file.username,
+                'document_name': file.document_name,
+                'algorithm': file.algorithm,
+                'status': file.status,
+                'file_path': file.file_path,
+                'upload_date': file.upload_date
+            }
+            files_data.append(file_data)
+        return (files_data)
+    except Exception as error:
+        print('Error', error)
+        return []
 
-@app.route('/get_programs', methods=['GET'])
-def get_programs():
+@app.route('/list_program_files', methods=['GET'])
+def list_program_files():
     try:
         files = Files.query.all()
         files_data = []
@@ -146,7 +171,7 @@ def get_programs():
                 'upload_date': file.upload_date
             }
             files_data.append(file_data)
-        return jsonify({'files': files_data})
+        return jsonify(files_data)
     except Exception as error:
         print('Error', error)
         return jsonify({'message': 'Internal server error'}), 500
