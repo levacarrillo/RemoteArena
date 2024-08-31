@@ -81,6 +81,7 @@ async function uploadFile() {
             console.log('hi')
             inputUploader.value = '';
             showToast('File manager', 'Se ha subido el archivo exitosamente!');
+            updateTable()
         } else {
             showToast('File manager', 'No se ha subido el archivo');
         }
@@ -122,4 +123,29 @@ function showToast(header, message) {
         delay: 5000
     });
     myToast.show();
+}
+
+function updateTable() {
+    fetch('/get_files_list')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            const table = document.querySelector('#table tbody');
+            console.log(table)
+            table.innerHTML = ''
+            
+            data.forEach(item => {
+                let row = table.insertRow();
+                row.insertCell(0).innerText = item.id;
+                row.insertCell(1).innerText = item.username;
+                row.insertCell(2).innerText = item.document_name;
+                row.insertCell(3).innerText = item.algorithm;
+                row.insertCell(4).innerText = item.status;
+                let buttonCell = row.insertCell(5);
+                let button = document.createElement('button');
+                button.innerText = "Compile";
+                buttonCell.append(button);
+                row.insertCell(6).innerText = item.upload_date;
+            });
+        });
 }

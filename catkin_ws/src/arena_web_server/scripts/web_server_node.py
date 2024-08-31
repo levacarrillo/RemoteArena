@@ -19,7 +19,6 @@ def home():
     #programFiles =[]
     user_name = os.getlogin()
     abspath = f'/home/{user_name}/GlusterMR/Programs'
-    #programFiles = [f for f in os.listdir(abspath) if os.path.isfile(os.path.join(abspath, f))]
     programFiles = get_file_list()
     print(programFiles)
     
@@ -88,7 +87,6 @@ def light_control_command():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-
     #data = request.files["file"]
     
     if 'file' not in request.files:
@@ -127,6 +125,8 @@ def upload_file():
             #print('Saving file->', file.filename, 'at->', abspath)
             file_path = os.path.join(abspath, file.filename)
             file.save(file_path)
+        
+        programFiles = get_file_list()
         return jsonify('message', 'File added successfully.'), 200 
 
     except Exception as error:
@@ -153,6 +153,11 @@ def get_file_list():
     except Exception as error:
         print('Error', error)
         return []
+
+@app.route('/get_files_list', methods=['GET'])
+def get_files_list():
+    return jsonify(get_file_list()), 200
+
 
 @app.route('/list_program_files', methods=['GET'])
 def list_program_files():
