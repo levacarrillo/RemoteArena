@@ -41,29 +41,19 @@ function handleChecked(cb) {
         console.log(data);
     });
 }
-async function uploadFile() {
+async function uploadFile(username) {
     const inputUploader = document.getElementById('inputUploader');
     const algorithmInput = document.getElementById('algorithmInput');
     const form = document.getElementById('uploadForm');
     const formData = new FormData(form);
-    console.log(form);
-    console.log(formData);
-    console.log(form.elements["algorithmInput"].value);
+    const filename = inputUploader.files[0].name;
+    console.log(filename);
+    console.log(username)
 
-    obj = {
-    	"user": "Cosme",
-	"document_name": "new_document.txt",
-	"algorithm": "light follower",
-	"status": 1,
-	"path": "GlusterMR/programs/",
-	"upload_date": "today"
-    };
     data = {
-    	"username": "Cosme",
-	"document_name": "new_document.txt",
-	"algorithm": form["algorithmInput"].value,
-	"status": "Not compiled",
-	"file_path": "GlusterMR/programs/",
+        "document_name": filename,
+        "algorithm": form["algorithmInput"].value,
+    	"file_path": "/" + username,
     };
 
     const json = JSON.stringify(data);
@@ -92,14 +82,13 @@ async function uploadFile() {
 function fileUploaderChanged() {
     const inputUploader = document.getElementById('inputUploader');
     const uploadButton = document.getElementById('uploadButton');
-    const clearButton = document.getElementById('clearButton');
-
+    const filename = inputUploader.files[0].name;
+    console.log(inputUploader)
+    console.log(filename)
     if (inputUploader.files.length > 0) {
         uploadButton.disabled = false;
-        clearButton.disabled = false;
     } else {
         uploadButton.disabled = true;
-        clearButton.disabled = true;
     }
 }
 function clearFileInput() {
@@ -126,13 +115,17 @@ function showToast(header, message) {
 }
 
 function updateTable() {
+    const programSelect = document.getElementById('programSelect');
     fetch('/get_files_list')
         .then(response => response.json())
         .then(data => {
             console.log(data);
             const table = document.querySelector('#table tbody');
-            console.log(table)
+            
+            console.log(table);
+            console.log(programSelect);
             table.innerHTML = ''
+            programSelect.innerHTML = ''
             
             data.forEach(item => {
                 let row = table.insertRow();
@@ -146,6 +139,11 @@ function updateTable() {
                 button.innerText = "Compile";
                 buttonCell.append(button);
                 row.insertCell(6).innerText = item.upload_date;
-            });
+                
+                const option = document.createElement('option');
+                option.value = item.id;
+                option.innerHTML = '#' + item.id + ' | ' + item.algorithm;
+                programSelect.appendChild(option);
         });
+    });
 }

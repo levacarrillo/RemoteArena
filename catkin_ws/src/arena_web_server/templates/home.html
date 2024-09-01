@@ -22,7 +22,7 @@
             <a class="navbar-brand ps-4" href="https://biorobotics.fi-p.unam.mx/">Biorobotics Lab</a>
             <div class="d-flex w-100 justify-content-end">   
                 <div class="d-flex">
-                    <span class="navbar-brand m-auto me-3"><strong>User: </strong>{{ user }}</span>
+                    <span class="navbar-brand m-auto me-3"><strong>User: </strong>{{ username }}</span>
                     <div class="d-flex align-items-center flex-column me-4">
                         <svg class="navbar-brand m-auto" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
                             <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
@@ -116,7 +116,7 @@
                                                     <!-- <button onclick="updateTable()" class="mb-1">Update table</button> -->
                                                 </div>
                                                 <strong>Select program from list:</strong>
-                                                <select aria-placeholder="qwert" class="form-select form-select-sm" aria-label="Default select example">
+                                                <select id="programSelect" aria-placeholder="qwert" class="form-select form-select-sm" aria-label="Default select example">
                                                     {% for programFile in programFiles %}
                                                         <option value="programFile">#{{ programFile.id }} | {{ programFile.algorithm }} </option>
                                                     {% endfor %}
@@ -235,14 +235,13 @@
                                 <label for="algorithmInput" class="w-50">Algorithm type: </label>
                                 <input  id="algorithmInput" type="text" class="form-control mb-3" aria-describedby="algorithmInput" placeholder="Enter algorithm type">
                             </div>
-
-                                <input id="inputUploader" name="file" onchange="fileUploaderChanged()" type="file" class="form-control mb-3" />
+                            <input id="inputUploader" name="file" onchange="fileUploaderChanged()" type="file" class="form-control mb-3" />
                           </div>
                     </form>    
                 </div>
                 <div class="modal-footer">
                   <button id="closeModalButton" type="button" class="btn btn-secondary" onclick="clearFileInput()" data-bs-dismiss="modal">Close</button>
-                  <button id="uploadButton" type="button" class="btn btn-primary" onclick="uploadFile()" data-bs-dismiss="modal">Save program file</button>
+                  <button id="uploadButton" type="button" class="btn btn-primary" onclick="uploadFile('{{ username }}')" data-bs-dismiss="modal">Save program file</button>
                 </div>
               </div>
             </div>

@@ -52,7 +52,7 @@ def home():
         programFiles = get_file_list()
         print(programFiles)    
         # programs = ['program 1', 'program 2']
-        return render_template('home.html', programFiles=programFiles, user=session['user'])
+        return render_template('home.html', programFiles=programFiles, username=session['user'])
 
     return redirect(url_for('login'))
 
@@ -135,22 +135,22 @@ def upload_file():
         dataForm = json.loads(request.form["jsonData"])
         print(dataForm)
 
-        username = dataForm['username']
+        username = session['user']
         document_name = dataForm['document_name']
         algorithm = dataForm['algorithm']
-        status = dataForm['status']
+        # status = dataForm['status']
         file_path = dataForm['file_path']
 
         if not document_name:
             return jsonify({'message': 'Bad request, please check data.'}), 400
 
-        new_file = Files(username=username, document_name=document_name, algorithm=algorithm, status=status, file_path=file_path)
+        new_file = Files(username=username, document_name=document_name, algorithm=algorithm, file_path=file_path)
         db.session.add(new_file)
         db.session.commit()
 
         if file: 
             user_name = os.getlogin()
-            abspath = f'/home/{user_name}/GlusterMR/Programs'
+            abspath = f'/home/{user_name}/GlusterMR/Programs' + file_path
             if not os.path.exists(abspath):
                 os.makedirs(abspath)
             #print('Saving file->', file.filename, 'at->', abspath)

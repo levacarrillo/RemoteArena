@@ -9,7 +9,7 @@ class Files(db.Model):
     username = db.Column(db.String(255), nullable=False)
     document_name = db.Column(db.String(255), nullable=False)
     algorithm = db.Column(db.String(255), nullable=False)
-    status = db.Column(db.String(255), nullable=False)
+    status = db.Column(db.String(255), nullable=False, default="Not compiled")
     file_path = db.Column(db.String(255), nullable=False)
     upload_date = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
     active = db.Column(db.Boolean, nullable=False, default=True)
