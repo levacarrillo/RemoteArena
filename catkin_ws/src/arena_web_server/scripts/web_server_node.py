@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import rospy
 import os
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from arena_control.srv import LightBulbsControl
 from models import db, Files
 import json
@@ -15,6 +15,17 @@ lightBulbsState = [False, False]
 programFiles = []
 
 @app.route('/')
+def index():
+    if 'user' in session:
+        return render_template('home.html', programFiles=programFiles)
+    return redirect(url_for('login'))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    
+    return render_template('login.html')
+
+@app.route('/home')
 def home():
     #programFiles =[]
     user_name = os.getlogin()
