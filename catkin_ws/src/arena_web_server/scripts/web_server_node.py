@@ -2,39 +2,59 @@
 import rospy
 import os
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
+# from flask_bcrypt import Bcrypt
 from arena_control.srv import LightBulbsControl
-from models import db, Files
+from models import db, Files, Users
 import json
 
 app = Flask(__name__, static_folder = '../templates/static', template_folder = '../templates')
 port = 5000
-app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql+psycopg2://usuario:password@localhost:5432/programs'
+# app.config['SESSION_TYPE'] = 'system'
+app.secret_key = 'salt'
+app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql+psycopg2://usuario:password@localhost:5432/remote_arena'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 
 lightBulbsState = [False, False]
 programFiles = []
 
+users = {
+    "Admin": "pass"
+}
+
 @app.route('/')
 def index():
-    if 'user' in session:
-        return render_template('home.html', programFiles=programFiles)
-    return redirect(url_for('login'))
+    return redirect(url_for('home'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    
+    if request.method == 'POST':
+        print(request)
+        user1 = request.form['username']
+        password1 = request.form['password']
+
+        if user1 in users and users[user1] == password1:
+            session['user'] = user1
+            return redirect(url_for('index'))
     return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    # flash('You have logged out successfully', 'info')
+    return redirect(url_for('login'))
 
 @app.route('/home')
 def home():
-    #programFiles =[]
-    user_name = os.getlogin()
-    abspath = f'/home/{user_name}/GlusterMR/Programs'
-    programFiles = get_file_list()
-    print(programFiles)
-    
-    # programs = ['program 1', 'program 2']
-    return render_template('home.html', programFiles=programFiles)
+    if 'user' in session:
+        #programFiles =[]
+        user_name = os.getlogin()
+        abspath = f'/home/{user_name}/GlusterMR/Programs'
+        programFiles = get_file_list()
+        print(programFiles)    
+        # programs = ['program 1', 'program 2']
+        return render_template('home.html', programFiles=programFiles, user=session['user'])
+
+    return redirect(url_for('login'))
 
 @app.route('/run_command', methods=['POST'])
 def run_command():
@@ -143,7 +163,20 @@ def upload_file():
     except Exception as error:
         print('Error', error)
         return jsonify({'message', 'Internal server error.'}), 500
-        
+
+@app.route('/get_users')
+def get_users():
+    global users
+    try:
+        usersdb = Users.query.all()
+        for u in usersdb:
+            users.update({ u.username: u.password })
+        print(users)
+        return users
+    except Exception as error:
+        print('Error in get_user_list(): ', error)
+        return users     
+
 def get_file_list():
     try:
         files = Files.query.all()
@@ -162,7 +195,7 @@ def get_file_list():
             files_data.append(file_data)
         return (files_data)
     except Exception as error:
-        print('Error', error)
+        print('Error in get_file_list(): ', error)
         return []
 
 @app.route('/get_files_list', methods=['GET'])
