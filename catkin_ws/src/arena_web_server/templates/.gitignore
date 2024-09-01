@@ -9,6 +9,7 @@
 !home.html
 !index.html
 !viewer.html
+!login.html
 
 # And these subdirectories
 !static/
