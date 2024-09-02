@@ -1,3 +1,13 @@
+var socket = io.connect('http://localhost'+ ':'+ location.port); 
+// console.log(document.domain);
+console.log(location.port);
+console.log(socket);
+socket.on('batt-data', function(msg) {
+    const progresbar = document.getElementById('progress-bar');
+    progresbar.innerHTML = msg.data + '%';
+    progresbar.style.width = msg.data + '%';
+
+});
 function moveRobotCommand(movement) {
     fetch('/move_robot_command', {
         method: 'POST',

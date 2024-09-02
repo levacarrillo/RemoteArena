@@ -2,6 +2,9 @@
 import rospy
 import os
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
+from flask_socketio import SocketIO, emit
+from std_msgs.msg import String
+
 # from flask_bcrypt import Bcrypt
 from arena_control.srv import LightBulbsControl
 from models import db, Files, Users
@@ -13,6 +16,8 @@ port = 5000
 app.secret_key = 'salt'
 app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql+psycopg2://usuario:password@localhost:5432/remote_arena'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+
+socketio = SocketIO(app)
 
 lightBulbsState = [False, False]
 programFiles = []
@@ -225,8 +230,16 @@ def list_program_files():
         print('Error', error)
         return jsonify({'message': 'Internal server error'}), 500
 
+def callback(data):
+    print(data.data)
+    socketio.emit('batt-data', {'data': data.data})
+
+
+def listener():
+    rospy.Subscriber("chatter", String, callback)
 def start_ros_node():
     rospy.init_node('web_server_node', anonymous=True)
+    listener()
 
 if __name__ == '__main__':
     # STARTING ROS NODE
@@ -236,3 +249,4 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True, use_reloader=True, port=port)
+    socketio.run(app, host='0.0.0.0', port=5000)
