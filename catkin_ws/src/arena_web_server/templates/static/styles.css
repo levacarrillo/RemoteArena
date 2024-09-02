@@ -4,8 +4,6 @@ body {
         .table {
             max-height: 100px;
             overflow: auto;
-            /* display:inline-block; */
-            background-color: red;
         }
     }
 }
