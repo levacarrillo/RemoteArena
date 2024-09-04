@@ -26,6 +26,7 @@ users = {
     "Admin": "pass"
 }
 
+# VIEW
 @app.route('/')
 def index():
     return redirect(url_for('home'))
@@ -61,6 +62,7 @@ def home():
 
     return redirect(url_for('login'))
 
+# ROS
 @app.route('/run_command', methods=['POST'])
 def run_command():
     request_data = request.get_json()
@@ -99,10 +101,8 @@ def move_robot_command():
 def light_control_command():
     global lightBulbsState
     request_data = request.get_json()
-    # print(request_data)
     id = request_data['id']
     state = request_data['state']
-    # print("id->", id, 'state->', state)
 
     rospy.wait_for_service('light_bulbs_state')
 
@@ -121,6 +121,7 @@ def light_control_command():
 
     return jsonify(message='Command success: ' + str(response.success))
 
+# PERSISTENCE
 @app.route('/upload', methods=['POST'])
 def upload_file():
     #data = request.files["file"]
@@ -234,12 +235,9 @@ def callback(data):
     print(data.data)
     socketio.emit('batt-data', {'data': data.data})
 
-
-def listener():
-    rospy.Subscriber("chatter", String, callback)
 def start_ros_node():
     rospy.init_node('web_server_node', anonymous=True)
-    listener()
+    rospy.Subscriber("chatter", String, callback)
 
 if __name__ == '__main__':
     # STARTING ROS NODE
