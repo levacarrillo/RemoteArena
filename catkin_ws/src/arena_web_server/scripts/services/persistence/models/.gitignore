@@ -6,9 +6,6 @@
 !LICENSE
 !readme.MD
 
-!web_server_node.py
-!models.py
-!controller.py
+!ModelsDB.py
 
 # And these subdirectories
-!services/
