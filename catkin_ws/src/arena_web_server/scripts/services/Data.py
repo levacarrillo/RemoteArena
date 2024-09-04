@@ -16,19 +16,13 @@ class Data:
 
     def get_file_list(self):
         try:
-            file_list = self.db.get_get_file_list()
+            file_list = self.db.get_file_list()
             return file_list
         except Exception as error:
             print('There was an error in: Data.get_file_list()->', error)
             return []
 
     def save_file(self, username, request):
-        print(request.form)
-        print(request.files)
-
-        print(request.form['dataForm'])
-        print(type(request.form['dataForm']))
-
         if 'file' not in request.files:
             return 'No file part'
 
@@ -43,7 +37,6 @@ class Data:
             file_name = dataForm['file_name']
             file_path = dataForm['file_path']
             algorithm = dataForm['algorithm']
-
             print(f"file_name: {file_name} | file_path: {file_path} | algorithm {algorithm}")
 
             if not file_name:
@@ -57,6 +50,9 @@ class Data:
                     os.makedirs(abspath)
                 print('Saving file->', file.filename, ' at->', abspath)
                 file.save(os.path.join(abspath, file_name))
+            
+                self.db.save_file(username, file_name, file_path, algorithm)
+
             return 'File added successfully'
         except Exception as error:
             print('There was an error in: Data.save_file()->', error)

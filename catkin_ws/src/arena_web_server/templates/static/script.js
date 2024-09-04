@@ -126,7 +126,7 @@ function showToast(header, message) {
 
 function updateTable() {
     const programSelect = document.getElementById('programSelect');
-    fetch('/get_files_list')
+    fetch('/get_file_list')
         .then(response => response.json())
         .then(data => {
             console.log(data);

@@ -21,7 +21,6 @@ class DataBase:
             print(f"Connecting database at {db_host}:{db_port} with {db_user}")
 
             app.secret_key = db_key
-            # app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql+psycopg2://usuario:password@localhost:5432/remote_arena'
             app.config['SQLALCHEMY_DATABASE_URI']= f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
             app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
             db.init_app(app)
@@ -40,7 +39,7 @@ class DataBase:
                 return self.users
 
             except Exception as error:
-                print('Error in get_users(): ', error)
+                print('Error in DataBase.get_users(): ', error)
                 return self.users
 
     def get_file_list(self):
@@ -60,5 +59,15 @@ class DataBase:
                 self.files.append(file_data)
             return self.files
         except Exception as error:
-            print('Error in get_file_list(): ', error)
+            print('Error in DataBase.get_file_list(): ', error)
             return []
+
+    def save_file(self, username, file_name, file_path, algorithm):
+        try:
+            new_file = Files(username=username, file_name=file_name, file_path =file_path, algorithm=algorithm)
+            db.session.add(new_file)
+            db.session.commit()
+            return 'File added in database successfully'
+        except Exception as error:
+            print('Error in DataBase.save_file(): ', error)
+            return 'Error in DataBase.save_file(): ' + error

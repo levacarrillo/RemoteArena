@@ -16,7 +16,7 @@ def index():
 @app.route('/home', methods=['GET'])
 def home():
     if user.session_active:
-        return render_template('home.html', username=user.name)
+        return render_template('home.html', username=user.name, programFiles=data.get_file_list())
     return redirect(url_for('login'))
 
 @app.route('/login', methods=['GET', 'POST'])
