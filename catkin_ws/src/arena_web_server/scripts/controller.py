@@ -42,6 +42,11 @@ def get_users():
 def get_file_list():
     return data.get_file_list()
 
+@app.route('/save_file', methods=['POST'])
+def save_file():
+    data.save_file(user.name, request)
+    return "hola"
+
 # ROS
 
 if __name__ == '__main__':

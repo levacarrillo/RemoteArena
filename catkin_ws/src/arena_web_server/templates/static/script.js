@@ -1,13 +1,13 @@
-var socket = io.connect('http://localhost'+ ':'+ location.port); 
-// console.log(document.domain);
-console.log(location.port);
-console.log(socket);
-socket.on('batt-data', function(msg) {
-    const progresbar = document.getElementById('progress-bar');
-    progresbar.innerHTML = msg.data + '%';
-    progresbar.style.width = msg.data + '%';
+// var socket = io.connect('http://localhost'+ ':'+ location.port); 
+// // console.log(document.domain);
+// console.log(location.port);
+// console.log(socket);
+// socket.on('batt-data', function(msg) {
+//     const progresbar = document.getElementById('progress-bar');
+//     progresbar.innerHTML = msg.data + '%';
+//     progresbar.style.width = msg.data + '%';
 
-});
+// });
 function moveRobotCommand(movement) {
     fetch('/move_robot_command', {
         method: 'POST',
@@ -53,7 +53,7 @@ function handleChecked(cb) {
 }
 async function uploadFile(username) {
     const inputUploader = document.getElementById('inputUploader');
-    const algorithmInput = document.getElementById('algorithmInput');
+    // const algorithmInput = document.getElementById('algorithmInput');
     const form = document.getElementById('uploadForm');
     const formData = new FormData(form);
     const filename = inputUploader.files[0].name;
@@ -61,21 +61,21 @@ async function uploadFile(username) {
     console.log(username)
 
     data = {
-        "document_name": filename,
-        "algorithm": form["algorithmInput"].value,
+        "file_name": filename,
     	"file_path": "/" + username,
+        "algorithm": form["algorithmInput"].value,
     };
 
     const json = JSON.stringify(data);
-    formData.append('jsonData', json);
+    formData.append('dataForm', json);
     console.log(formData);
     try {
-        const response = await fetch('/upload', {
+        const response = await fetch('/save_file', {
             method: 'POST',
             body: formData
         })
         const result = await response.text()
-	//console.log(result);
+	    console.log(result);
         console.log(response);
         if (response.status === 200) {
             console.log('hi')
