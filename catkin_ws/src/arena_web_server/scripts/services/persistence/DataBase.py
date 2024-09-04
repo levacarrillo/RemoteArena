@@ -1,11 +1,28 @@
 from .models.ModelsDB import Users, Files, db
+from dotenv import load_dotenv
+import os
+import rospkg
 
 class DataBase:
     def __init__(self, app=None):
         if app is not None:
             self.app = app
-            app.secret_key = 'salt'
-            app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql+psycopg2://usuario:password@localhost:5432/remote_arena'
+            rospack = rospkg.RosPack()
+            relative_path = '/scripts/services/persistence/server.env'
+            pathenv = rospack.get_path('arena_web_server') + relative_path;
+            load_dotenv(dotenv_path=pathenv)
+            
+            db_key  = os.getenv("SECRET_KEY")
+            db_user = os.getenv("DB_USER")
+            db_password = os.getenv("DB_PASSWORD")
+            db_host = os.getenv("DB_HOST")
+            db_port = os.getenv("DB_PORT")
+            db_name = os.getenv("DB_NAME")
+            print(f"Connecting database at {db_host}:{db_port} with {db_user}")
+
+            app.secret_key = db_key
+            # app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql+psycopg2://usuario:password@localhost:5432/remote_arena'
+            app.config['SQLALCHEMY_DATABASE_URI']= f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
             app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
             db.init_app(app)
             with app.app_context():
