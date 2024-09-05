@@ -26,23 +26,24 @@ class DataBase:
             db.init_app(app)
             with app.app_context():
                 db.create_all()
+            app.app_context().push()
+            
         self.users = {}
         self.files = []
 
     def get_users(self):
-        with self.app.app_context():
-            try:
-                users = Users.query.all()
-                for user in users:
-                    self.users.update({ user.username: user.password })
+        try:
+            users = Users.query.all()
+            for user in users:
+                self.users.update({ user.username: user.password })
+            return self.users
 
-                return self.users
-
-            except Exception as error:
-                print('Error in DataBase.get_users(): ', error)
-                return self.users
+        except Exception as error:
+            print('Error in DataBase.get_users(): ', error)
+            return self.users
 
     def get_file_list(self):
+        self.files = []
         try:
             files = Files.query.all()
             for file in files:
@@ -57,6 +58,7 @@ class DataBase:
                     'upload_date': file.upload_date
                 }
                 self.files.append(file_data)
+            print(len(self.files))
             return self.files
         except Exception as error:
             print('Error in DataBase.get_file_list(): ', error)
