@@ -78,7 +78,6 @@ async function uploadFile(username) {
 	    console.log(result);
         console.log(response);
         if (response.status === 200) {
-            console.log('hi')
             inputUploader.value = '';
             showToast('File manager', 'Se ha subido el archivo exitosamente!');
             updateTable()
@@ -141,7 +140,7 @@ function updateTable() {
                 let row = table.insertRow();
                 row.insertCell(0).innerText = item.id;
                 row.insertCell(1).innerText = item.username;
-                row.insertCell(2).innerText = item.document_name;
+                row.insertCell(2).innerText = item.file_name;
                 row.insertCell(3).innerText = item.algorithm;
                 row.insertCell(4).innerText = item.status;
                 let buttonCell = row.insertCell(5);

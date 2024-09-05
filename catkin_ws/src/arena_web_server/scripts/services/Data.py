@@ -50,7 +50,8 @@ class Data:
                     os.makedirs(abspath)
                 print('Saving file->', file.filename, ' at->', abspath)
                 file.save(os.path.join(abspath, file_name))
-            
+
+                # SAVING IN DATABASE
                 self.db.save_file(username, file_name, file_path, algorithm)
 
             return 'File added successfully'
