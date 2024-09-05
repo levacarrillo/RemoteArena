@@ -40,17 +40,17 @@ def get_users():
 
 @app.route('/get_file_list', methods=['GET'])
 def get_file_list():
-    return data.get_file_list()
+    return jsonify(data.get_file_list())
 
 @app.route('/save_file', methods=['POST'])
 def save_file():
-    return data.save_file(user.name, request)
+    return jsonify(data.save_file(user.name, request))
 
 
 # ROS
 @app.route('/set_light_bulbs_state', methods=['POST'])
 def set_light_bulbs_state():
-    return ros.set_light_bulbs_state(request.get_json())
+    return jsonify(ros.set_light_bulbs_state(request.get_json()))
 
 @app.route('/move_robot_command', methods=['POST'])
 def move_robot_command():
