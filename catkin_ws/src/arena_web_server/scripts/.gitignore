@@ -9,6 +9,7 @@
 !web_server_node.py
 !models.py
 !controller.py
+!web_controller.py
 
 # And these subdirectories
 !services/
