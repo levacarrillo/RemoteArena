@@ -43,7 +43,7 @@ class Data:
                 return 'Bad request, please check data'
             
             if file:
-                user_name = 'luisnava'
+                user_name = os.getlogin()
                 abspath = f'/home/{user_name}/GlusterMR/Programs' + file_path
                 
                 if not os.path.exists(abspath):
