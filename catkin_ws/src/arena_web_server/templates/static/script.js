@@ -7,6 +7,20 @@ socket.on('batt-data', function(msg) {
     progresbar.style.width = msg.data + '%';
 
 });*/
+const progresbar = document.getElementById('progress-bar');
+
+function getBatteryPercent() {
+    fetch('/get_battery_percent')
+    .then(response => response.json())
+    .then(data => {
+        progresbar.innerHTML = data;
+        progresbar.style.width = data;
+    })
+    .catch(error => {
+        console.error('Error fetching data: ', error);
+    });
+}
+setInterval(getBatteryPercent, 2000);
 function moveRobotCommand(movement) {
     fetch('/move_robot_command', {
         method: 'POST',

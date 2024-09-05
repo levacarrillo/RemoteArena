@@ -52,6 +52,10 @@ def save_file():
 def set_light_bulbs_state():
     return jsonify(ros.set_light_bulbs_state(request.get_json()))
 
+@app.route('/get_battery_percent', methods=['GET'])
+def get_battery_percent():
+    return jsonify(ros.batt_percent)
+
 @app.route('/move_robot_command', methods=['POST'])
 def move_robot_command():
     request_data = request.get_json()
@@ -68,8 +72,9 @@ def run_executable():
     print(command)
     return jsonify(command)
 
+
 if __name__ == '__main__':
     user = User(app)
     data = Data()
-    ros = ROS(app)
+    ros = ROS()
     app.run(debug=True, use_reloader=True, port=port)
