@@ -48,9 +48,28 @@ def save_file():
 
 
 # ROS
+@app.route('/set_light_bulbs_state', methods=['POST'])
+def set_light_bulbs_state():
+    return ros.set_light_bulbs_state(request.get_json())
+
+@app.route('/move_robot_command', methods=['POST'])
+def move_robot_command():
+    request_data = request.get_json()
+    print(request_data)
+    movement = request_data['movement']
+    print(movement)
+    return jsonify(movement)
+
+@app.route('/run_executable', methods=['POST'])
+def run_executable():
+    request_data = request.get_json()
+    print(request_data)
+    command = request_data['command']
+    print(command)
+    return jsonify(command)
 
 if __name__ == '__main__':
     user = User(app)
     data = Data()
-    # ros = ROS(app)
+    ros = ROS(app)
     app.run(debug=True, use_reloader=True, port=port)

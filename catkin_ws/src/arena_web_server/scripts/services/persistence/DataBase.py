@@ -58,7 +58,6 @@ class DataBase:
                     'upload_date': file.upload_date
                 }
                 self.files.append(file_data)
-            print(len(self.files))
             return self.files
         except Exception as error:
             print('Error in DataBase.get_file_list(): ', error)

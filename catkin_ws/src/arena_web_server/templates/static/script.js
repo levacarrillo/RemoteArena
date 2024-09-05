@@ -1,13 +1,12 @@
-// var socket = io.connect('http://localhost'+ ':'+ location.port); 
-// // console.log(document.domain);
-// console.log(location.port);
-// console.log(socket);
-// socket.on('batt-data', function(msg) {
-//     const progresbar = document.getElementById('progress-bar');
-//     progresbar.innerHTML = msg.data + '%';
-//     progresbar.style.width = msg.data + '%';
+var socket = io.connect('http://localhost'+ ':'+ location.port); 
+console.log(location.port);
+console.log(socket);
+socket.on('batt-data', function(msg) {
+    const progresbar = document.getElementById('progress-bar');
+    progresbar.innerHTML = msg.data + '%';
+    progresbar.style.width = msg.data + '%';
 
-// });
+});
 function moveRobotCommand(movement) {
     fetch('/move_robot_command', {
         method: 'POST',
@@ -22,8 +21,8 @@ function moveRobotCommand(movement) {
         console.log(data);
     });
 }
-function runCommand(command) {
-    fetch('/run_command', {
+function runExecutable(command) {
+    fetch('/run_executable', {
         method: 'POST',
         headers: {
                 'Content-Type': 'application/json'	
@@ -37,7 +36,7 @@ function runCommand(command) {
     });
 }
 function handleChecked(cb) {
-    fetch('/light_bulbs_control', {
+    fetch('/set_light_bulbs_state', {
         method: 'POST',
         headers: {
                 'Content-Type': 'application/json'	

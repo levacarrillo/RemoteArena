@@ -119,12 +119,11 @@
                                                 <div class="d-flex">
                                                     <h5>File manager</h5>
                                                 </div>
-                                                <div class="mb-2">
+                                                <div class="mb-3">
                                                     <button data-bs-toggle="modal" data-bs-target="#exampleModalCenter">Upload program file</button>
-                                                    <!-- <button onclick="updateTable()" class="mb-1">Update table</button> -->
                                                 </div>
-                                                <strong>Select program from list:</strong>
-                                                <select id="programSelect" aria-placeholder="qwert" class="form-select form-select-sm" aria-label="Default select example">
+                                                <strong class="mb-2">Select program from list:</strong>
+                                                <select id="programSelect" aria-placeholder="qwert" class="form-select form-select-sm mt-2" aria-label="Default select example">
                                                     {% for programFile in programFiles %}
                                                         <option value="programFile">#{{ programFile.id }} | {{ programFile.algorithm }} </option>
                                                     {% endfor %}
@@ -176,10 +175,10 @@
                                                     <h5>Algorithms</h5>
                                                 </div>
                                                 <div class="d-flex flex-column h-75 justify-content-center">
-                                                    <button onclick="runCommand('run')" class="mb-1">Run algorithm</button>
-                                                    <button onclick="runCommand('runAndRecord')" class="mb-1">Run and record</button>
-                                                    <button disabled onclick="runCommand('stopRunning')" class="mb-1">Stop algorithm</button>
-                                                    <button onclick="runCommand('returnHome')" class="mb-1">Return home</button>
+                                                    <button onclick="runExecutable('run')" class="mb-1">Run algorithm</button>
+                                                    <button onclick="runExecutable('runAndRecord')" class="mb-1">Run and record</button>
+                                                    <button disabled onclick="runExecutable('stopRunning')" class="mb-1">Stop algorithm</button>
+                                                    <button onclick="runExecutable('returnHome')" class="mb-1">Return home</button>
                                                 </div>
                                             </div>
                                         </div>
