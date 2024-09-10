@@ -6,10 +6,12 @@
 !LICENSE
 !readme.MD
 
-!home.html
-!index.html
-!viewer.html
 !login.html
+!home.html
+!recordings.html
+!fileManager.html
+!userManager.html
+
 
 # And these subdirectories
 !static/
