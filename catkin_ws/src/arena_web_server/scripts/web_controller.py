@@ -15,22 +15,26 @@ def index():
 
 @app.route('/home', methods=['GET'])
 def home():
-    print('User active: ', user.session_active)
     if user.session_active:
-        return render_template('home.html', username=user.name, programFiles=data.get_file_list())
+        return render_template('home.html', username=user.name, admin=user.admin, programFiles=data.get_file_list())
     return redirect(url_for('login'))
 
 @app.route('/recordings', methods=['GET'])
 def recordings():
-    return render_template('recordings.html')
-
-@app.route('/fileManager')
-def fileManager():
-    return render_template('fileManager.html')
+    return render_template('recordings.html',  username=user.name, admin=user.admin)
 
 @app.route('/userManager')
 def userManager():
-    return render_template('userManager.html')
+    if not user.admin: 
+        return redirect(url_for('home'))
+    return render_template('userManager.html',  username=user.name, admin=user.admin)
+
+@app.route('/fileManager')
+def fileManager():
+    if not user.admin: 
+        return redirect(url_for('home'))
+    return render_template('fileManager.html',  username=user.name, admin=user.admin)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

@@ -25,18 +25,20 @@
                   <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/home">Home</a>
                   </li>
-                  <li class="nav-item"></li>
-                    <a class="nav-link" aria-current="page" href="/recordings">Recordings</a>
+                  <li class="nav-item">
+                      <a class="nav-link" aria-current="page" href="/recordings">Recordings</a>
                   </li>
-                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Administrator
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/userManager">Users</a></li>
-                        <li><a class="dropdown-item" href="/fileManager">Files</a></li>
-                      </ul>
-                  </li>
+                  {% if admin %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Administrator
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/userManager">Users</a></li>
+                            <li><a class="dropdown-item" href="/fileManager">Files</a></li>
+                        </ul>
+                    </li>
+                  {% endif %}
                 </ul>
             </div>
             <div class="d-flex w-100 justify-content-end">   
@@ -57,7 +59,7 @@
         <div class="container-fluid p-5">
             <div class="row justify-content-center">
                 <div class="col-12 col-sm-8 col-md-6 col-lg-4">
-                    <h2>Files manager</h2>
+                    <h2>Recordings</h2>
                 </div>
             </div>
         </div>
