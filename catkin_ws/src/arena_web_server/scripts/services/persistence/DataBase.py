@@ -28,16 +28,21 @@ class DataBase:
                 db.create_all()
             app.app_context().push()
             
-        self.users = {}
+        self.users = []
         self.files = []
 
     def get_users(self):
         try:
             users = Users.query.all()
             for user in users:
-                self.users.update({ user.username: user.password })
+                # self.users.update({ 'username': user.username, 'password': user.password , 'admin': user.admin })
+                user_data = {
+                    'username': user.username,
+                    'password': user.password,
+                    'admin': user.admin
+                }
+                self.users.append(user_data)
             return self.users
-
         except Exception as error:
             print('Error in DataBase.get_users(): ', error)
             return self.users

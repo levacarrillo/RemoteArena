@@ -11,6 +11,8 @@ class Users(db.Model):
     account_id = db.Column(db.String(255), nullable=False)
     username = db.Column(db.String(255), nullable=False)
     password = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), nullable=False)
+    admin = db.Column(db.Boolean, nullable=False)
 
 class Files(db.Model):
     __tablename__ = 'files'
