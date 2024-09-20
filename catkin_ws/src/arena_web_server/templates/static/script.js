@@ -7,7 +7,20 @@ socket.on('batt-data', function(msg) {
     progresbar.style.width = msg.data + '%';
 
 });*/
+
+const cputemperature = document.getElementById('robot-temperature');
 const progresbar = document.getElementById('progress-bar');
+
+function getCpuTemp() {
+    fetch('/get_cpu_temp')
+    .then(response => response.json())
+    .then(data => {
+        cputemperature.innerHTML = data;
+    })
+    .catch(error => {
+        console.error('Error fetching data: ', error);
+    });
+}
 
 function getBatteryPercent() {
     fetch('/get_battery_percent')
@@ -20,6 +33,8 @@ function getBatteryPercent() {
         console.error('Error fetching data: ', error);
     });
 }
+
+setInterval(getCpuTemp, 2000);
 setInterval(getBatteryPercent, 2000);
 function moveRobotCommand(movement) {
     fetch('/move_robot_command', {

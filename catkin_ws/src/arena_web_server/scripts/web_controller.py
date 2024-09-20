@@ -73,6 +73,10 @@ def set_light_bulbs_state():
 def get_battery_percent():
     return jsonify(ros.batt_percent)
 
+@app.route('/get_cpu_temp', methods=['GET'])
+def get_cpu_temp():
+    return jsonify(ros.cpu_temp)
+
 @app.route('/move_robot_command', methods=['POST'])
 def move_robot_command():
     request_data = request.get_json()
