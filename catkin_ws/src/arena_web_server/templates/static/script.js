@@ -8,8 +8,20 @@ socket.on('batt-data', function(msg) {
 
 });*/
 
+const selectedrobot = document.getElementById('selected-robot')
 const cputemperature = document.getElementById('robot-temperature');
 const progresbar = document.getElementById('progress-bar');
+
+function getSelectedRobot() {
+    fetch('/get_selected_robot')
+    .then(response => response.json())
+    .then(data => {
+        selectedrobot.innerHTML = data;
+    })
+    .catch(error => {
+        console.error('Error fetching data: ', error);
+    });
+}
 
 function getCpuTemp() {
     fetch('/get_cpu_temp')
@@ -34,8 +46,10 @@ function getBatteryPercent() {
     });
 }
 
+setInterval(getSelectedRobot, 2000)
 setInterval(getCpuTemp, 2000);
 setInterval(getBatteryPercent, 2000);
+
 function moveRobotCommand(movement) {
     fetch('/move_robot_command', {
         method: 'POST',
