@@ -7,7 +7,6 @@
 !readme.MD
 
 # And these subdirectories
-!arena_camera/
 !arena_mapping/
 !arena_web_server/
 !arena_control/
