@@ -1,7 +1,6 @@
 import rospy
 from arena_control.srv import LightBulbsControl
 from std_msgs.msg import String
-#from flask_socketio import SocketIO, emit
 
 class ROS:
     def __init__(self):
@@ -9,10 +8,9 @@ class ROS:
         rospy.Subscriber('battery_percent', String, self.batt_callback)
         rospy.Subscriber('cpu_temp', String, self.cpu_temp_callback)
         self.lightBulbsState = [False, False]
+        self.selected_robot = rospy.get_param(rospy.search_param('selected_robot')) 
         self.batt_percent = "0%"
         self.cpu_temp = "--"
-        #self.socketio = SocketIO(app)
-        #self.socketio.run(app, host='0.0.0.0', port=4000)
 
     def cpu_temp_callback(self, data):
         self.cpu_temp = data.data + '°C'
