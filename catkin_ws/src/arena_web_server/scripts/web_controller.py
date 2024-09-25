@@ -69,6 +69,10 @@ def save_file():
 def set_light_bulbs_state():
     return jsonify(ros.set_light_bulbs_state(request.get_json()))
 
+@app.route('/get_selected_robot', methods=['GET'])
+def get_selected_robot():
+    return jsonify(ros.selected_robot)
+
 @app.route('/get_battery_percent', methods=['GET'])
 def get_battery_percent():
     return jsonify(ros.batt_percent)
