@@ -5,6 +5,7 @@
 !.gitignore
 !LICENSE
 !readme.MD
+!install.sh
 
 # And these subdirectories
 !catkin_ws/

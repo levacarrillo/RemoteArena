@@ -21,24 +21,3 @@ source deve/setup.bash
 ## Run with
 roslaunch arena_mapping startup.launch
 ```
-
-sudo apt-get install ros-melodic-web-video-server -y
-sudo apt-get install ros-kinetic-usb-cam
-sudo apt-get install ros-noetic-video-stream-opencv
-
-sudo apt-get install ros-noetic-roslint -y
-sudo apt-get install ros-noetic-rviz-visual-tools -y
-
-sudo apt-get install python3-pip -y
-sudo pip install Flask -y
-sudo apt-get install python3-venv -y °
-
-sudo pip3 install rospkg
-
-sudo apt-get install ros-noetic-rosserial-python
-sudo apt-get install ros-noetic-rosserial-arduino
-sudo apt-get install postgresql
-
-sudo pip3 install psycopg2-binary Flask-SQLAlchemy
-sudo pip3 install flask-socketio
-sudo pip3 install python-dotenv
