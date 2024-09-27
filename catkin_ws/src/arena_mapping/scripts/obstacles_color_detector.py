@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 import yaml
 import rospy
 import os
@@ -50,9 +50,9 @@ class obstacles_color_detector:
             self.tracked_image_msg = self.bridge.cv2_to_imgmsg(tracked_img, encoding="mono8")
             self.publisher.publish(self.tracked_image_msg)
         except CvBridgeError as e:
-            rospy.logerr(f"There was an error converting image: {e}")
+            rospy.logerr("There was an error converting image: %s", e)
         except cv2.error as e:
-            rospy.logerr(f"There was an error decoding image: {e}")
+            rospy.logerr("There was an error decoding image: %s", e)
 def load_config():
     filePath = os.path.dirname(os.path.abspath(os.path.dirname(__file__))) + '/assets/params/hsv_config.yaml'
     config_data = {
@@ -69,9 +69,9 @@ def load_config():
 
 def main():
     print("Starting obstacles_color_detector by Luis Nava.")
+    rospy.init_node('obstacles_color_detector', anonymous=True)
     config_data = load_config()
     ic = obstacles_color_detector(config_data)
-    rospy.init_node('obstacles_color_detector', anonymous=True)
     try:
         rospy.spin()
     except KeyboardInterrupt:
