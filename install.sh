@@ -1,6 +1,8 @@
 #!/bin/bash
-# Script of basic instalation
+# Basic instalation script
 
+sudo apt-get update -y 
+sudo apt-get upgrade -y
 sudo apt-get install ros-noetic-web-video-server -y
 sudo apt-get install ros-noetic-usb-cam -y
 sudo apt-get install ros-noetic-video-stream-opencv -y
