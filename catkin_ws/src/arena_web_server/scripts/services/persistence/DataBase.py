@@ -1,10 +1,14 @@
-from .models.ModelsDB import Users, Files, db
+from .models.ModelsDB import Users, Assignments, AssignmentFiles, About, db
 from dotenv import load_dotenv
 import os
 import rospkg
 
 class DataBase:
     def __init__(self, app=None):
+        self.admin = 1
+        self.professor = 2
+        self.student = 3
+
         if app is not None:
             self.app = app
             rospack = rospkg.RosPack()
@@ -27,53 +31,107 @@ class DataBase:
             with app.app_context():
                 db.create_all()
             app.app_context().push()
-            
-        self.users = []
-        self.files = []
+
+    def load_user(self):
+        try:
+            user = Users.query.get(1)
+            print(user)
+            if user:
+                user_dict = {
+                    'username': user.username,
+                    'names': user.names,
+                    'role': user.roles.name
+                }
+                return user_dict;
+            else:
+                return {}
+        except Exception as error:
+            print('Error in DataBase.load_user(): ', error)
+            return {}
 
     def get_users(self):
         try:
-            users = Users.query.all()
+            user_list = []
+            users = Users.query.filter(Users.role_id==self.student, Users.active==True)
             for user in users:
-                # self.users.update({ 'username': user.username, 'password': user.password , 'admin': user.admin })
                 user_data = {
                     'username': user.username,
-                    'password': user.password,
-                    'admin': user.admin
+                    'account_id': user.account_id,
                 }
-                self.users.append(user_data)
-            return self.users
+                user_list.append(user_data)
+            return user_list
         except Exception as error:
             print('Error in DataBase.get_users(): ', error)
-            return self.users
+            return []
 
-    def get_file_list(self):
-        self.files = []
+    def get_assignments(self):
         try:
-            files = Files.query.all()
+            assignment_list = []
+            assignments = Assignments.query
+            assignments = assignments.join(Users, Assignments.professor_id == Users.id)
+            assignments = assignments.all()
+            for assignment in assignments:
+                assignment_data = {
+                    'id': assignment.id,
+                    'title': assignment.title,
+                    'description': assignment.description,
+                    'due_date': assignment.due_date,
+                    'professor_names': assignment.professor.names,
+                }
+                assignment_list.append(assignment_data)
+            return assignment_list
+        except Exception as error:
+            print('Error in DataBase.get_assignments():', error)
+            return []
+
+    def get_assignment_files(self):
+        try:
+            file_list = []
+            files = AssignmentFiles.query
+            files = files.join(Users, AssignmentFiles.student_id == Users.id)
+            files = files.all()
             for file in files:
                 file_data = {
                     'id': file.id,
-                    'username': file.username,
-                    'file_name': file.file_name,
-                    'file_path': file.file_path,
-                    'algorithm': file.algorithm,
-                    'status': file.status,
-                    'active': file.active,
-                    'upload_date': file.upload_date
+                    'comments': file.comments,
+                    'compilation_status': file.compilation_status,
+                    'grade': file.grade,
+                    'uploaded_date': file.uploaded_date,
+                    'test_date': file.test_date,
+                    'username': file.student.username,
+                    'account_id': file.student.account_id,
+                    'name': file.student.names,
+                    'fathers_lastname': file.student.fathers_lastname,
+                    'mothers_lastname': file.student.mothers_lastname,
                 }
-                self.files.append(file_data)
-            return self.files
+                file_list.append(file_data)
+            print(file_list)
+            return file_list
         except Exception as error:
-            print('Error in DataBase.get_file_list(): ', error)
-            return []
+            print('Error in DataBase.get_assignment_files(): ', error)
 
-    def save_file(self, username, file_name, file_path, algorithm):
+    def get_about(self):
         try:
-            new_file = Files(username=username, file_name=file_name, file_path =file_path, algorithm=algorithm)
-            db.session.add(new_file)
-            db.session.commit()
-            return 'File added in database successfully'
+            about = About.query.filter_by(active=True).first()
+            if about:
+                about_dict = {
+                    'description': about.description,
+                    'contact_name': about.contact_name,
+                    'contact_email': about.contact_email,
+                }
+                return about_dict
+            return {}
         except Exception as error:
-            print('Error in DataBase.save_file(): ', error)
-            return 'Error in DataBase.save_file(): ' + error
+            print('Error in DataBase.get_users(): ', error)
+            return {}
+        
+
+    # def save_file(self, username, file_name, file_path, algorithm):
+    #     try:
+    #         new_file = Files(username=username, file_name=file_name, file_path =file_path, algorithm=algorithm)
+    #         db.session.add(new_file)
+    #         db.session.commit()
+    #         return 'File added in database successfully'
+    #     except Exception as error:
+    #         print('Error in DataBase.save_file(): ', error)
+    #         return 'Error in DataBase.save_file(): ' + error

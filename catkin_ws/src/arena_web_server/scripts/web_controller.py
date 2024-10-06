@@ -1,67 +1,50 @@
 #!/usr/bin/env python3
 from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask_cors import CORS
 from services.User import * 
 from services.Data import *
 from services.ROS import *
 
 
 app = Flask(__name__, static_folder = '../templates/static', template_folder = '../templates')
+CORS(app)
 port = 4000
 
-# VIEW
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    return redirect(url_for('home'))
-
-@app.route('/home', methods=['GET'])
-def home():
-    if user.session_active:
-        return render_template('home.html', username=user.name, admin=user.admin, programFiles=data.get_file_list())
-    return redirect(url_for('login'))
-
-@app.route('/recordings', methods=['GET'])
-def recordings():
-    return render_template('recordings.html',  username=user.name, admin=user.admin)
-
-@app.route('/userManager')
-def userManager():
-    if not user.admin: 
-        return redirect(url_for('home'))
-    return render_template('userManager.html',  username=user.name, admin=user.admin)
-
-@app.route('/fileManager')
-def fileManager():
-    if not user.admin: 
-        return redirect(url_for('home'))
-    return render_template('fileManager.html',  username=user.name, admin=user.admin)
-
-
-@app.route('/login', methods=['GET', 'POST'])
+# USER
+@app.route('/login', methods=['POST'])
 def login():
-    if request.method == 'POST' and user.login(request):
-            return redirect(url_for('index'))
-
-    return render_template('login.html')
+    user.login(request)
+    return jsonify({})
 
 @app.route('/logout', methods=['GET'])
 def logout():
-    user.logout('administrator')
-    return redirect(url_for('login'))
-
+    return jsonify({})
 
 # PERSISTENCE
-@app.route('/get_users', methods=['GET'])
+@app.route('/get_users', methods=['POST'])
 def get_users():
     users = data.get_users()
     return jsonify(users)
 
-@app.route('/get_file_list', methods=['GET'])
-def get_file_list():
-    return jsonify(data.get_file_list())
+@app.route('/get_assignments', methods=['POST'])
+def get_assignments():
+    return jsonify(data.get_assignments())
 
-@app.route('/save_file', methods=['POST'])
-def save_file():
-    return jsonify(data.save_file(user.name, request))
+@app.route('/get_assignment_files', methods=['POST'])
+def get_assignment_files():
+    return jsonify(data.get_assignment_files())
+
+# @app.route('/get_file_list', methods=['GET'])
+# def get_file_list():
+#     return jsonify(data.get_file_list())
+
+# @app.route('/save_file', methods=['POST'])
+# def save_file():
+#     return jsonify(data.save_file(user.name, request))
+
+@app.route('/get_about', methods=['GET'])
+def get_about():
+    return jsonify(data.get_about())
 
 
 # ROS
