@@ -69,7 +69,7 @@ class AssignmentFiles(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     comments = db.Column(db.String(255), nullable=True)
     file_path = db.Column(db.String(255), nullable=False)
-    compilation_status = db.Column(db.Boolean, nullable=False)
+    compilation_status = db.Column(db.String(255), nullable=False)
     grade = db.Column(db.Integer, nullable=True)
     uploaded_date = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
     test_date = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
@@ -100,6 +100,7 @@ class About(db.Model):
     description = db.Column(db.String(355), nullable=False)
     contact_name = db.Column(db.String(255), nullable=False)
     contact_email = db.Column(db.String(255), nullable=False)
+    picture_path = db.Column(db.String(255), nullable=False)
     active = db.Column(db.Boolean, nullable=False)
 
     def __repr__(self):
