@@ -6,9 +6,5 @@
 !LICENSE
 !readme.MD
 
-# And these subdirectories
-!assets/
-!launch/
-!rosbags/
-!scripts/
-!src/
+!no_image.jpg
+!white_background.png

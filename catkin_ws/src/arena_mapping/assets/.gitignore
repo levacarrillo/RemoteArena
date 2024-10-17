@@ -7,8 +7,9 @@
 !readme.MD
 
 # And these subdirectories
-!assets/
-!launch/
-!rosbags/
-!scripts/
-!src/
+!images/
+!maps/
+!params/
+!rviz_visualization/
+!urdf/
+

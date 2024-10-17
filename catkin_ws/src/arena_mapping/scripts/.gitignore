@@ -6,9 +6,5 @@
 !LICENSE
 !readme.MD
 
-# And these subdirectories
-!assets/
-!launch/
-!rosbags/
-!scripts/
-!src/
+!aruco_detector.py
+!obstacles_color_calibrator.py

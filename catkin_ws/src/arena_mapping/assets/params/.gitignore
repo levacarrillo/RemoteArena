@@ -6,9 +6,4 @@
 !LICENSE
 !readme.MD
 
-# And these subdirectories
-!assets/
-!launch/
-!rosbags/
-!scripts/
-!src/
+!hsv_config.yaml
