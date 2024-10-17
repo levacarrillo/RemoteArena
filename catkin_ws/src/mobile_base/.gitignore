@@ -6,4 +6,9 @@
 !LICENSE
 !readme.MD
 
-!mobile_base_node_simul.cpp
+!CMakeLists.txt
+!package.xml
+
+# And these subdirectories
+!src/
+!srv/

@@ -6,8 +6,7 @@
 !LICENSE
 !readme.MD
 
+!mobile_base_node_simul.cpp
+!move_minibot_node_simul.cpp
+
 # And these subdirectories
-!arena_mapping/
-!arena_web_server/
-!arena_control/
-!mobile_base/

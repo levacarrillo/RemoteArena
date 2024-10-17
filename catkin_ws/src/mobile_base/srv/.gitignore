@@ -6,8 +6,6 @@
 !LICENSE
 !readme.MD
 
+!MoveMinibot.srv
+
 # And these subdirectories
-!arena_mapping/
-!arena_web_server/
-!arena_control/
-!mobile_base/
