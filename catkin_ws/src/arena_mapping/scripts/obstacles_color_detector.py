@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import yaml
 import rospy
 import os
@@ -41,11 +41,11 @@ class obstacles_color_detector:
             #Threshold the HSV image to get only red colors
             tracked_img = cv2.inRange(image_hsv, self.lower_hsv, self.upper_hsv)
 
-            #cv2.imshow('real_img', image_np)
-            #cv2.imshow('hsv_img', image_hsv)
-            #cv2.imshow('gray_img', image_gray)
-            #cv2.imshow('tracked_img', tracked_img)
-            #cv2.waitKey(1)
+            # cv2.imshow('real_img', image_np)
+            # cv2.imshow('hsv_img', image_hsv)
+            # cv2.imshow('gray_img', image_gray)
+            # cv2.imshow('tracked_img', tracked_img)
+            # cv2.waitKey(1)
             
             self.tracked_image_msg = self.bridge.cv2_to_imgmsg(tracked_img, encoding="mono8")
             self.publisher.publish(self.tracked_image_msg)
