@@ -1,0 +1,7 @@
+image: /home/luisnava/RemoteArena/catkin_ws/src/arena_mapping/assets/images/white_background.png  # Ruta del archivo de imagen
+resolution: 0.01                # Tamaño de cada píxel en metros
+width: 102
+origin: [0.0, 0.0, 0.0]         # Coordenadas del origen del mapa [x, y, theta]
+occupied_thresh: 0.65           # Umbral para marcar celdas ocupadas
+free_thresh: 0.196              # Umbral para celdas libres
+negate: 0                       # 0 si blanco es libre, 1 si es ocupado

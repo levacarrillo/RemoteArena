@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<robot name="minibot">
+  <material name="gray">
+    <color rgba="0.5 0.5 0.5 1.0" />
+  </material>
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <cylinder length="0.12" radius="0.065" />
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.06" />
+      <material name="gray" />
+    </visual>
+  </link>
+</robot>
