@@ -78,8 +78,8 @@ int main(int argc, char ** argv) {
     geometry_msgs::TransformStamped static_transformStamped;
 
     static_transformStamped.header.stamp = ros::Time::now();
-    static_transformStamped.header.frame_id = "world";
-    static_transformStamped.child_frame_id = "map";
+    static_transformStamped.header.frame_id = "map";
+    static_transformStamped.child_frame_id = "odom";
     static_transformStamped.transform.translation.x = 0;
     static_transformStamped.transform.translation.y = 0;
     static_transformStamped.transform.translation.z = 0;
