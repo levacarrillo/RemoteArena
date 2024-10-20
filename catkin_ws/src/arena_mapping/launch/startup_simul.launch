@@ -8,6 +8,10 @@
         <param name="frame_id" value="map" />
     </node>
     <node name="mobile_base_node_simul" pkg="mobile_base" type="mobile_base_node_simul"  output="screen" />
+    <node name="move_minibot_node_simul" pkg="mobile_base" type="move_minibot_node_simul"  output="screen" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+        <remap from="joint_states" to="/joint_states" />
+    </node>
     <!-- Nodes to detect main characteristics -->
     <node name="aruco_detector"  pkg="arena_mapping" type="aruco_detector.py" output="screen" respawn="true" />
     <node name="obstacles_color_detector" pkg="arena_mapping" type="obstacles_color_detector.py" output="screen" respawn="true" />
