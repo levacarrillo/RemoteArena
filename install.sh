@@ -9,6 +9,7 @@ sudo apt-get install ros-noetic-video-stream-opencv -y
 sudo apt-get install ros-noetic-roslint -y
 sudo apt-get install ros-noetic-rviz-visual-tools -y
 sudo apt-get install ros-noetic-map-server -y
+sudo apt-get install ros-noetic-arudo-ros -y
 sudo apt-get install python3-pip -y
 sudo apt-get install python3-venv -y
 sudo pip3 install flask
