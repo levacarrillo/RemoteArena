@@ -1,4 +1,4 @@
-image: /home/luisnava/RemoteArena/catkin_ws/src/arena_mapping/assets/images/white_background.png  # Ruta del archivo de imagen
+image: ../images/white_background.png  # Ruta del archivo de imagen
 resolution: 0.01                # Tamaño de cada píxel en metros
 width: 102
 origin: [0.0, 0.0, 0.0]         # Coordenadas del origen del mapa [x, y, theta]
