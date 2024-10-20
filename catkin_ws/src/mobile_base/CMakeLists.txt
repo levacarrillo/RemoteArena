@@ -32,7 +32,10 @@ catkin_package(
 #  DEPENDS system_lib
 )
 
-include_directories(${catkin_INCLUDE_DIRS})
+include_directories(
+  include
+  ${catkin_INCLUDE_DIRS}
+)
 
 add_executable(mobile_base_node_simul src/mobile_base_node_simul.cpp)
 add_dependencies(mobile_base_node_simul ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})

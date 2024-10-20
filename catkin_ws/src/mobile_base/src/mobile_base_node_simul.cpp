@@ -47,9 +47,9 @@ void publishOdom(nav_msgs::Odometry odom, double dt) {
 }
 
 void callbackCmdVel(const geometry_msgs::Twist::ConstPtr &msg) {
-    std::cout << "Received command robot velocity"<< std::endl;
-    std::cout << "linear x->" << msg->linear.x << std::endl;
-    std::cout << "angular z->"<< msg->angular.z << std::endl;
+    // std::cout << "Received command robot velocity"<< std::endl;
+    // std::cout << "linear x->" << msg->linear.x << std::endl;
+    // std::cout << "angular z->"<< msg->angular.z << std::endl;
 
     vx  = msg->linear.x;
     vth = msg->angular.z;
@@ -59,7 +59,7 @@ int main(int argc, char ** argv) {
     std::cout << "Starting mobile_base_node_simul by Luis Nava..." << std::endl;
 	ros::init(argc, argv, "mobile_base_node_simul");
 	ros::NodeHandle nh;
-    ros::Rate rate(50);
+    ros::Rate rate(60);
 
     ros::Subscriber subCmdVel = nh.subscribe("/cmd_vel", 1, callbackCmdVel);
     ros::Publisher pubJointState = nh.advertise<sensor_msgs::JointState>("/joint_states", 1);
@@ -80,8 +80,8 @@ int main(int argc, char ** argv) {
     static_transformStamped.header.stamp = ros::Time::now();
     static_transformStamped.header.frame_id = "map";
     static_transformStamped.child_frame_id = "odom";
-    static_transformStamped.transform.translation.x = 0;
-    static_transformStamped.transform.translation.y = 0;
+    static_transformStamped.transform.translation.x = 0.2;
+    static_transformStamped.transform.translation.y = 0.5;
     static_transformStamped.transform.translation.z = 0;
 
     tf2::Quaternion quat;
