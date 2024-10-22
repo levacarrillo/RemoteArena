@@ -6,4 +6,7 @@
 !LICENSE
 !readme.MD
 
-!config_file.rviz
+!CMakeLists.txt
+!package.xml
+
+!profiles.h
