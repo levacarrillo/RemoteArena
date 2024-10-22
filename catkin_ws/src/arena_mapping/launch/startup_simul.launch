@@ -3,7 +3,7 @@
     <node name="play_bag" pkg="rosbag" type="play" args="$(find arena_mapping)/rosbags/bag_only_camera.bag" respawn="true" />
     <!-- Nodes to Rviz visualization -->
     <param name="robot_description" command="cat '$(find arena_mapping)/assets/urdf/minibot.urdf'" />
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find arena_mapping)/assets/rviz_visualization/config_file.rviz" />
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find arena_mapping)/assets/visualization/config_simulator.rviz" />
     <node name="map_server" pkg="map_server" type="map_server" args="$(find arena_mapping)/assets/maps/arena_map.yaml" >
         <param name="frame_id" value="map" />
     </node>
