@@ -4,156 +4,62 @@
 #include <iostream>
 #include <geometry_msgs/Twist.h>
 
-enum Profile {
-    RECTANGULAR,
-    TRIANGULAR,
-    TRAPEZOIDAL,
-    GAUSSIAN,
-    SIGMOIDE,
-    POLYNOMIAL,
-};
+float current_speed;
 
-float incremetal_speed = 0;
+float max_linear_speed;
+float speed_increment;
+float linear_alpha;
 
-float rectangularProfile(float v_max, float error){
-    if (error < 0)
-        return -v_max;
-    else
-        return v_max;
+float max_angular_vel;
+float angular_alpha;
+
+bool setParameters() {
+    // PARAMETERS FOR LINEAR ADVANCE
+    if(ros::param::has("max_linear_speed")) ros::param::get("max_linear_speed", max_linear_speed);
+    else { ROS_ERROR("There's no parameter for max_linear_speed"); return false; }
+
+    if(ros::param::has("speed_increment")) ros::param::get("speed_increment", speed_increment);
+    else { ROS_ERROR("There's no parameter for speed_increment"); return false; }
+
+    if(ros::param::has("linear_alpha")) ros::param::get("linear_alpha", linear_alpha);
+    else { ROS_ERROR("There's no parameter for linear_alpha"); return false; }
+
+    // PARAMETERS FOR ANGULAR TWIST
+    if(ros::param::has("max_angular_vel")) ros::param::get("max_angular_vel", max_angular_vel);
+    else { ROS_ERROR("There's no parameter for max_angular_vel"); return false; }
+
+    if(ros::param::has("angular_alpha")) ros::param::get("angular_alpha", angular_alpha);
+    else { ROS_ERROR("There's no parameter for angular_alpha"); return false; }
+
+    return true;
 }
 
-float triangularProfile(float v_max, float v_init, float curr, float goal) {
+float trapezoidalProfile(float curr, float goal) {
     float dir = goal / fabs(goal);
-    v_init = fabs(v_init);
-    curr   = fabs(curr);
-    goal   = fabs(goal);
-    // CALCULING TWO GRADIENTS
-    float m1 = 2 * (v_max - v_init) / goal;
-    float m2 = - (2 * v_max) / goal;
-    if (curr <= goal / 2) {
-        return dir * (v_init + m1 * curr);
-    } else if (curr > goal / 2 && curr < goal) {
-        return dir * (v_max + m2 * (curr - goal / 2));
-    }
-    return 0;
+    if (current_speed < max_linear_speed) current_speed += speed_increment;
+
+    if (curr >= goal) current_speed = 0;
+    return dir * current_speed;
 }
 
-float trapezoidalProfile(float v_max, float auto_increment, float curr, float goal) {
-    float dir = goal / fabs(goal);
-    incremetal_speed += auto_increment;
-    if (incremetal_speed > v_max) incremetal_speed = v_max;
-    curr   = fabs(curr);
-    goal   = fabs(goal);
-    if (curr >= goal) incremetal_speed = 0;
-    return dir * incremetal_speed;
+float sigmoideProfile(float angle_error, float alpha) {
+    return max_angular_vel * (2 / (1 + exp( -angle_error / alpha)) - 1);
 }
 
-float gaussianProfile(float v_max, float error, float alpha) {
-    return v_max * exp(- pow(error, 2) / alpha);
-}
-
-float sigmoideProfile(float v_max, float error, float alpha) {
-    return v_max * (2 / (1 + exp(- error / alpha)) - 1);
-}
-
-float polynomialProfile(float v_max, float v_init, float goal) {
-    float a, b, c, x, v_top;
-    float xp_0 = 6 * v_init / (v_max + 3 * v_init);
-    a = (xp_0 - 2)/pow(goal, 2);
-    b = (3 - 2*xp_0) / (goal);
-    c = xp_0;
-    float x_inf = - b /(3*a);
-    float vel = 3*a*pow(x_inf, 2) + 2*b*x_inf + c;
-    return vel;
-}
-
-geometry_msgs::Twist getAngularVelocity(
-                                            float curr,
-                                            float goal,
-                                            float angle_error,
-                                            Profile profile) {
-
-    float w = 0;
-    float start_angular = 0.5;
-    float max_vel_angular = 0.5;
-    float initial_vel_angular = 0.2;
-    float auto_increment = 0.1;
-    float gaussian_alpha = 30.2;
-    float sigmoide_alpha = 0.45;
-
-    switch(profile) {
-        case RECTANGULAR:
-            w = rectangularProfile(max_vel_angular, angle_error);
-        break;
-        case TRIANGULAR:
-            w = triangularProfile(max_vel_angular, initial_vel_angular, curr, goal);
-        break;
-        case TRAPEZOIDAL:
-            w = trapezoidalProfile(max_vel_angular, auto_increment, curr, goal);
-        break;
-        case GAUSSIAN:
-            w = gaussianProfile(max_vel_angular, angle_error, gaussian_alpha);
-        break;
-        case SIGMOIDE:
-            w = sigmoideProfile(max_vel_angular, angle_error, sigmoide_alpha);
-        break;
-        case POLYNOMIAL:
-            w = polynomialProfile(max_vel_angular, initial_vel_angular, goal);
-        break;
-        default:
-            w = rectangularProfile(max_vel_angular, angle_error);
-        break;
-    }
-
+geometry_msgs::Twist getAngularVelocity(float angle_error) {
     geometry_msgs::Twist angular_vel;
     angular_vel.linear.x = 0.0;
     angular_vel.linear.y = 0.0;
-    angular_vel.angular.z = w;
+    angular_vel.angular.z = sigmoideProfile(angle_error, angular_alpha);
 
     return angular_vel;
 }
 
-geometry_msgs::Twist getLinearVelocity(
-                                        float curr,
-                                        float goal,
-                                        float distance_error,
-                                        Profile profile) {
-    float v;
-    float v_max = 0.2;
-    float initial_vel = 0.1;
-    float auto_increment = 0.1;
-
-    float gaussian_alpha = 20.2;
-    float sigmoide_alpha = 1.2;
-
-    switch(profile) {
-        case RECTANGULAR:
-            v = rectangularProfile(v_max, distance_error);
-        break;
-        case TRIANGULAR:
-            v = triangularProfile(v_max, initial_vel, curr, goal);
-        break;
-        case TRAPEZOIDAL:
-            v = trapezoidalProfile(v_max, auto_increment, curr, goal);
-        break;
-        case GAUSSIAN:
-            v = gaussianProfile(v_max, distance_error, gaussian_alpha);
-        break;
-        case SIGMOIDE:
-            v = sigmoideProfile(v_max, distance_error, sigmoide_alpha);
-        break;
-        case POLYNOMIAL:
-            v = polynomialProfile(v_max, initial_vel, goal);
-        break;
-        default:
-            v = rectangularProfile(v_max, distance_error);
-        break;
-    }
-
+geometry_msgs::Twist getLinearVelocity(float curr, float goal, float angle_error) {
     geometry_msgs::Twist linear_velocity;
-    linear_velocity.linear.x = v;
+    linear_velocity.linear.x = trapezoidalProfile(curr, goal);
     linear_velocity.linear.y = 0.0;
-    linear_velocity.angular.z = 0.0;
+    linear_velocity.angular.z = sigmoideProfile(angle_error, linear_alpha);
 
     return linear_velocity;
 }

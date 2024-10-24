@@ -26,6 +26,11 @@ float DISTANCE_TOLERANCY = 0.08;
 
 ros::Publisher pubCmdVel;
 
+float normalizeAngle(float angle) {
+    if (angle < 0) angle += 2 * M_PI;
+    return angle;
+}
+
 robotPose getAbsolutePose(tf2_ros::Buffer& tfBuffer) {
     robotPose absolutePose;
     try{
@@ -35,14 +40,12 @@ robotPose getAbsolutePose(tf2_ros::Buffer& tfBuffer) {
         tf2::fromMsg(transformStamped.transform.rotation, q);
         double roll, pitch, yaw;
         tf2::getEulerYPR(q, yaw, pitch, roll);
-
+        
         absolutePose.x = transformStamped.transform.translation.x;
         absolutePose.y = transformStamped.transform.translation.y;
         absolutePose.th = yaw;
         absolutePose.magnitude = sqrt(pow(absolutePose.x, 2) + pow(absolutePose.y, 2));
 
-        if (yaw > M_PI)   absolutePose.th -= 2 * M_PI;
-        if (yaw <= -M_PI) absolutePose.th += 2 * M_PI;
     } catch (tf2::TransformException &ex) {
         ROS_WARN("%s", ex.what());
         ros::Duration(1.0).sleep();
@@ -66,7 +69,11 @@ robotPose getCurrentPose(robotPose absPose) {
     robotPose currentPose;
     currentPose.x  = absPose.x  - init.x;
     currentPose.y  = absPose.y  - init.y;
-    currentPose.th = absPose.th - init.th;
+    if (init.th + goal.th < -M_PI || init.th + goal.th > M_PI ) {
+        currentPose.th = normalizeAngle(absPose.th) - normalizeAngle(init.th);
+    } else {
+        currentPose.th = absPose.th - init.th;
+    }
     currentPose.magnitude = sqrt(pow(currentPose.x, 2) + pow(currentPose.y, 2));
     return currentPose;
 }
@@ -91,8 +98,6 @@ bool moveCallback(mobile_base::MoveMinibot::Request &req, mobile_base::MoveMinib
     goal = getGoalPose(req);
 
     State state = SM_CORRECT_ANGLE;
-    Profile angularProfile = RECTANGULAR;
-    Profile linearProfile = RECTANGULAR;
 
     while(ros::ok() && !res.done) {
         curr  = getCurrentPose(getAbsolutePose(tfBuffer));
@@ -107,15 +112,16 @@ bool moveCallback(mobile_base::MoveMinibot::Request &req, mobile_base::MoveMinib
         switch(state) {
             case SM_CORRECT_ANGLE:
                 if(abs(error.th) > ANGLE_TOLERANCY) {
-                    pubCmdVel.publish(getAngularVelocity(curr.th, goal.th, error.th, angularProfile));
+                    pubCmdVel.publish(getAngularVelocity(error.th));
                 } else {
                     state = SM_MOVE_ROBOT;
                 }
             break;
             case SM_MOVE_ROBOT:
                 if(abs(error.magnitude) > DISTANCE_TOLERANCY) {
-                    pubCmdVel.publish(getLinearVelocity(curr.magnitude, goal.magnitude, error.magnitude, linearProfile));
+                    pubCmdVel.publish(getLinearVelocity(curr.magnitude, goal.magnitude, error.th));
                 } else {
+                    current_speed = 0;
                     state = SM_FINISH_MOVEMENT;
                 }
             break;
@@ -138,10 +144,11 @@ int main(int argc, char **argv) {
     std::cout << "Starting move_minibot_node_simul by Luis Nava..." << std::endl;
     ros::init(argc, argv, "move_minibot_node_simul");
     ros::NodeHandle nh;
-    
+    if(!setParameters()) return -1;
+
     pubCmdVel = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
     ros::ServiceServer moveService = nh.advertiseService("move_robot", moveCallback);
 
     ros::spin();
-    return 1;
+    return 0;
 }
