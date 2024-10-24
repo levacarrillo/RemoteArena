@@ -7,13 +7,13 @@
     <node name="map_server" pkg="map_server" type="map_server" args="$(find arena_mapping)/assets/maps/arena_map.yaml" >
         <param name="frame_id" value="map" />
     </node>
-    <!-- Nodes to controll minibot -->
-    <node name="mobile_base_node_simul" pkg="mobile_base" type="mobile_base_node_simul"  output="screen" />
-    <node name="move_minibot_node_simul" pkg="mobile_base" type="move_minibot_node_simul"  output="screen" />
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
         <remap from="joint_states" to="/joint_states" />
     </node>
-    <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler" />
+    <!-- Launch mobile base -->
+    <include file="$(find mobile_base)/launch/bring_up_base.launch" />
+    <!-- Graphics node -->
+    <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler" args="--layout '$(find arena_mapping)/assets/visualization/config_plot_profiles.xml'" />
     <!-- Nodes to detect main characteristics -->
     <node name="aruco_detector"  pkg="arena_mapping" type="aruco_detector.py" output="screen" respawn="true" />
     <node name="obstacles_color_detector" pkg="arena_mapping" type="obstacles_color_detector.py" output="screen" respawn="true" />
