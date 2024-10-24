@@ -10,8 +10,4 @@
 !package.xml
 
 # And these subdirectories
-!assets/
-!include/
-!launch/
-!src/
-!srv/
+!params/

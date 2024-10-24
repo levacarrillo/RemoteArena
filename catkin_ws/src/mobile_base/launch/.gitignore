@@ -6,12 +6,5 @@
 !LICENSE
 !readme.MD
 
-!CMakeLists.txt
-!package.xml
-
+!bring_up_base.launch
 # And these subdirectories
-!assets/
-!include/
-!launch/
-!src/
-!srv/
