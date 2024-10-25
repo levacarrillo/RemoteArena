@@ -3,21 +3,21 @@
  <tabbed_widget name="Main Window" parent="main_window">
   <Tab containers="1" tab_name="PID's">
    <Container>
-    <DockSplitter sizes="0.500499;0.499501" orientation="-" count="2">
+    <DockSplitter sizes="0.500717;0.499283" orientation="-" count="2">
      <DockArea name="...">
-      <plot flip_x="false" mode="TimeSeries" flip_y="false" style="Lines">
-       <range top="0.201396" bottom="0.142748" left="1729633581.481815" right="1729633591.478220"/>
+      <plot flip_x="false" style="Lines" flip_y="false" mode="TimeSeries">
+       <range bottom="-0.100000" left="5.928022" top="0.100000" right="10.910459"/>
        <limitY/>
-       <curve color="#1f77b4" name="/curr_speeds/data[0]"/>
-       <curve color="#d62728" name="/curr_speeds/data[1]"/>
+       <curve name="/curr_speeds/data[0]" color="#1f77b4"/>
+       <curve name="/curr_speeds/data[1]" color="#d62728"/>
       </plot>
      </DockArea>
      <DockArea name="...">
-      <plot flip_x="false" mode="TimeSeries" flip_y="false" style="Lines">
-       <range top="0.077605" bottom="-0.001893" left="1729633581.481815" right="1729633591.478220"/>
+      <plot flip_x="false" style="Lines" flip_y="false" mode="TimeSeries">
+       <range bottom="-0.100000" left="5.928022" top="0.100000" right="10.910459"/>
        <limitY/>
-       <curve color="#1ac938" name="/curr_speeds/data[2]"/>
-       <curve color="#ff7f0e" name="/curr_speeds/data[3]"/>
+       <curve name="/curr_speeds/data[2]" color="#1ac938"/>
+       <curve name="/curr_speeds/data[3]" color="#ff7f0e"/>
       </plot>
      </DockArea>
     </DockSplitter>
@@ -25,7 +25,7 @@
   </Tab>
   <currentTabIndex index="0"/>
  </tabbed_widget>
- <use_relative_time_offset enabled="0"/>
+ <use_relative_time_offset enabled="1"/>
  <!-- - - - - - - - - - - - - - - -->
  <!-- - - - - - - - - - - - - - - -->
  <Plugins>

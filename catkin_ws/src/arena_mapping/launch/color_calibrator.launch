@@ -1,7 +1,6 @@
 <launch>
-    <!-- Node for hardware's camera -->
-    <param name="/camera_id" value="0"/>
-    <node name="arena_camera_node" pkg="arena_control" type="arena_camera_node" output="screen"/>
+    <!-- Launch to startup hardware from real arena -->
+    <include file="$(find arena_control)/launch/hardware.launch" />
     <!-- Node to calibrate hsv params -->
     <node name="obstacles_color_calibrator" pkg="arena_mapping" type="obstacles_color_calibrator.py" output="screen" />
 </launch>

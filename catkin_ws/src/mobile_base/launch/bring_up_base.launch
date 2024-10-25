@@ -1,5 +1,0 @@
-<launch>
-    <rosparam command="load" file="$(find mobile_base)/assets/params/profile.yaml" />
-    <node name="mobile_base_node_simul" pkg="mobile_base" type="mobile_base_node_simul"  output="screen" />
-    <node name="move_minibot_node_simul" pkg="mobile_base" type="move_minibot_node_simul"  output="screen" />
-</launch>

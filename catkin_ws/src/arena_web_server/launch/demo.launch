@@ -1,5 +1,4 @@
 <launch>
-    <param name="selected_robot" type="str" value="None" />
     <!-- Start arena characteristics -->
     <include file="$(find arena_mapping)/launch/startup.launch" />
     <!-- Nodes to start web services -->
