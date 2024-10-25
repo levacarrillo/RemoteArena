@@ -6,10 +6,5 @@
 !LICENSE
 !readme.MD
 
-!CMakeLists.txt
-!package.xml
-
 # And these subdirectories
-!params/
-!urdf/
 !visualization/

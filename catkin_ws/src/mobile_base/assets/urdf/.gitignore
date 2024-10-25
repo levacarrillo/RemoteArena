@@ -6,5 +6,4 @@
 !LICENSE
 !readme.MD
 
-!bring_up_base_simul.launch
-# And these subdirectories
+!minibot.urdf
