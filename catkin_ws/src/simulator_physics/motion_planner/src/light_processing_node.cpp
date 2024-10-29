@@ -20,7 +20,7 @@ bool light_callback(motion_planner::LightReadings::Request &req, motion_planner:
     float max_intensity = 0;
     bool threshold_reached = false;
 
-    for (size_t i=0; i<sizeof(light_readings); i++) {
+    for (size_t i=0; i<8; i++) {
         float light_distance_x = robot_distance_to_light.x - ROBOT_RADIUS * std::cos(sensor_angle[i]);
         float light_distance_y = robot_distance_to_light.y - ROBOT_RADIUS * std::sin(sensor_angle[i]);
         res.light_readings[i] = light_readings[i] = 1 / sqrt(pow(light_distance_x, 2) + pow(light_distance_y, 2));

@@ -14,12 +14,11 @@ int main(int argc, char* argv[]) {
     ros::Rate rate(20);
 
     bool stop_running = false;
-    float light_max_intensity;
+
+    float max_intensity;
     float light_readings[8];
 
     movement movement;
-    float max_advance    =  0.3;
-    float max_turn_angle =  0.3;
 
     enum Behavior {
         SM_LIGHT_FOLLOWER,
@@ -36,12 +35,12 @@ int main(int argc, char* argv[]) {
 
     Behavior behavior = SM_LIGHT_FOLLOWER;
 
-    MotionPlannerUtilities motionPlannerUtilities(nh);
+    MotionPlannerUtilities mpu(nh);
 
     while(ros::ok()) {
         if (!stop_running) {
             if (light_client.call(srv)) {
-                light_max_intensity = srv.response.max_intensity;
+                max_intensity = srv.response.max_intensity;
                 for (size_t i=0; i<srv.response.light_readings.size(); i++) {
                     light_readings[i] = srv.response.light_readings[i];
                 }
@@ -51,7 +50,7 @@ int main(int argc, char* argv[]) {
 
             switch(behavior) {
                 case SM_LIGHT_FOLLOWER:
-                    stop_running = light_follower(light_max_intensity, light_readings, &movement, max_advance);
+                    stop_running = light_follower(max_intensity, light_readings, &movement, mpu.get_max_advance());
                 break;
                 default:
                     std::cout << " *************** NO BEHAVIOR DEFINED *************** " << std::endl;
@@ -67,7 +66,7 @@ int main(int argc, char* argv[]) {
             std::cout << "Movement: twist: " << movement.twist << " advance: " << movement.advance << "\n" << std::endl;
 
         
-            motionPlannerUtilities.move_robot(movement.twist, movement.advance);
+            mpu.move_robot(movement.twist, movement.advance);
         }
         ros::spinOnce();
         rate.sleep();

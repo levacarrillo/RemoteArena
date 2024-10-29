@@ -1,4 +1,7 @@
 <launch>
+    <param name="/max_advance" value="0.3" />
+    <param name="/max_turn_angle" value="0.7854" />
+    <param name="/threshold_follower" value="7.1" />
     <node name="motion_planner_node" pkg="motion_planner" type="motion_planner_node" output="screen" />
     <node name="light_processing_node" pkg="motion_planner" type="light_processing_node" output="screen" />
 </launch>

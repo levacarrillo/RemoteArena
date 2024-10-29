@@ -12,9 +12,12 @@
 *                                              *
 ************************************************/
 
-#define THRESHOLD_FOLLOWER 7.1
+float THRESHOLD_FOLLOWER = 7.1;
 
 bool light_follower(float max_intensity, float* light_readings, movement* movement, float max_advance) {
+    if (!ros::param::get("/threshold_follower", THRESHOLD_FOLLOWER)) {
+        ROS_ERROR("COULDN'T FIND /threshold_follower PARAMETER");
+    }
 
     int sensor_max_value = 0;
 
@@ -31,9 +34,10 @@ bool light_follower(float max_intensity, float* light_readings, movement* moveme
         if (sensor_max_value > 4) {
             sensor_max_value = - (sizeof(light_readings) - sensor_max_value);
         }
-        
+
         movement->twist   = sensor_max_value * M_PI / 16;
         movement->advance = max_advance;
     }
+    
     return false;
 }

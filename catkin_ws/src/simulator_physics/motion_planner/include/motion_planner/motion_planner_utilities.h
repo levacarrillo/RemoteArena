@@ -8,10 +8,25 @@ class MotionPlannerUtilities {
     private:
         ros::NodeHandle &nh_;
         ros::ServiceClient client;
+        float max_advance;
+        float max_turn_angle;
     public:
         MotionPlannerUtilities(ros::NodeHandle &nh) : nh_(nh) {
-            std::cout << "standing..." << std::endl;
             client = nh_.serviceClient<mobile_base::MoveMinibot>("move_robot");
+        }
+
+        float get_max_advance() {
+            if (!nh_.getParam("/max_advance", max_advance)) {
+                ROS_ERROR("FAILED TO GET PARAMETER /max_advance OF ROBOT");
+            }
+            return max_advance;
+        }
+        
+        float get_max_turn_angle() {
+            if (!nh_.getParam("/max_turn_angle", max_turn_angle)) {
+                ROS_ERROR("FAILED TO GET PARAMETER /max_turn_angle OF ROBOT");
+            }
+            return max_turn_angle;
         }
 
         void move_robot(float theta, float advance) {
