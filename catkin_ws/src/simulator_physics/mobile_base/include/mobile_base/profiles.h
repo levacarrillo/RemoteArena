@@ -34,6 +34,13 @@ bool setParameters() {
     return true;
 }
 
+bool isRunning() {
+    bool run_algorithm = false;
+    if(ros::param::has("/run_algorithm")) ros::param::get("run_algorithm", run_algorithm);
+    else { ROS_ERROR("There's no parameter for run_algorithm"); return false; }
+    return run_algorithm;
+}
+
 float trapezoidalProfile(float curr, float goal) {
     float dir = goal / fabs(goal);
     if (current_speed < max_linear_speed) current_speed += speed_increment;

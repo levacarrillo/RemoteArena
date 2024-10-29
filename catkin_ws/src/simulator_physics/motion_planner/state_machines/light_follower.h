@@ -14,30 +14,33 @@
 
 float THRESHOLD_FOLLOWER = 7.1;
 
-bool light_follower(float max_intensity, float* light_readings, movement* movement, float max_advance) {
+bool light_follower(float intensity, float* light_values, movement* movements, float max_advance) {
     if (!ros::param::get("/threshold_follower", THRESHOLD_FOLLOWER)) {
         ROS_ERROR("COULDN'T FIND /threshold_follower PARAMETER");
     }
 
     int sensor_max_value = 0;
+    bool finished;
 
-    if(max_intensity > THRESHOLD_FOLLOWER) {
-        movement->twist   = 0.0;
-        movement->advance = 0.0;
+    if(intensity > THRESHOLD_FOLLOWER) {
+        movements->twist   = 0.0;
+        movements->advance = 0.0;
         std::cout << "\n ****************** Reached light source ***************\n" << std::endl;
-        return true;
+        finished = true;
     } else {
-        for (size_t i=1; i<sizeof(light_readings); i++) {
-            if (light_readings[i] > light_readings[sensor_max_value]) 
+        for (size_t i=1; i<sizeof(light_values); i++) {
+            if (light_values[i] > light_values[sensor_max_value]) 
                 sensor_max_value = i;
         }
         if (sensor_max_value > 4) {
-            sensor_max_value = - (sizeof(light_readings) - sensor_max_value);
+            sensor_max_value = - (sizeof(light_values) - sensor_max_value);
         }
 
-        movement->twist   = sensor_max_value * M_PI / 16;
-        movement->advance = max_advance;
+        movements->twist   = sensor_max_value * M_PI / 16;
+        movements->advance = max_advance;
+        
+        finished = false;
     }
     
-    return false;
+    return finished;
 }
