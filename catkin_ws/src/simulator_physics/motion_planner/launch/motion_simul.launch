@@ -1,0 +1,4 @@
+<launch>
+    <node name="motion_planner_node" pkg="motion_planner" type="motion_planner_node" output="screen" />
+    <node name="light_processing_node" pkg="motion_planner" type="light_processing_node" output="screen" />
+</launch>
