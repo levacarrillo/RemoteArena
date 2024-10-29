@@ -1,0 +1,14 @@
+<launch>
+    <rosparam command="load" file="$(find mobile_base)/assets/params/profile_params.yaml" />
+    <param name="robot_description" command="cat '$(find mobile_base)/assets/urdf/minibot.urdf'" />
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+        <remap from="joint_states" to="/joint_states" />
+    </node>
+
+    <node name="mobile_base_node_simul" pkg="mobile_base" type="mobile_base_node_simul"  output="screen" />
+    <node name="move_minibot_node_simul" pkg="mobile_base" type="move_minibot_node_simul"  output="screen" />
+
+    <!-- Node to plot simulated movement's data -->
+    <!-- <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler" args="layout '$(find mobile_base)/assets/visualization/config_plot_profiles.xml'" /> -->
+</launch>
