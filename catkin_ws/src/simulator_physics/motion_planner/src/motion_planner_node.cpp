@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
     motion_planner::LightReadings srv;
     ros::Rate rate(20);
 
-    bool stop = false;
+    bool stop_running = false;
     float light_max_intensity;
     float light_readings[8];
 
@@ -36,20 +36,22 @@ int main(int argc, char* argv[]) {
 
     Behavior behavior = SM_LIGHT_FOLLOWER;
 
-    MotionPlannerUtilities motion(nh);
+    MotionPlannerUtilities motionPlannerUtilities(nh);
 
     while(ros::ok()) {
-        if (!stop) {
+        if (!stop_running) {
             if (light_client.call(srv)) {
                 light_max_intensity = srv.response.max_intensity;
                 for (size_t i=0; i<srv.response.light_readings.size(); i++) {
                     light_readings[i] = srv.response.light_readings[i];
                 }
+            } else {
+                ROS_ERROR("FAILED TO CALL SERVICE /light_readings");
             }
 
             switch(behavior) {
                 case SM_LIGHT_FOLLOWER:
-                    stop = light_follower(light_max_intensity, light_readings, &movement, max_advance);
+                    stop_running = light_follower(light_max_intensity, light_readings, &movement, max_advance);
                 break;
                 default:
                     std::cout << " *************** NO BEHAVIOR DEFINED *************** " << std::endl;
@@ -65,7 +67,7 @@ int main(int argc, char* argv[]) {
             std::cout << "Movement: twist: " << movement.twist << " advance: " << movement.advance << "\n" << std::endl;
 
         
-            motion.move_robot(movement.twist, movement.advance);
+            motionPlannerUtilities.move_robot(movement.twist, movement.advance);
         }
         ros::spinOnce();
         rate.sleep();

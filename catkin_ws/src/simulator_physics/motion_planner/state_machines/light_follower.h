@@ -31,6 +31,7 @@ bool light_follower(float max_intensity, float* light_readings, movement* moveme
         if (sensor_max_value > 4) {
             sensor_max_value = - (sizeof(light_readings) - sensor_max_value);
         }
+        
         movement->twist   = sensor_max_value * M_PI / 16;
         movement->advance = max_advance;
     }

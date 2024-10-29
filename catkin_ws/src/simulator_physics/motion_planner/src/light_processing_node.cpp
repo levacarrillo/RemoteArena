@@ -5,8 +5,7 @@
 #include <geometry_msgs/TransformStamped.h>
 #include <motion_planner/LightReadings.h>
 
-#define ROBOT_RADIUS 0.1
-float THRESHOLD = 200.0;
+#define ROBOT_RADIUS 0.08
 
 float sensor_angle[8];
 
@@ -18,27 +17,21 @@ struct {
 
 bool light_callback(motion_planner::LightReadings::Request &req, motion_planner::LightReadings::Response &res) {
     float light_readings[8];
-    int id_sensor_max;
     float max_intensity = 0;
     bool threshold_reached = false;
 
-    for (int i=0; i<8; i++) {
+    for (size_t i=0; i<sizeof(light_readings); i++) {
         float light_distance_x = robot_distance_to_light.x - ROBOT_RADIUS * std::cos(sensor_angle[i]);
         float light_distance_y = robot_distance_to_light.y - ROBOT_RADIUS * std::sin(sensor_angle[i]);
         res.light_readings[i] = light_readings[i] = 1 / sqrt(pow(light_distance_x, 2) + pow(light_distance_y, 2));
 
         if (light_readings[i] > max_intensity) {
-            id_sensor_max = i;
             max_intensity = light_readings[i];
         }
     }
-    if (max_intensity >= THRESHOLD) {
-        threshold_reached = true;
-    }
 
-    // res.id_sensor_max = id_sensor_max;
     res.max_intensity = max_intensity;
-    // res.threshold_reached = threshold_reached;
+
     return true;
 }
 
