@@ -5,3 +5,6 @@
 !.gitignore
 !LICENSE
 !readme.MD
+
+# And these subdirectories
+!motion_planner/

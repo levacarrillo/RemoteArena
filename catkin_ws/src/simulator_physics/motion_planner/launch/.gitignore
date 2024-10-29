@@ -5,3 +5,6 @@
 !.gitignore
 !LICENSE
 !readme.MD
+
+!*.launch
+# And these subdirectories

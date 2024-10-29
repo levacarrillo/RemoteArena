@@ -6,5 +6,7 @@
 !LICENSE
 !readme.MD
 
+!arena_simul_markers.py
 !aruco_detector.py
 !obstacles_color_calibrator.py
+!obstacles_color_detector.py

@@ -5,3 +5,6 @@
 !.gitignore
 !LICENSE
 !readme.MD
+
+!structures.h
+# And these subdirectories

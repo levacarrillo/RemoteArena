@@ -5,3 +5,8 @@
 !.gitignore
 !LICENSE
 !readme.MD
+
+!light_follower.h
+!sm_destination.h
+
+# And these subdirectories

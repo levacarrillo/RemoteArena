@@ -5,3 +5,6 @@
 !.gitignore
 !LICENSE
 !readme.MD
+
+!LightReadings.srv
+# And these subdirectories

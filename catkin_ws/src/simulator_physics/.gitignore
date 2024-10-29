@@ -5,3 +5,7 @@
 !.gitignore
 !LICENSE
 !readme.MD
+
+# And these subdirectories
+!mobile_base/
+!motion_planner/
