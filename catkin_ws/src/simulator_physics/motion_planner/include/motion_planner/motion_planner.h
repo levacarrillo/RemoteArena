@@ -3,16 +3,67 @@
 
 #include <ros/ros.h>
 #include <mobile_base/MoveMinibot.h>
+#include <motion_planner/LightReadings.h>
 
 class MotionPlanner {
     private:
         ros::NodeHandle &nh_;
-        ros::ServiceClient client;
+        ros::ServiceClient movement_client, light_client;
+        bool run_algorithm;
         float max_advance;
         float max_turn_angle;
+        std::string behavior;
+        float light_readings[8];
+        float max_intensity;
+
     public:
         MotionPlanner(ros::NodeHandle &nh) : nh_(nh) {
-            client = nh_.serviceClient<mobile_base::MoveMinibot>("move_robot");
+            movement_client = nh_.serviceClient<mobile_base::MoveMinibot>("move_robot");
+            light_client = nh.serviceClient<motion_planner::LightReadings>("light_readings");
+        }
+
+        float* get_light_readings() {
+            motion_planner::LightReadings srv;
+            if (light_client.call(srv)) {
+                max_intensity = srv.response.max_intensity;
+                for (size_t i=0; i<srv.response.light_readings.size(); i++) {
+                    light_readings[i] = srv.response.light_readings[i];
+                }
+            } else {
+                ROS_ERROR("FAILED TO CALL SERVICE /light_readings");
+            }
+            return light_readings;
+        }
+
+        float get_max_intensity() {
+            return max_intensity;
+        }
+
+        void move_robot(float theta, float advance) {
+            mobile_base::MoveMinibot srv;
+            srv.request.theta    = theta;
+            srv.request.distance = advance;
+            if (movement_client.call(srv)) {
+                if(srv.response.done) std::cout << "ROBOT MOVEMENT DONE" << std::endl;
+                else ROS_ERROR("FAILED TO ROBOT MOVEMENT");
+            } else {
+                ROS_ERROR("Failed to call service /move_robot");
+            }
+        }
+
+        Behaviors get_behavior() {
+            if (!nh_.getParam("/behavior", behavior)) {
+                ROS_ERROR("FAILED TO GET PARAMETER /behavior");
+                return NOT_DEFINED;
+            }
+
+            if (behavior == "user_sm")             return USER_SM;
+            if (behavior == "sm_destination")      return SM_DESTINATION;
+            if (behavior == "light_follower")      return LIGHT_FOLLOWER;
+            if (behavior == "sm_avoid_obstacles")  return SM_AVOID_OBSTACLES;
+            if (behavior == "sm_avoidance_destination") return SM_AVOIDANCE_DESTINATION;
+
+            return NOT_DEFINED;
         }
 
         float get_max_advance() {
@@ -29,17 +80,19 @@ class MotionPlanner {
             return max_turn_angle;
         }
 
-        void move_robot(float theta, float advance) {
-            mobile_base::MoveMinibot srv;
-            srv.request.theta    = theta;
-            srv.request.distance = advance;
-            if (client.call(srv)) {
-                if(srv.response.done) printf("Robot movement done \n");
-                else printf("Robot movement fail \n");
-            } else {
-                ROS_ERROR("Failed to call service /move_robot");
+        bool is_running() {
+            if (!nh_.getParam("/run_algorithm", run_algorithm)) {
+                ROS_ERROR("FAILED TO GET PARAMETER /run_algorithm");
+                return false;
             }
+            return run_algorithm;
         }
+
+        void stop_algorithm() {
+            nh_.setParam("/run_algorithm", false);
+            ros::Duration(1);
+        }
+
 };
 
 #endif

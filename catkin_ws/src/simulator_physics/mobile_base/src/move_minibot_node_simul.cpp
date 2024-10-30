@@ -108,17 +108,18 @@ bool moveCallback(mobile_base::MoveMinibot::Request &req, mobile_base::MoveMinib
     while(ros::ok() && !res.done) {
         if (!isRunning()) {
             res.done = true;
+            std::cout << "************* ALGORITHM STOPPED *************" << std::endl;
             break;
         }
         curr  = getCurrentPose(getAbsolutePose(tfBuffer));
         error = getErrorPose();
-        std::cout << "-------------------------------------------------------------------" << std::endl;
-        std::cout << "initial:  x->" << init.x  << "\ty->" << init.y  << "\tth->" << init.th << "\tmag->" << init.magnitude << std::endl;
-        std::cout << "currrent: x->" << curr.x  << "\ty->" << curr.y  << "\tth->" << curr.th << "\tmag->" << curr.magnitude << std::endl;
-        std::cout << "goal:     x->" << goal.x  << "\ty->" << goal.y  << "\tth->" << goal.th << "\tmag->" << goal.magnitude << std::endl;
-        std::cout << "error:    x->" << error.x << "\ty->" << error.y << "\tth->" << error.th << "\tmag->" << error.magnitude << std::endl;
-        std::cout << "time execution: ->" << current_time << "ms" << std::endl;
-        std::cout << std::endl;
+        // std::cout << "-------------------------------------------------------------------" << std::endl;
+        // std::cout << "initial:  x->" << init.x  << "\ty->" << init.y  << "\tth->" << init.th << "\tmag->" << init.magnitude << std::endl;
+        // std::cout << "currrent: x->" << curr.x  << "\ty->" << curr.y  << "\tth->" << curr.th << "\tmag->" << curr.magnitude << std::endl;
+        // std::cout << "goal:     x->" << goal.x  << "\ty->" << goal.y  << "\tth->" << goal.th << "\tmag->" << goal.magnitude << std::endl;
+        // std::cout << "error:    x->" << error.x << "\ty->" << error.y << "\tth->" << error.th << "\tmag->" << error.magnitude << std::endl;
+        // std::cout << "time execution: ->" << current_time << "ms" << std::endl;
+        // std::cout << std::endl;
 
         switch(state) {
             case SM_CORRECT_ANGLE:
