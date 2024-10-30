@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
 
     float max_intensity;
     float* light_readings;
-    int q_light;
+    int light_destination;
     int next_state = 1;
 
     movement movement;
@@ -29,14 +29,20 @@ int main(int argc, char* argv[]) {
         if (run_algorithm) {
             light_readings = node.get_light_readings();
             max_intensity = node.get_max_intensity();
-            q_light = quantize_light(light_readings);
+            light_destination = get_light_direction(light_readings);
+
+            // std::cout << "[";
+            // for (size_t i=0; i<8; i++) {
+            //     std::cout << light_readings[i] << ",";
+            // }
+            // std::cout << "]" << std::endl;
 
             switch(behavior) {
                 case LIGHT_FOLLOWER:
                     run_algorithm = !light_follower(max_intensity, light_readings, &movement, node.get_max_advance());
                 break;
                 case SM_DESTINATION:
-                    run_algorithm = !sm_destination(max_intensity, q_light, &movement, &next_state, node.get_max_advance(), node.get_max_turn_angle());
+                    run_algorithm = !sm_destination(max_intensity, light_destination, &movement, &next_state, node.get_max_advance(), node.get_max_turn_angle());
                 break;
                 default:
                     std::cout << " *************** NO BEHAVIOR DEFINED *************** " << std::endl;

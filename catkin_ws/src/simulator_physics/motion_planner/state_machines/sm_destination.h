@@ -16,7 +16,7 @@ bool sm_destination(float max_intensity, int dest, movement *movements, int *nex
 {
     int state = *next_state;
     bool finished = false;
-
+    std::cout << "State.->" << state << std::endl;
     switch ( state ) {
         case 1:
             if (max_intensity > THRESHOLD_DEST) {
@@ -29,36 +29,29 @@ bool sm_destination(float max_intensity, int dest, movement *movements, int *nex
                 *next_state = 2;
             }
             break;
-	case 2:
-            if (dest == 0){
-                // go right
+	    case 2:
+            if (dest == GO_RIGHT){
                 *movements=generate_output(RIGHT, Mag_Advance,max_twist);
                 *next_state = 3;
-            } else if (dest == 1){
-                // go left
+            } else if (dest == GO_LEFT){
                 *movements=generate_output(LEFT, Mag_Advance,max_twist);
                 *next_state = 4;
-            } else if (dest == 2){
-                // go forward 
+            } else if (dest == GO_FOWARD_RIGHT){
                 *movements=generate_output(FORWARD, Mag_Advance,max_twist);
                 *next_state = 3;
-            } else if (dest == 3){
-                // go forward 
+            } else if (dest == GO_FOWARD_LEFT){
                 *movements=generate_output(FORWARD, Mag_Advance,max_twist);
-                //printf("Present State: %d FORWARD\n", state);
                 *next_state = 4;
-            } else if (dest == 4){
-                // go forward 
+            } else if (dest == GO_FOWARD){
                 *movements=generate_output(FORWARD, Mag_Advance,max_twist);
-                //printf("Present State: %d FORWARD\n", state);
                 *next_state = 1;
             }
             break;
-        case 3: // right turn
+        case 3:
             *movements=generate_output(RIGHT, Mag_Advance, max_twist);
             *next_state = 1;
             break;
-        case 4: // left turn
+        case 4:
             *movements=generate_output(LEFT, Mag_Advance,max_twist);
             *next_state = 1;
             break;

@@ -6,6 +6,15 @@ enum move {
     RIGHT
 };
 
+enum direction {
+    GO_FOWARD,
+    GO_FOWARD_RIGHT,
+    GO_FOWARD_LEFT,
+    GO_RIGHT,
+    GO_LEFT,
+    GO_BACKWARD
+};
+
 movement generate_output(int move_output, float advance, float twist) {
 
     movement output;
@@ -44,23 +53,25 @@ movement generate_output(int move_output, float advance, float twist) {
     }
 
     return(output);
-
 }
 
-int quantize_light(float *light_readings){
+int get_light_direction(float *light_readings){
     int sensor = 0;
 
-    for(int i = 1; i < 8; i+=2 )
-    {
-        if( light_readings[i] > light_readings[sensor] )
+    std::cout << "i->" << 0 << " value->" << light_readings[0] << std::endl;
+
+    for(int i = 1; i < 8; i+=2 ) {
+        std::cout << "i->" << i << " value->" << light_readings[i] << std::endl;
+        if(light_readings[i] > light_readings[sensor])
             sensor = i;
     }
 
-    if(sensor == 0)      return 2;
-    else if(sensor == 1) return 3;
-    else if(sensor == 3) return 1;
-    else if(sensor == 5) return 0;
-    else if(sensor == 7) return 2;
-    else
-        return 0;
+    std::cout << "Sensor->" << sensor << std::endl;
+
+    if(sensor == 0)      return GO_FOWARD;
+    else if(sensor == 1) return GO_FOWARD;
+    else if(sensor == 3) return GO_LEFT;
+    else if(sensor == 5) return GO_RIGHT;
+    else if(sensor == 7) return GO_FOWARD;
+    else return GO_RIGHT;
 }

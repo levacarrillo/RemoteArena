@@ -13,6 +13,7 @@ float linear_alpha;
 float max_angular_vel;
 float angular_alpha;
 
+
 bool setParameters() {
     // PARAMETERS FOR LINEAR ADVANCE
     if(ros::param::has("max_linear_speed")) ros::param::get("max_linear_speed", max_linear_speed);

@@ -7,6 +7,7 @@
 #include <tf2_ros/static_transform_broadcaster.h>
 #include <sensor_msgs/JointState.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <mobile_base/robot_setup.h>
 
 double robotX = 0.0, robotY = 0.0, robotT = 0.0;
 double vx = 0.0, vth = 0.0;
@@ -59,11 +60,15 @@ int main(int argc, char ** argv) {
     std::cout << "Starting mobile_base_node_simul by Luis Nava..." << std::endl;
 	ros::init(argc, argv, "mobile_base_node_simul");
 	ros::NodeHandle nh;
-    ros::Rate rate(60);
+    ros::Rate rate(50);
 
     ros::Subscriber subCmdVel = nh.subscribe("/cmd_vel", 1, callbackCmdVel);
     ros::Publisher pubJointState = nh.advertise<sensor_msgs::JointState>("/joint_states", 1);
     pubOdom  = nh.advertise<nav_msgs::Odometry>("odom", 1);
+
+    if(!setInitialPose()) {
+        return -1;
+    }
 
 	std::string jointNames[2] = {"left_wheel_joint_connect", "right_wheel_joint_connect"};
 	float jointPositions[2] = {0.0, 0.0};
@@ -80,12 +85,12 @@ int main(int argc, char ** argv) {
     static_transformStamped.header.stamp = ros::Time::now();
     static_transformStamped.header.frame_id = "map";
     static_transformStamped.child_frame_id = "odom";
-    static_transformStamped.transform.translation.x = 0.2;
-    static_transformStamped.transform.translation.y = 0.2;
-    static_transformStamped.transform.translation.z = 0;
+    static_transformStamped.transform.translation.x = robot_pose_x;
+    static_transformStamped.transform.translation.y = robot_pose_y;
+    static_transformStamped.transform.translation.z = 0.0;
 
     tf2::Quaternion quat;
-    quat.setRPY(0, 0, 0);
+    quat.setRPY(0, 0, robot_pose_w);
     static_transformStamped.transform.rotation.x = quat.x();
     static_transformStamped.transform.rotation.y = quat.y();
     static_transformStamped.transform.rotation.z = quat.z();
