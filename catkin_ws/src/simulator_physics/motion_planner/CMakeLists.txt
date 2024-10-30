@@ -8,8 +8,13 @@ find_package(catkin REQUIRED COMPONENTS
   hardware
 )
 
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
+
 include_directories(
-include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 

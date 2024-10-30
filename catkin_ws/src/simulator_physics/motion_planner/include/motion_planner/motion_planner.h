@@ -2,12 +2,14 @@
 #define MOTION_PLANNER_UTILITIES_H
 
 #include <ros/ros.h>
+#include <sensor_msgs/LaserScan.h>
 #include <hardware/LightReadings.h>
 #include <mobile_base/MoveMinibot.h>
 
 class MotionPlanner {
     private:
         ros::NodeHandle &nh_;
+        ros::Subscriber lidar_sub;
         ros::ServiceClient movement_client, light_client;
         bool run_algorithm;
         float max_advance;
@@ -16,11 +18,37 @@ class MotionPlanner {
         float light_readings[8];
         float max_intensity;
 
+        float lidar_readings[3];
+
+        void laserCallback(const sensor_msgs::LaserScan::ConstPtr& msg) {
+            for (int i=0; i<3; i++) {
+                lidar_readings[i] = float(msg->ranges[i]);
+            }
+        }
+
     public:
         MotionPlanner(ros::NodeHandle &nh) : nh_(nh) {
             movement_client = nh_.serviceClient<mobile_base::MoveMinibot>("move_robot");
-            light_client = nh.serviceClient<hardware::LightReadings>("light_readings");
+            light_client = nh_.serviceClient<hardware::LightReadings>("light_readings");
+            lidar_sub = nh_.subscribe("/scan", 10, &MotionPlanner::laserCallback, this);
         }
+        
+        float* get_lidar_readings() {
+            return lidar_readings;
+        }
+
+        void move_robot(float theta, float advance) {
+            mobile_base::MoveMinibot srv;
+            srv.request.theta    = theta;
+            srv.request.distance = advance;
+            if (movement_client.call(srv)) {
+                if(srv.response.done) std::cout << "ROBOT MOVEMENT DONE" << std::endl;
+                else ROS_ERROR("FAILED TO ROBOT MOVEMENT");
+            } else {
+                ROS_ERROR("Failed to call service /move_robot");
+            }
+        }
+
 
         float* get_light_readings() {
             hardware::LightReadings srv;
@@ -39,17 +67,6 @@ class MotionPlanner {
             return max_intensity;
         }
 
-        void move_robot(float theta, float advance) {
-            mobile_base::MoveMinibot srv;
-            srv.request.theta    = theta;
-            srv.request.distance = advance;
-            if (movement_client.call(srv)) {
-                if(srv.response.done) std::cout << "ROBOT MOVEMENT DONE" << std::endl;
-                else ROS_ERROR("FAILED TO ROBOT MOVEMENT");
-            } else {
-                ROS_ERROR("Failed to call service /move_robot");
-            }
-        }
 
         Behaviors get_behavior() {
             if (!nh_.getParam("/behavior", behavior)) {
@@ -92,7 +109,6 @@ class MotionPlanner {
             nh_.setParam("/run_algorithm", false);
             ros::Duration(1);
         }
-
 };
 
 #endif

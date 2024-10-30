@@ -75,3 +75,30 @@ int get_light_direction(float *light_readings){
     else if(sensor == 7) return GO_FOWARD;
     else return GO_RIGHT;
 }
+
+int obstacle_detection(float* observations, int size, float laser_value) {
+    int right_sensors, left_sensors;
+    int obstacle_left = 0, obstacle_right = 0;
+    if( size % 2 != 0) {
+        right_sensors = ( size - 1 ) / 2;
+        left_sensors = right_sensors + 1;
+    } else {
+        right_sensors = left_sensors = size / 2;
+    }
+
+    for (int i = left_sensors; i < size ; i++ ) {
+        if( observations[i] < laser_value  ) {
+            obstacle_left = 2;
+            break;
+        }
+    }
+
+    for (int i = 0; i < right_sensors ; i++ ) {
+        if( observations[i] < laser_value  ) {
+            obstacle_right = 1;
+            break;
+        }
+    }
+
+    return obstacle_left + obstacle_right ;
+}
