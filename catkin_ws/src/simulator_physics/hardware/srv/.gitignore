@@ -6,7 +6,6 @@
 !LICENSE
 !readme.MD
 
+!LightReadings.srv
+
 # And these subdirectories
-!hardware/
-!mobile_base/
-!motion_planner/

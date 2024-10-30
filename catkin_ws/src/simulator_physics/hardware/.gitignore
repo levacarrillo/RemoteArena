@@ -6,7 +6,10 @@
 !LICENSE
 !readme.MD
 
+!CMakeLists.txt
+!package.xml
+
 # And these subdirectories
-!hardware/
-!mobile_base/
-!motion_planner/
+!include/
+!src/
+!srv/

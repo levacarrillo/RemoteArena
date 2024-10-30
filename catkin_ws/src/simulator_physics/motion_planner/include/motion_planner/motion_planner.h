@@ -2,8 +2,8 @@
 #define MOTION_PLANNER_UTILITIES_H
 
 #include <ros/ros.h>
+#include <hardware/LightReadings.h>
 #include <mobile_base/MoveMinibot.h>
-#include <motion_planner/LightReadings.h>
 
 class MotionPlanner {
     private:
@@ -19,11 +19,11 @@ class MotionPlanner {
     public:
         MotionPlanner(ros::NodeHandle &nh) : nh_(nh) {
             movement_client = nh_.serviceClient<mobile_base::MoveMinibot>("move_robot");
-            light_client = nh.serviceClient<motion_planner::LightReadings>("light_readings");
+            light_client = nh.serviceClient<hardware::LightReadings>("light_readings");
         }
 
         float* get_light_readings() {
-            motion_planner::LightReadings srv;
+            hardware::LightReadings srv;
             if (light_client.call(srv)) {
                 max_intensity = srv.response.max_intensity;
                 for (size_t i=0; i<srv.response.light_readings.size(); i++) {

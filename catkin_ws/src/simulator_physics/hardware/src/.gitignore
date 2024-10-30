@@ -6,7 +6,7 @@
 !LICENSE
 !readme.MD
 
+!laser_scan_node.cpp
+!light_sensors_node.cpp
+
 # And these subdirectories
-!hardware/
-!mobile_base/
-!motion_planner/

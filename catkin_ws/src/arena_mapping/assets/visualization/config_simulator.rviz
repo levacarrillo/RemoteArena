@@ -9,7 +9,6 @@ Panels:
         - /Grid1/Offset1
         - /TF1
         - /TF1/Frames1
-        - /TF1/Tree1/map1
         - /Marker1
       Splitter Ratio: 0.5382353067398071
     Tree Height: 839
@@ -31,7 +30,7 @@ Panels:
   - Class: rviz/Time
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: LaserScan
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -87,6 +86,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        laser_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
@@ -104,6 +108,8 @@ Visualization Manager:
           Value: false
         base_link:
           Value: false
+        laser_link:
+          Value: true
         light_bulb:
           Value: false
         map:
@@ -124,6 +130,8 @@ Visualization Manager:
             base_link:
               aruco_marker:
                 {}
+              laser_link:
+                {}
       Update Interval: 0
       Value: true
     - Class: rviz/Marker
@@ -133,6 +141,34 @@ Visualization Manager:
       Namespaces:
         "": true
       Queue Size: 100
+      Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/LaserScan
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Min Color: 0; 0; 0
+      Name: LaserScan
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.009999999776482582
+      Style: Flat Squares
+      Topic: /scan
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
       Value: true
   Enabled: true
   Global Options:
@@ -162,7 +198,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.4382193088531494
+      Distance: 2.048713207244873
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -170,17 +206,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 1.329956293106079
-        Y: 0.3883352279663086
-        Z: 0.5387635827064514
+        X: 1.3333765268325806
+        Y: 0.4306090176105499
+        Z: 0.6085188984870911
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.3747960329055786
+      Pitch: 0.88979572057724
       Target Frame: <Fixed Frame>
-      Yaw: 4.718591213226318
+      Yaw: 4.713590145111084
     Saved: ~
 Window Geometry:
   Displays:

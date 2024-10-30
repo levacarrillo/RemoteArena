@@ -3,7 +3,7 @@
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2_ros/transform_listener.h>
 #include <geometry_msgs/TransformStamped.h>
-#include <motion_planner/LightReadings.h>
+#include <hardware/LightReadings.h>
 
 #define ROBOT_RADIUS 0.08
 
@@ -15,7 +15,7 @@ struct {
 } robot_distance_to_light;
 
 
-bool light_callback(motion_planner::LightReadings::Request &req, motion_planner::LightReadings::Response &res) {
+bool light_callback(hardware::LightReadings::Request &req, hardware::LightReadings::Response &res) {
     float light_readings[8];
     float max_intensity = 0;
     bool threshold_reached = false;
@@ -36,7 +36,7 @@ bool light_callback(motion_planner::LightReadings::Request &req, motion_planner:
 }
 
 int main(int argc, char* argv[]) {
-    ros::init(argc, argv, "light_processing_node");
+    ros::init(argc, argv, "light_sensors_node");
     ros::NodeHandle nh;
 
     ros::ServiceServer service = nh.advertiseService("/light_readings", light_callback);
