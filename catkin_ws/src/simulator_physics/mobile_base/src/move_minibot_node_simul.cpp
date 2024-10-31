@@ -24,7 +24,7 @@ enum State {
 float ANGLE_TOLERANCY    = 0.10;
 float DISTANCE_TOLERANCY = 0.08;
 
-int MAX_TIME = 1500;
+int MAX_TIME = 1000;
 
 ros::Publisher pubCmdVel;
 
@@ -146,7 +146,10 @@ bool moveCallback(mobile_base::MoveMinibot::Request &req, mobile_base::MoveMinib
                 std::cout << "An unexpected error has occurred :(" << std::endl;
         }
         current_time += 10;
-        if (current_time > MAX_TIME) res.done = true;
+        if (current_time > MAX_TIME) {
+            std::cout << "MOVEMENT HAS EXCEEDED TIME MAX" << std::endl;
+            res.done = true;
+        }
 
 	    rate.sleep();
     }

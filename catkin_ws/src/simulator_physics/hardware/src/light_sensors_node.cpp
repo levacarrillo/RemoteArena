@@ -12,13 +12,13 @@ float sensor_angle[8];
 struct {
     float x;
     float y;
-} robot_distance_to_light;
+} robot_distance_to_light, robot_position, light_bulb_position;
 
 
 bool light_callback(hardware::LightReadings::Request &req, hardware::LightReadings::Response &res) {
     float light_readings[8];
     float max_intensity = 0;
-    bool threshold_reached = false;
+    float sensor_max_intensity = 0;
 
     for (size_t i=0; i<8; i++) {
         float light_distance_x = robot_distance_to_light.x - ROBOT_RADIUS * std::cos(sensor_angle[i]);
@@ -27,9 +27,11 @@ bool light_callback(hardware::LightReadings::Request &req, hardware::LightReadin
 
         if (light_readings[i] > max_intensity) {
             max_intensity = light_readings[i];
+            sensor_max_intensity = i;
         }
     }
 
+    res.sensor_max_intensity = sensor_max_intensity;
     res.max_intensity = max_intensity;
 
     return true;
@@ -50,14 +52,25 @@ int main(int argc, char* argv[]) {
         geometry_msgs::TransformStamped transformStamped;
 
         try {
-            transformStamped = tfBuffer.lookupTransform("base_link", "light_bulb", ros::Time(0));
+            transformStamped = tfBuffer.lookupTransform("map", "base_link", ros::Time(0));
             tf2::Quaternion q;
             tf2::fromMsg(transformStamped.transform.rotation, q);
             double roll, pitch, yaw;
             tf2::getEulerYPR(q, yaw, pitch, roll);
 
-            robot_distance_to_light.x =  transformStamped.transform.translation.x;
-            robot_distance_to_light.y =  transformStamped.transform.translation.y;
+            robot_position.x =  transformStamped.transform.translation.x;
+            robot_position.y =  transformStamped.transform.translation.y;
+
+            transformStamped = tfBuffer.lookupTransform("map", "light_bulb", ros::Time(0));
+
+            light_bulb_position.x =  transformStamped.transform.translation.x;
+            light_bulb_position.y =  transformStamped.transform.translation.y;
+
+            robot_distance_to_light.x = light_bulb_position.x - robot_position.x;
+            robot_distance_to_light.y = light_bulb_position.y - robot_position.y;
+
+            // std::cout << "Distance to light x->" << robot_distance_to_light.x;
+            // std::cout << "\ty->" << robot_distance_to_light.y << std::endl;
 
             for (int i=0; i<8; i++) {
                 sensor_angle[i] = i * M_PI / 4 + yaw;

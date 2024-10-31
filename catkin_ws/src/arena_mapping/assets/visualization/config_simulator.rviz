@@ -107,9 +107,9 @@ Visualization Manager:
         aruco_marker:
           Value: false
         base_link:
-          Value: false
-        laser_link:
           Value: true
+        laser_link:
+          Value: false
         light_bulb:
           Value: false
         map:
@@ -206,17 +206,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 1.3333765268325806
-        Y: 0.4306090176105499
-        Z: 0.6085188984870911
+        X: 1.3057904243469238
+        Y: 0.2809147834777832
+        Z: 0.48724594712257385
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.88979572057724
+      Pitch: 1.5697963237762451
       Target Frame: <Fixed Frame>
-      Yaw: 4.713590145111084
+      Yaw: 4.708590030670166
     Saved: ~
 Window Geometry:
   Displays:
