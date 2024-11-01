@@ -18,6 +18,7 @@ sudo apt-get install ros-noetic-rviz-visual-tools -y
 sudo apt-get install ros-noetic-map-server -y
 sudo apt-get install ros-noetic-aruco-ros -y
 sudo apt-get install ros-noetic-plotjuggler-ros -y
+sudo apt-get install ros-noetic-robot-state-publisher -y
 
 sudo apt-get install python3-pip -y
 sudo apt-get install python3-venv -y
