@@ -3,6 +3,7 @@
 
 sudo apt-get update -y 
 sudo apt-get upgrade -y
+sudo apt-get install arduino-mk -y
 sudo apt-get install ros-noetic-cv-bridge -y
 sudo apt-get install ros-noetic-image-transport -y
 sudo apt-get install ros-noetic-tf -y
