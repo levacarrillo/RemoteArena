@@ -1,84 +1,68 @@
 #include <ros.h>
-#include <arena_control/LightBulbsControl.h>
-#include <arena_control/RobotChargersControl.h>
 
-// OBJECT NODE
 ros::NodeHandle nh;
 
-// ARDUINO'S PINES
-int light_pins[]   = {2, 3};
-int charger_pins[] = {4, 5};
+// SETTING UP ARDUINO'S PINS
+int light_pin[2] = {2, 3};
+int charger_pin[2] = {4, 5};
 
-bool lights_callback(arena_control::LightBulbsControl::Request &req, arena_control::LightBulbsControl::Response &res) {
-  nh.loginfo("------------------------");
-  char buffer[25];
-  for(int i=0; i<(sizeof(light_pins) / sizeof(light_pins[0])); i++) {
-    if((bool)req.bulbs_state[i]) {
-      digitalWrite(light_pins[i], LOW);
-      sprintf(buffer, "Light bulb %d turned on", i+1);
-    } else {
-      digitalWrite(light_pins[i], HIGH);
-      sprintf(buffer, "Light bulb %d turned off", i+1);
-    }
-    nh.loginfo(buffer);
-  }
-  res.success = true;
-  return res.success;
-}
+// PARAMS VARIABLES
+bool charger_status[2] = {true, true};
+bool light_bulb_status[2]= {false, false};
 
-bool chargers_callback(arena_control::RobotChargersControl::Request &req, arena_control::RobotChargersControl::Response &res) {
-  nh.loginfo("------------------------");
-  char buffer[25];
-  for(int i=0; i<(sizeof(charger_pins) / sizeof(charger_pins[0])); i++) {
-    if(!(bool)req.chargers_state[i]) {
-      digitalWrite(charger_pins[i], LOW);
-      sprintf(buffer, "Charger %d turned off", i+1);
-    } else {
-      digitalWrite(charger_pins[i], HIGH);
-      sprintf(buffer, "Charger %d turned on", i+1);
-    }
-    nh.loginfo(buffer);
-  }
-  res.success = true;
-  return res.success;
-}
-
-ros::ServiceServer<arena_control::LightBulbsControl::Request, arena_control::LightBulbsControl::Response> lights_server("light_bulbs_state", &lights_callback);
-ros::ServiceServer<arena_control::RobotChargersControl::Request, arena_control::RobotChargersControl::Response> chargers_server("chargers_state", &chargers_callback);
-
-// SETTING PINS MODE
-void pins_setup() {
-  for(int i=0; i<(sizeof(light_pins) / sizeof(light_pins[0])); i++) {
-    pinMode(light_pins[i], OUTPUT);
-    digitalWrite(light_pins[i], HIGH);
-  }
-  for(int i=0; i<(sizeof(charger_pins) / sizeof(charger_pins[0])); i++) {
-    pinMode(charger_pins[i], OUTPUT);
-    digitalWrite(charger_pins[i], HIGH);
+// RESETTING LIGHTS
+void reset_lights() {
+  for (int i=0; i<sizeof(light_pin); i++){
+    // TURNING ON LIGHTS
+    digitalWrite(light_pin[i], HIGH);
+    delay(800);
+    // TURNING OFF LIGHTS AGAIN
+    digitalWrite(light_pin[i], LOW);
   }
 }
 
 // RESETTING CHARGERS
 void reset_chargers() {
-  // TURNING OFF CHARGERS
-  for(int i=0; i<(sizeof(charger_pins) / sizeof(charger_pins[0])); i++) {
-    digitalWrite(charger_pins[i], LOW);
-  }
-  // TURNING ON CHARGERS AGAIN
-  for(int i=0; i<(sizeof(charger_pins) / sizeof(charger_pins[0])); i++) {
-    digitalWrite(charger_pins[i], HIGH);
+  for (int i=0; i<sizeof(charger_pin); i++){
+    // TURNING OFF CHARGERS
+    digitalWrite(charger_pin[i], LOW);
+    delay(800);
+    // TURNING ON CHARGERS AGAIN
+    digitalWrite(charger_pin[i], HIGH);
   }
 }
 
+bool getParams() {
+  bool params_loaded = true;
+  if(!nh.getParam("/arena_hardware/light_bulb", light_bulb_status, 2)) { params_loaded = false; }
+  if(!nh.getParam("/arena_hardware/charger", charger_status, 2)) { params_loaded = false; }
+
+  return params_loaded;
+}
+
 void setup() {
-  pins_setup();
   nh.initNode();
-  nh.advertiseService(lights_server);
-  nh.advertiseService(chargers_server);
+
+  for (int i=0; i<2; i++) {
+    pinMode(light_pin[i],  OUTPUT);
+    pinMode(charger_pin[i], OUTPUT);
+  }
+
+  reset_lights();
   reset_chargers();
 }
 
 void loop() {
+  if(!getParams()) {
+    nh.logwarn("-----------------------------------------------");
+    nh.logwarn("Arena's control params not loaded correctly");
+  } else {
+    for(int i=0; i<2; i++) {
+      digitalWrite(light_pin[i], light_bulb_status[i]);
+      digitalWrite(charger_pin[i], light_bulb_status[i]);
+    }
+  }
+
   nh.spinOnce();
-  delay(1000);
+  delay(50);
 }
