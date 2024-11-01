@@ -34,8 +34,8 @@ void reset_chargers() {
 
 bool getParams() {
   bool params_loaded = true;
-  if(!nh.getParam("/arena_hardware/light_bulb", light_bulb_status, 2)) { params_loaded = false; }
-  if(!nh.getParam("/arena_hardware/charger", charger_status, 2)) { params_loaded = false; }
+  if(!nh.getParam("/arena_hardware/light_bulbs", light_bulb_status, 2)) { params_loaded = false; }
+  if(!nh.getParam("/arena_hardware/chargers", charger_status, 2)) { params_loaded = false; }
 
   return params_loaded;
 }

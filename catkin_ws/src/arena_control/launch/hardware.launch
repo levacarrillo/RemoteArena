@@ -4,5 +4,7 @@
     <!-- Node to connect with micro-controller -->
     <node name="relays_controller" pkg="rosserial_python" type="serial_node.py" required="true" output="screen">
         <param name="port" value="/dev/ttyACM0" />
+        <param name="/arena_hardware/light_bulbs" value="[0, 0]" />
+        <param name="/arena_hardware/chargers" value="[0, 0]" />
     </node>	
 </launch>
