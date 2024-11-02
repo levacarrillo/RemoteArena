@@ -8,24 +8,24 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   sensor_msgs
   std_msgs
-  message_generation
+  # message_generation
 )
 
-add_service_files(
-  FILES
-  LightBulbsControl.srv
-  RobotChargersControl.srv 
-)
+# add_service_files(
+#   FILES
+#   LightBulbsControl.srv
+#   RobotChargersControl.srv 
+# )
 
-generate_messages(
-  DEPENDENCIES
-  std_msgs
-)
+# generate_messages(
+#   DEPENDENCIES
+#   std_msgs
+# )
 
 
-catkin_package(
-  CATKIN_DEPENDS roscpp rospy std_msgs
-)
+# catkin_package(
+#   CATKIN_DEPENDS roscpp rospy std_msgs
+# )
 
 find_package(OpenCV)
 

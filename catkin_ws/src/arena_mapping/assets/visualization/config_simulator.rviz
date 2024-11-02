@@ -110,7 +110,9 @@ Visualization Manager:
           Value: true
         laser_link:
           Value: false
-        light_bulb:
+        light_bulb_1:
+          Value: false
+        light_bulb_2:
           Value: false
         map:
           Value: true
@@ -124,7 +126,9 @@ Visualization Manager:
       Show Names: true
       Tree:
         map:
-          light_bulb:
+          light_bulb_1:
+            {}
+          light_bulb_2:
             {}
           odom:
             base_link:
@@ -198,7 +202,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.048713207244873
+      Distance: 1.905393362045288
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -206,17 +210,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 1.3057904243469238
-        Y: 0.2809147834777832
-        Z: 0.48724594712257385
+        X: 1.2691185474395752
+        Y: 0.39921140670776367
+        Z: 0.5849634408950806
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.5697963237762451
+      Pitch: 0.8797962069511414
       Target Frame: <Fixed Frame>
-      Yaw: 4.708590030670166
+      Yaw: 4.708590507507324
     Saved: ~
 Window Geometry:
   Displays:

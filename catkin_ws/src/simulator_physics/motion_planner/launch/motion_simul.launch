@@ -5,9 +5,11 @@
     <param name="/max_turn_angle" value="0.7854" />
     <param name="/threshold_follower" value="7.1" />
     <param name="/run_algorithm" value="false" />
+
+    <param name="/arena_hardware/light_bulbs" value="[False, False]" />
     
     <node name="motion_planner_node" pkg="motion_planner" type="motion_planner_node" output="screen" />
     
-    <node name="light_sensors_node" pkg="hardware" type="light_sensors_node" output="screen" />
     <node name="laser_scan_node" pkg="hardware" type="laser_scan_node" output="screen" />
+    <node name="light_sensors_node" pkg="hardware" type="light_sensors_node" output="screen" />
 </launch>
