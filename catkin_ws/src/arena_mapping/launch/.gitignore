@@ -1,0 +1,11 @@
+# Ignore everything
+*
+
+# But these files
+!.gitignore
+!LICENSE
+!readme.MD
+
+!startup_simul_test.launch
+
+# And these subdirectories
