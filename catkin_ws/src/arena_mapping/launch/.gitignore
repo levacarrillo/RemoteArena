@@ -5,9 +5,7 @@
 !.gitignore
 !LICENSE
 !readme.MD
-!control_lights.srv
-!control_chargers.srv
-!LightBulbsControl.srv
-!RobotChargersControl.srv
+
+!startup_simul_test.launch
 
 # And these subdirectories
