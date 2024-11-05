@@ -6,6 +6,5 @@
 !LICENSE
 !readme.MD
 
+!relays.yaml
 # And these subdirectories
-!params/
-!visualization/
