@@ -46,7 +46,6 @@ def get_assignment_files():
 def get_about():
     return jsonify(data.get_about())
 
-
 # ROS
 @app.route('/set_light_bulbs_state', methods=['POST'])
 def set_light_bulbs_state():
@@ -66,19 +65,11 @@ def get_cpu_temp():
 
 @app.route('/move_robot_command', methods=['POST'])
 def move_robot_command():
-    request_data = request.get_json()
-    print(request_data)
-    movement = request_data['movement']
-    print(movement)
-    return jsonify(movement)
+    return jsonify(ros.move_robot(request.get_json()))
 
 @app.route('/run_executable', methods=['POST'])
 def run_executable():
-    request_data = request.get_json()
-    print(request_data)
-    command = request_data['command']
-    print(command)
-    return jsonify(command)
+    return jsonify(ros.run_command(request.get_json()))
 
 
 if __name__ == '__main__':

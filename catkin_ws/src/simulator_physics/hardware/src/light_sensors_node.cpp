@@ -48,17 +48,14 @@ int main(int argc, char* argv[]) {
 
     ros::Rate rate(10.0);
 
-    std::string light[2] = {"light_bulb_1", "light_bulb_2"};
+    static std::string light[2] = {"light_bulb_1", "light_bulb_2"};
+    ros::Duration(2);
+
     while(ros::ok()) {
         geometry_msgs::TransformStamped transformStamped;
 
-        if(!nh.hasParam("/arena_hardware/light_bulbs")) {
-            ROS_ERROR("There's no light status params, please check it");
-            // return 0;
-        }
-
         std::vector<bool> light_status;
-        nh.getParam("/arena_hardware/light_bulbs", light_status);
+        nh.getParam("/light_bulbs", light_status);
 
         try {
             transformStamped = tfBuffer.lookupTransform("map", "base_link", ros::Time(0));
@@ -69,17 +66,15 @@ int main(int argc, char* argv[]) {
 
             robot_position.x =  transformStamped.transform.translation.x;
             robot_position.y =  transformStamped.transform.translation.y;
-
-            std::string light_bulb_selected;
+            
+            int selected = -1;
             for(int i=0; i<light_status.size(); i++) {
                 if(light_status[i] == 1) {
-                    light_bulb_selected = light[i];
+                    selected = i;
                 }
             }
-
-            std::cout << light_bulb_selected << std::endl;
-
-            transformStamped = tfBuffer.lookupTransform("map", light_bulb_selected, ros::Time(0));
+            if(selected >= 0)
+                transformStamped = tfBuffer.lookupTransform("map", light[selected], ros::Time(0));
 
             light_bulb_position.x =  transformStamped.transform.translation.x;
             light_bulb_position.y =  transformStamped.transform.translation.y;

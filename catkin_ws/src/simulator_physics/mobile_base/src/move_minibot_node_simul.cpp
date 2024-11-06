@@ -47,9 +47,10 @@ robotPose getAbsolutePose(tf2_ros::Buffer& tfBuffer) {
         absolutePose.y = transformStamped.transform.translation.y;
         absolutePose.th = yaw;
         absolutePose.magnitude = sqrt(pow(absolutePose.x, 2) + pow(absolutePose.y, 2));
+        std::cout << "index" << std::endl;
 
     } catch (tf2::TransformException &ex) {
-        ROS_WARN("%s", ex.what());
+        // ROS_WARN("%s", ex.what());
         ros::Duration(1.0).sleep();
     }
     return absolutePose;
@@ -133,7 +134,6 @@ bool moveCallback(mobile_base::MoveMinibot::Request &req, mobile_base::MoveMinib
                 if(abs(error.magnitude) > DISTANCE_TOLERANCY) {
                     pubCmdVel.publish(getLinearVelocity(curr.magnitude, goal.magnitude, error.th));
                 } else {
-                    current_speed = 0;
                     state = SM_FINISH_MOVEMENT;
                 }
             break;
