@@ -73,7 +73,7 @@ class MotionPlanner {
                 ROS_ERROR("FAILED TO GET PARAMETER /behavior");
                 return NOT_DEFINED;
             }
-
+            if (behavior == "none")                return NONE;
             if (behavior == "user_sm")             return USER_SM;
             if (behavior == "sm_destination")      return SM_DESTINATION;
             if (behavior == "light_follower")      return LIGHT_FOLLOWER;
