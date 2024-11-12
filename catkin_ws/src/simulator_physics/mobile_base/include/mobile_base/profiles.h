@@ -36,10 +36,10 @@ bool setParameters() {
 }
 
 bool isRunning() {
-    bool run_algorithm = false;
-    if(ros::param::has("/run_algorithm")) ros::param::get("run_algorithm", run_algorithm);
-    else { ROS_ERROR("There's no parameter for run_algorithm"); return false; }
-    return run_algorithm;
+    bool enable_movement = false;
+    if(ros::param::has("/enable_movement")) ros::param::get("enable_movement", enable_movement);
+    else { ROS_ERROR("There's no parameter for enable_movement"); return false; }
+    return enable_movement;
 }
 
 float trapezoidalProfile(float curr, float goal) {

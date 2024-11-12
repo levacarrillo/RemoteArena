@@ -39,9 +39,9 @@ class ROS:
     def run_command(self, rest_data):
         exec_command = rest_data['command']
         if exec_command == 'run_algorithm':
-            rospy.set_param('run_algorithm', True)
-        elif exec_command == 'stop_algorithm':
-            rospy.set_param('run_algorithm', False)
+            rospy.set_param('enable_movement', True)
+        elif exec_command == 'stop':
+            rospy.set_param('enable_movement', False)
 
     def move_robot(self, rest_data):
         move_command = rest_data['command']
@@ -75,7 +75,7 @@ class ROS:
         distance = rest_data['distance']
         print(distance)
         rospy.set_param('behavior', 'none')
-        rospy.set_param('run_algorithm', True)
+        rospy.set_param('enable_movement', True)
         try:
             movement = rospy.ServiceProxy('move_robot', MoveMinibot)
             resp = movement(angle, distance)

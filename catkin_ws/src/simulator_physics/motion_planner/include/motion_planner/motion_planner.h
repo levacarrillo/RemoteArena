@@ -11,7 +11,7 @@ class MotionPlanner {
         ros::NodeHandle &nh_;
         ros::Subscriber lidar_sub;
         ros::ServiceClient movement_client, light_client;
-        bool run_algorithm;
+        bool enable_movement;
         float max_advance;
         float max_turn_angle;
         std::string behavior;
@@ -98,15 +98,15 @@ class MotionPlanner {
         }
 
         bool is_running() {
-            if (!nh_.getParam("/run_algorithm", run_algorithm)) {
-                ROS_ERROR("FAILED TO GET PARAMETER /run_algorithm");
+            if (!nh_.getParam("/enable_movement", enable_movement)) {
+                ROS_ERROR("FAILED TO GET PARAMETER /enable_movement");
                 return false;
             }
-            return run_algorithm;
+            return enable_movement;
         }
 
         void stop_algorithm() {
-            nh_.setParam("/run_algorithm", false);
+            nh_.setParam("/enable_movement", false);
             ros::Duration(1);
         }
 };
