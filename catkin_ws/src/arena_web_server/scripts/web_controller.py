@@ -63,9 +63,22 @@ def get_battery_percent():
 def get_cpu_temp():
     return jsonify(ros.cpu_temp)
 
+@app.route('/get_laser_values', methods=['GET'])
+def get_laser_values():
+    return jsonify(ros.laser_scan)
+
+@app.route('/get_max_light_sensor')
+def get_max_light_sensor():
+    return jsonify(ros.get_max_light_sensor())
+
 @app.route('/move_robot_command', methods=['POST'])
 def move_robot_command():
     return jsonify(ros.move_robot(request.get_json()))
+
+@app.route('/move_robot_to_pose', methods=['POST'])
+def move_robot_to_pose():
+    return jsonify(ros.move_robot_to_pose(request.get_json()))
+
 
 @app.route('/run_executable', methods=['POST'])
 def run_executable():
