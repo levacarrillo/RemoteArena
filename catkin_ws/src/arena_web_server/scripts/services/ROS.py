@@ -71,9 +71,7 @@ class ROS:
 
     def move_robot_to_pose(self, rest_data):
         angle = rest_data['angle']
-        print(angle)
         distance = rest_data['distance']
-        print(distance)
         rospy.set_param('behavior', 'none')
         rospy.set_param('enable_movement', True)
         try:
