@@ -42,6 +42,11 @@ bool isRunning() {
     return enable_movement;
 }
 
+float uniformProfile(float goal) {
+    float dir = goal / fabs(goal);
+    return dir * max_linear_speed;
+}
+
 float trapezoidalProfile(float curr, float goal) {
     float dir = goal / fabs(goal);
     if (current_speed < max_linear_speed) current_speed += speed_increment;
@@ -65,9 +70,10 @@ geometry_msgs::Twist getAngularVelocity(float angle_error) {
 
 geometry_msgs::Twist getLinearVelocity(float curr, float goal, float angle_error) {
     geometry_msgs::Twist linear_velocity;
-    linear_velocity.linear.x = trapezoidalProfile(curr, goal);
+    linear_velocity.linear.x = uniformProfile(goal);
     linear_velocity.linear.y = 0.0;
-    linear_velocity.angular.z = sigmoideProfile(angle_error, linear_alpha);
+    // linear_velocity.angular.z = sigmoideProfile(angle_error, linear_alpha);
+    linear_velocity.angular.z = 0.0;
 
     return linear_velocity;
 }
