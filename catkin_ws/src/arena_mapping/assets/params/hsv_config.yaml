@@ -1,8 +1,8 @@
 lower_hsv:
-  H: 11
-  S: 10
-  V: 45
+  H: 0
+  S: 0
+  V: 0
 upper_hsv:
   H: 255
-  S: 65
-  V: 114
+  S: 255
+  V: 255

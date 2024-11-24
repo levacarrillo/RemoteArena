@@ -1,10 +1,12 @@
 <launch>
-    <!-- Node for hardware's camera -->
-    <!-- <node name="usb_cam_node" pkg="usb_cam" type="usb_cam_node" output="screen"/> -->
-    <!-- Node to connect with micro-controller -->
-    <!-- <node name="relays_controller" pkg="rosserial_python" type="serial_node.py" required="true" output="screen">
-        <param name="port" value="/dev/ttyACM0" />
-    </node>	 -->
-    <!-- Node to plot data from the real robot's wheels -->
-    <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler" args="--layout '$(find arena_control)/assets/visualization/config_plot_pid.xml'" />
+    <group ns="hardware">
+        <!-- Node for hardware's camera -->
+        <!-- <node name="usb_cam_node" pkg="usb_cam" type="usb_cam_node" output="screen"/> -->
+        <!-- Node to connect with micro-controller -->
+        <!-- <node name="relays_controller" pkg="rosserial_python" type="serial_node.py" required="true" output="screen">
+            <param name="port" value="/dev/ttyACM0" />
+        </node>	 -->
+        <!-- Node to plot data from the real robot's wheels -->
+        <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler" args="--layout '$(find arena_control)/assets/visualization/config_plot_pid.xml'" />
+    </group>
 </launch>

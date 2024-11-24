@@ -1,14 +1,17 @@
 <launch>
-    <param name="/behavior" value="light_follower" />
+    <!-- Simulated robot's hardware -->
+    <include file="$(find hardware)/launch/startup.launch" />
+    
+    <group ns="motion_planner">
+        <param name="/behavior" value="light_follower" />
 
-    <param name="/max_advance" value="0.15" />
-    <param name="/max_turn_angle" value="0.7854" />
-    <param name="/threshold_follower" value="7.1" />
-    <param name="/enable_movement" value="false" />
-    <param name="/noise" value="0.01" />
+        <param name="/max_advance" value="0.15" />
+        <param name="/max_turn_angle" value="0.7854" />
+        <param name="/threshold_follower" value="7.1" />
+        <param name="/enable_movement" value="false" />
+        <param name="/noise" value="0.01" />
+        
+        <node name="motion_planner_node" pkg="motion_planner" type="motion_planner_node" output="screen" />
+    </group>
     
-    <node name="motion_planner_node" pkg="motion_planner" type="motion_planner_node" output="screen" />
-    
-    <node name="laser_scan_node" pkg="hardware" type="laser_scan_node" output="screen" />
-    <node name="light_sensors_node" pkg="hardware" type="light_sensors_node" output="screen" />
 </launch>

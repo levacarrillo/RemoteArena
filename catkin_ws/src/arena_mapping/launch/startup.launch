@@ -2,7 +2,9 @@
     <!-- Launch to startup hardware from real arena -->
     <include file="$(find arena_control)/launch/hardware.launch" />
 
-    <!-- Nodes to detect features in arena -->
-    <node name="aruco_detector"  pkg="arena_mapping"    type="aruco_detector.py" output="screen" respawn="true"/>
-    <node name="obstacles_color_detector" pkg="arena_mapping" type="obstacles_color_detector.py" output="screen" />
+    <group ns="mapping">
+        <!-- Nodes to detect features in arena -->
+        <node name="aruco_detector"  pkg="arena_mapping"    type="aruco_detector.py" output="screen" respawn="true"/>
+        <node name="obstacles_color_detector" pkg="arena_mapping" type="obstacles_color_detector.py" output="screen" />
+    </group>
 </launch>

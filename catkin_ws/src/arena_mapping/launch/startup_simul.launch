@@ -1,21 +1,22 @@
 <launch>
     <!-- Launch simulated mobile base -->
     <include file="$(find mobile_base)/launch/bring_up_base_simul.launch" />
+    
+    <group ns="mapping">
+        <!-- Rosbag to play the arena's recordings -->
+        <!-- <node name="play_bag" pkg="rosbag" type="play" args="$(find arena_mapping)/rosbags/bag_only_camera.bag" respawn="true" /> -->
 
-    <!-- Rosbag to play the arena's recordings -->
-    <!-- <node name="play_bag" pkg="rosbag" type="play" args="$(find arena_mapping)/rosbags/bag_only_camera.bag" respawn="true" /> -->
-
-    <!-- Nodes to Rviz visualization -->
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find arena_mapping)/assets/visualization/config_simulator.rviz" />
-    <node name="map_server" pkg="map_server" type="map_server" args="$(find arena_mapping)/assets/maps/arena_map.yaml" >
-        <param name="frame_id" value="map" />
-    </node>
-    <node name="arena_simul_markers" pkg="arena_mapping" type="arena_simul_markers.py" />
-
-    <!-- Motion planner simulation -->
+        <!-- Nodes to Rviz visualization -->
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find arena_mapping)/assets/visualization/config_simulator.rviz" />
+        <node name="map_server" pkg="map_server" type="map_server" args="$(find arena_mapping)/assets/maps/arena_map.yaml" >
+            <param name="frame_id" value="map" />
+        </node>
+        <node name="arena_simul_markers" pkg="arena_mapping" type="arena_simul_markers.py" />
+        <!-- Nodes to detect main characteristics -->
+        <!-- <node name="aruco_detector"  pkg="arena_mapping" type="aruco_detector.py" output="screen" respawn="true" /> -->
+        <node name="obstacles_color_detector" pkg="arena_mapping" type="obstacles_color_detector.py" output="screen" respawn="true" />
+    </group>
+    
+    <!-- Motion planner simulator -->
     <include file="$(find motion_planner)/launch/motion_simul.launch" />
-
-    <!-- Nodes to detect main characteristics -->
-    <!-- <node name="aruco_detector"  pkg="arena_mapping" type="aruco_detector.py" output="screen" respawn="true" /> -->
-    <node name="obstacles_color_detector" pkg="arena_mapping" type="obstacles_color_detector.py" output="screen" respawn="true" />
 </launch>
