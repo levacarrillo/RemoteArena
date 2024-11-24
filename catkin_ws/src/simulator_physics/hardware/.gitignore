@@ -11,5 +11,6 @@
 
 # And these subdirectories
 !include/
+!launch/
 !src/
 !srv/
