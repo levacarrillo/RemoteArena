@@ -1,7 +1,7 @@
 <launch>
     <!-- Launch to startup hardware from real arena -->
     <include file="$(find arena_control)/launch/hardware.launch" />
-    <group ns="mapping">
+    <group ns="arena_mapping">
         <!-- Node to calibrate hsv params -->
         <node name="obstacles_color_calibrator" pkg="arena_mapping" type="obstacles_color_calibrator.py" output="screen" />
     </group>
