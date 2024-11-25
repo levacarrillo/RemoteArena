@@ -108,7 +108,7 @@ bool moveCallback(mobile_base::MoveMinibot::Request &req, mobile_base::MoveMinib
     while(ros::ok() && !res.done) {
         if (!isRunning()) {
             res.done = true;
-            std::cout << "************* ALGORITHM STOPPED *************" << std::endl;
+            std::cout << "************* ALGORITHM STOPPED **************" << std::endl;
             break;
         }
         curr  = getCurrentPose(getAbsolutePose(tfBuffer));
@@ -157,13 +157,13 @@ bool moveCallback(mobile_base::MoveMinibot::Request &req, mobile_base::MoveMinib
 }
 
 int main(int argc, char **argv) {
-    std::cout << "Starting move_minibot_node_simul by Luis Nava..." << std::endl;
-    ros::init(argc, argv, "move_minibot_node_simul");
+    std::cout << "Starting move_minibot_node by Luis Nava..." << std::endl;
+    ros::init(argc, argv, "move_minibot_node");
     ros::NodeHandle nh;
     if(!setParameters()) return -1;
 
-    pubCmdVel = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
-    ros::ServiceServer moveService = nh.advertiseService("move_robot", moveCallback);
+    pubCmdVel = nh.advertise<geometry_msgs::Twist>("/mobile_base/cmd_vel", 1);
+    ros::ServiceServer moveService = nh.advertiseService("/mobile_base/move_to_pose", moveCallback);
 
     ros::spin();
     return 0;

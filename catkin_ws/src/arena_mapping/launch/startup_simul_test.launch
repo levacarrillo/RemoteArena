@@ -1,5 +1,5 @@
 <launch>
-    <group ns="mapping">
+    <group ns="arena_mapping">
         <!-- Launch simulated mobile base -->
         <!-- <include file="$(find mobile_base)/launch/bring_up_base_simul.launch" /> -->
 

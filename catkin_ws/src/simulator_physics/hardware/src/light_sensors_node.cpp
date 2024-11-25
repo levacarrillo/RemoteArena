@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
     ros::init(argc, argv, "light_sensors_node");
     ros::NodeHandle nh;
 
-    ros::ServiceServer service = nh.advertiseService("/light_readings", light_callback);
+    ros::ServiceServer service = nh.advertiseService("/hardware/light_readings", light_callback);
 
     tf2_ros::Buffer tfBuffer;
     tf2_ros::TransformListener tfListener(tfBuffer);
@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
         geometry_msgs::TransformStamped transformStamped;
 
         std::vector<bool> light_status;
-        nh.getParam("/light_bulbs", light_status);
+        nh.getParam("/hardware/light_bulbs", light_status);
 
         try {
             transformStamped = tfBuffer.lookupTransform("map", "base_link", ros::Time(0));

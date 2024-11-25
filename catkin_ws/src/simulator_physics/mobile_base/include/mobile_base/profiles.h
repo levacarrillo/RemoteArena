@@ -16,30 +16,30 @@ float angular_alpha;
 
 bool setParameters() {
     // PARAMETERS FOR LINEAR ADVANCE
-    if(ros::param::has("max_linear_speed")) ros::param::get("max_linear_speed", max_linear_speed);
-    else { ROS_ERROR("There's no parameter for max_linear_speed"); return false; }
+    if(ros::param::has("/mobile_base/max_linear_speed")) ros::param::get("/mobile_base/max_linear_speed", max_linear_speed);
+    else { ROS_ERROR("There's no parameter for /mobile_base/max_linear_speed"); return false; }
 
-    if(ros::param::has("speed_increment")) ros::param::get("speed_increment", speed_increment);
-    else { ROS_ERROR("There's no parameter for speed_increment"); return false; }
+    if(ros::param::has("/mobile_base/speed_increment")) ros::param::get("/mobile_base/speed_increment", speed_increment);
+    else { ROS_ERROR("There's no parameter for /mobile_base/speed_increment"); return false; }
 
-    if(ros::param::has("linear_alpha")) ros::param::get("linear_alpha", linear_alpha);
-    else { ROS_ERROR("There's no parameter for linear_alpha"); return false; }
+    if(ros::param::has("/mobile_base/linear_alpha")) ros::param::get("/mobile_base/linear_alpha", linear_alpha);
+    else { ROS_ERROR("There's no parameter for /mobile_base/linear_alpha"); return false; }
 
     // PARAMETERS FOR ANGULAR TWIST
-    if(ros::param::has("max_angular_vel")) ros::param::get("max_angular_vel", max_angular_vel);
-    else { ROS_ERROR("There's no parameter for max_angular_vel"); return false; }
+    if(ros::param::has("/mobile_base/max_angular_vel")) ros::param::get("/mobile_base/max_angular_vel", max_angular_vel);
+    else { ROS_ERROR("There's no parameter for /mobile_base/max_angular_vel"); return false; }
 
-    if(ros::param::has("angular_alpha")) ros::param::get("angular_alpha", angular_alpha);
-    else { ROS_ERROR("There's no parameter for angular_alpha"); return false; }
+    if(ros::param::has("/mobile_base/angular_alpha")) ros::param::get("/mobile_base/angular_alpha", angular_alpha);
+    else { ROS_ERROR("There's no parameter for /mobile_base/angular_alpha"); return false; }
 
     return true;
 }
 
 bool isRunning() {
-    bool enable_movement = false;
-    if(ros::param::has("/enable_movement")) ros::param::get("enable_movement", enable_movement);
-    else { ROS_ERROR("There's no parameter for enable_movement"); return false; }
-    return enable_movement;
+    bool enable_movements = false;
+    if(ros::param::has("/mobile_base/enable_movements")) ros::param::get("/mobile_base/enable_movements", enable_movements);
+    else { ROS_ERROR("There's no parameter for /mobile_base/enable_movements"); return false; }
+    return enable_movements;
 }
 
 float uniformProfile(float goal) {

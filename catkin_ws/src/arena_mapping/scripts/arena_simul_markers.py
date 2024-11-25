@@ -10,7 +10,7 @@ light_bulbs = [False, False]
 
 def getParameters():
     global light_bulbs
-    light_bulbs = rospy.get_param("/light_bulbs")
+    light_bulbs = rospy.get_param("/hardware/light_bulbs")
 
 
 def publish_light_bulb():
@@ -20,7 +20,7 @@ def publish_light_bulb():
 
     markerArray = MarkerArray()
 
-    rospy.set_param("/light_bulbs", light_bulbs)
+    rospy.set_param("/hardware/light_bulbs", light_bulbs)
 
     
     light_bulb_1 = Marker()

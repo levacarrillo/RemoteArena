@@ -37,11 +37,11 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(mobile_base_node_simul src/mobile_base_node_simul.cpp)
-add_dependencies(mobile_base_node_simul ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(mobile_base_node_simul ${catkin_LIBRARIES})
+add_executable(mobile_base_node src/mobile_base_node.cpp)
+add_dependencies(mobile_base_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(mobile_base_node ${catkin_LIBRARIES})
 
 
-add_executable(move_minibot_node_simul src/move_minibot_node_simul.cpp)
-add_dependencies(move_minibot_node_simul ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(move_minibot_node_simul ${catkin_LIBRARIES})
+add_executable(move_minibot_node src/move_minibot_node.cpp)
+add_dependencies(move_minibot_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(move_minibot_node ${catkin_LIBRARIES})

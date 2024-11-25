@@ -1,8 +1,8 @@
 <launch>
     <!-- Launch simulated mobile base -->
-    <include file="$(find mobile_base)/launch/bring_up_base_simul.launch" />
+    <include file="$(find mobile_base)/launch/mobile_base.launch" />
     
-    <group ns="mapping">
+    <group ns="arena_mapping">
         <!-- Rosbag to play the arena's recordings -->
         <!-- <node name="play_bag" pkg="rosbag" type="play" args="$(find arena_mapping)/rosbags/bag_only_camera.bag" respawn="true" /> -->
 
@@ -18,5 +18,5 @@
     </group>
     
     <!-- Motion planner simulator -->
-    <include file="$(find motion_planner)/launch/motion_simul.launch" />
+    <include file="$(find motion_planner)/launch/motion_planner.launch" />
 </launch>

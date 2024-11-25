@@ -6,6 +6,6 @@
 !LICENSE
 !readme.MD
 
-!*.launch
+!robot_id.yaml
 
 # And these subdirectories

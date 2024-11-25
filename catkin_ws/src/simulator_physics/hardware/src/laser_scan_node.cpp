@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
     ros::NodeHandle nh;
     ros::Rate loop(30);
 
-    ros::Publisher  scan_pub = nh.advertise<sensor_msgs::LaserScan>("/scan", 50);
+    ros::Publisher  scan_pub = nh.advertise<sensor_msgs::LaserScan>("/hardware/scan", 50);
 
 
 	unsigned int num_readings = 3;
@@ -22,8 +22,8 @@ int main(int argc, char** argv) {
     tf2_ros::Buffer tfBuffer;
     tf2_ros::TransformListener tfListener(tfBuffer);
 
-	if(nh.hasParam("/noise")) 
-		nh.getParam("/noise", noise);
+	if(nh.hasParam("/hardware/lasers_noise")) 
+		nh.getParam("/hardware/lasers_noise", noise);
 
 	random_numbers::RandomNumberGenerator rnd;
 
