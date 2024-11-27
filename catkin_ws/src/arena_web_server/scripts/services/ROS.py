@@ -39,14 +39,14 @@ class ROS:
     def run_command(self, rest_data):
         exec_command = rest_data['command']
         if exec_command == 'run_algorithm':
-            rospy.set_param('enable_movement', True)
+            rospy.set_param('/mobile_base/enable_movements', True)
         elif exec_command == 'stop':
-            rospy.set_param('enable_movement', False)
+            rospy.set_param('/mobile_base/enable_movements', False)
 
     def move_robot(self, rest_data):
         move_command = rest_data['command']
         twist_msg = Twist()
-        print(move_command)
+        # print(move_command)
 
         if move_command == 'foward':
             twist_msg.linear.x  = self.linear_vel
@@ -72,34 +72,34 @@ class ROS:
     def move_robot_to_pose(self, rest_data):
         angle = rest_data['angle']
         distance = rest_data['distance']
-        rospy.set_param('behavior', 'none')
-        rospy.set_param('enable_movement', True)
+        rospy.set_param('/motion_planner/behavior', 'none')
+        rospy.set_param('/mobile_base/enable_movements', True)
         try:
-            movement = rospy.ServiceProxy('move_robot', MoveMinibot)
+            movement = rospy.ServiceProxy('/mobile_base/move_to_pose', MoveMinibot)
             resp = movement(angle, distance)
-            print(resp)
+            # print('' + resp)
             return resp.done
         except rospy.ServiceException as error:
-            print('Service failed to call service /move_robot %s' %error)
+            print('Service failed to call service /mobile_base/move_to_pose %s' %error)
 
     def get_max_light_sensor(self):
         try:
-            client = rospy.ServiceProxy('light_readings', LightReadings)
+            client = rospy.ServiceProxy('/hardware/light_readings', LightReadings)
             resp = client()
-            print(resp)
+            # print(resp)
             return resp.sensor_max_intensity
         except rospy.ServiceException as error:
-            print('Service failed to call /light_readings service')
+            print('Service failed to call /hardware/light_readings service')
             
 
     def set_light_bulbs_state(self, rest_data):
         print(rest_data)
         lights_array = rest_data['lights']
         if 1 in lights_array:
-            rospy.set_param('light_bulbs', [True, False])
+            rospy.set_param('/hardware/light_bulbs', [True, False])
             if 2 in lights_array:
-                rospy.set_param('light_bulbs', [True, True])
+                rospy.set_param('/hardware/light_bulbs', [True, True])
         elif 2 in lights_array:
-            rospy.set_param('light_bulbs', [False, True])
+            rospy.set_param('/hardware/light_bulbs', [False, True])
         else:
-            rospy.set_param('light_bulbs', [False, False])
+            rospy.set_param('/hardware/light_bulbs', [False, False])
