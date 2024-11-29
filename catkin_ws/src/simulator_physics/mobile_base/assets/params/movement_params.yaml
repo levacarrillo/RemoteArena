@@ -1,0 +1,14 @@
+# PARAM TO ENABLE MOVEMENTS FROM move_minibot_node
+enable_movements: false
+# TIME LIMIT FOR MOVEMENTS [ms]
+max_time_limit: 10000
+# POSITION TOLERANCY
+angle_tolerancy: 0.008726
+distance_tolerancy: 0.05
+# PARAMETERS FOR LINEAR ADVANCE
+max_linear_vel: 0.1
+speed_increment: 0.005
+linear_alpha: 0.45
+# PARAMETERS FOR ANGULAR TWIST
+max_angular_vel: 1.5
+angular_alpha: 1.05
