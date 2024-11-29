@@ -17,6 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
   FILES
   MoveMinibot.srv
+  OdomSetPoint.srv
 )
 
 ## Generate added messages and services with any dependencies listed here

@@ -1,19 +1,20 @@
 #include <ros/ros.h>
-#include <geometry_msgs/Twist.h>
-#include <mobile_base/MoveMinibot.h>
-#include <geometry_msgs/TransformStamped.h>
 #include <tf2/utils.h>
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2_ros/transform_listener.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <geometry_msgs/Twist.h>
+#include <geometry_msgs/TransformStamped.h>
+#include <mobile_base/MoveMinibot.h>
 #include <mobile_base/profiles.h>
+#include <mobile_base/OdomSetPoint.h>
 
 struct robotPose {
   float x;
   float y;
   float th;
   float magnitude;
-} init, goal, curr, error;
+} curr, goal, error;
 
 enum State {
     SM_MOVE_ROBOT,
@@ -21,38 +22,57 @@ enum State {
     SM_FINISH_MOVEMENT
 };
 
-float ANGLE_TOLERANCY    = 0.10;
-float DISTANCE_TOLERANCY = 0.08;
-
-int MAX_TIME = 1000;
-
 ros::Publisher pubCmdVel;
+ros::ServiceClient client;
 
-float normalizeAngle(float angle) {
-    if (angle < 0) angle += 2 * M_PI;
-    return angle;
+float round2(double num) {
+    return std::round(num * 1000) / 1000;
 }
 
-robotPose getAbsolutePose(tf2_ros::Buffer& tfBuffer) {
-    robotPose absolutePose;
+robotPose getTransform(std::string parentLink, std::string childLink) {
+    tf2_ros::Buffer tfBuffer;
+    robotPose transformPose;
+    tf2_ros::TransformListener tfListener(tfBuffer);
     try{
         geometry_msgs::TransformStamped transformStamped;
-        transformStamped = tfBuffer.lookupTransform("odom", "base_link", ros::Time::now(), ros::Duration(0.1));
+        transformStamped = tfBuffer.lookupTransform(parentLink, childLink, ros::Time(0), ros::Duration(1.0));
         tf2::Quaternion q;
         tf2::fromMsg(transformStamped.transform.rotation, q);
         double roll, pitch, yaw;
         tf2::getEulerYPR(q, yaw, pitch, roll);
-        
-        absolutePose.x = transformStamped.transform.translation.x;
-        absolutePose.y = transformStamped.transform.translation.y;
-        absolutePose.th = yaw;
-        absolutePose.magnitude = sqrt(pow(absolutePose.x, 2) + pow(absolutePose.y, 2));
-
+        transformPose.x  = transformStamped.transform.translation.x;
+        transformPose.y  = transformStamped.transform.translation.y;
+        transformPose.th = yaw;
+        transformPose.magnitude = sqrt(pow(transformPose.x, 2) + pow(transformPose.y, 2));
+        // std::cout << "------------------------------------------" << std::endl;
+        // std::cout << "move_minibot.-> parentLink: " << parentLink << "\tchildLink: " << childLink << std::endl;
+        // std::cout << "move_minibot.-> x: " << transformPose.x << "\ty: " << transformPose.y << "\tth: " << transformPose.th << std::endl;
     } catch (tf2::TransformException &ex) {
-        // ROS_WARN("%s", ex.what());
+        ROS_WARN("%s", ex.what());
         ros::Duration(1.0).sleep();
     }
-    return absolutePose;
+    return transformPose;
+}
+
+bool setInitialPosition() {
+    try{    
+        robotPose currentPose = getTransform("map", "base_link");
+
+        mobile_base::OdomSetPoint srv;
+        srv.request.robot_x = currentPose.x;
+        srv.request.robot_y = currentPose.y;
+        srv.request.robot_w = currentPose.th;
+
+        if (!client.call(srv)) {
+            ROS_ERROR("move_minibot.->FAILED TO GET SERVICE /mobile_base/odom_set_point");
+            return false;
+        }
+    } catch (tf2::TransformException &ex) {
+        ROS_WARN("%s", ex.what());
+        ros::Duration(1.0).sleep();
+        return false;
+    }
+    return true;
 }
 
 robotPose getGoalPose(mobile_base::MoveMinibot::Request req) {
@@ -67,70 +87,61 @@ robotPose getGoalPose(mobile_base::MoveMinibot::Request req) {
     return goalPose;
 }
 
-robotPose getCurrentPose(robotPose absPose) {
-    robotPose currentPose;
-    currentPose.x  = absPose.x  - init.x;
-    currentPose.y  = absPose.y  - init.y;
-    if (init.th + goal.th < -M_PI || init.th + goal.th > M_PI ) {
-        currentPose.th = normalizeAngle(absPose.th) - normalizeAngle(init.th);
-    } else {
-        currentPose.th = absPose.th - init.th;
-    }
-    currentPose.magnitude = sqrt(pow(currentPose.x, 2) + pow(currentPose.y, 2));
-    return currentPose;
-}
-
 robotPose getErrorPose() {
     robotPose errorPose;
-    errorPose.x = goal.x - curr.x;
-    errorPose.y = goal.y - curr.y;
+    errorPose.x = fabs(goal.x) - fabs(curr.x);
+    errorPose.y = fabs(goal.y) - fabs(curr.y);
     errorPose.th = goal.th - curr.th;
     errorPose.magnitude = sqrt(pow(errorPose.x, 2) + pow(errorPose.y, 2));
     if (goal.magnitude < 0) errorPose.magnitude = - errorPose.magnitude;
+
     return errorPose;
 }
 
 bool moveCallback(mobile_base::MoveMinibot::Request &req, mobile_base::MoveMinibot::Response &res) {
-    tf2_ros::Buffer tfBuffer;
-    tf2_ros::TransformListener tfListener(tfBuffer);
-    ros::Rate rate(10);
-    
-    curr = getAbsolutePose(tfBuffer);
-    init = getAbsolutePose(tfBuffer);
+
+    while(!setInitialPosition()) {}
+    curr = getTransform("odom", "base_link");
     goal = getGoalPose(req);
+    ros::Rate rate(10);
 
     State state = SM_CORRECT_ANGLE;
 
     int current_time = 0;
-
     res.done = req.distance == 0.0 && req.theta == 0.0;
+
     
     while(ros::ok() && !res.done) {
+        // std::cout << "-------------------------------------------------------------------" << std::endl;
+        // std::cout << "move_minibot.-> STATE MACHINE: " << state << std::endl;
+        // std::cout << "move_minibot.-> ANGLE_TOLERANCY: " << ANGLE_TOLERANCY << "\tDISTANCE_TOLERANCY: " << DISTANCE_TOLERANCY << std::endl;
+        // std::cout << std::endl;
+        // std::cout << "move_minibot.-> Currrent-> x:" << round2(curr.x)  << "\ty:" << round2(curr.y)  << "\tth:" << round2(curr.th) << "\tmag:" << round2(curr.magnitude) << std::endl;
+        // std::cout << "move_minibot.-> Goal->     x:" << round2(goal.x)  << "\ty:" << round2(goal.y)  << "\tth:" << round2(goal.th) << "\tmag:" << round2(goal.magnitude) << std::endl;
+        // std::cout << "move_minibot.-> Error->    x:" << round2(error.x) << "\ty:" << round2(error.y) << "\tth:" << round2(error.th) << "\tmag:" << round2(error.magnitude) << std::endl;
+        // std::cout << "move_minibot.-> Time execution->" << current_time << "ms" << std::endl;
+        // std::cout << std::endl;
+
         if (!isRunning()) {
             res.done = true;
-            std::cout << "************* ALGORITHM STOPPED **************" << std::endl;
+            std::cout << "************* MOVEMENT STOPPED **************" << std::endl;
             break;
         }
-        curr  = getCurrentPose(getAbsolutePose(tfBuffer));
+
+        curr = getTransform("odom", "base_link");
         error = getErrorPose();
-        std::cout << "-------------------------------------------------------------------" << std::endl;
-        std::cout << "initial:  x->" << init.x  << "\ty->" << init.y  << "\tth->" << init.th << "\tmag->" << init.magnitude << std::endl;
-        std::cout << "currrent: x->" << curr.x  << "\ty->" << curr.y  << "\tth->" << curr.th << "\tmag->" << curr.magnitude << std::endl;
-        std::cout << "goal:     x->" << goal.x  << "\ty->" << goal.y  << "\tth->" << goal.th << "\tmag->" << goal.magnitude << std::endl;
-        std::cout << "error:    x->" << error.x << "\ty->" << error.y << "\tth->" << error.th << "\tmag->" << error.magnitude << std::endl;
-        std::cout << "time execution: ->" << current_time << "ms" << std::endl;
-        std::cout << std::endl;
 
         switch(state) {
+
             case SM_CORRECT_ANGLE:
-                if(abs(error.th) > ANGLE_TOLERANCY) {
+                if(abs(error.th) >= ANGLE_TOLERANCY) {
                     pubCmdVel.publish(getAngularVelocity(error.th));
                 } else {
                     state = SM_MOVE_ROBOT;
                 }
             break;
             case SM_MOVE_ROBOT:
-                if(abs(error.magnitude) > DISTANCE_TOLERANCY) {
+                if(abs(error.magnitude) >= DISTANCE_TOLERANCY) {
                     pubCmdVel.publish(getLinearVelocity(curr.magnitude, goal.magnitude, error.th));
                 } else {
                     state = SM_FINISH_MOVEMENT;
@@ -145,7 +156,7 @@ bool moveCallback(mobile_base::MoveMinibot::Request &req, mobile_base::MoveMinib
                 std::cout << "An unexpected error has occurred :(" << std::endl;
         }
         current_time += 10;
-        if (current_time > MAX_TIME) {
+        if (current_time > MAX_TIME_LIMIT) {
             std::cout << "MOVEMENT HAS EXCEEDED TIME MAX" << std::endl;
             res.done = true;
         }
@@ -163,6 +174,7 @@ int main(int argc, char **argv) {
     if(!setParameters()) return -1;
 
     pubCmdVel = nh.advertise<geometry_msgs::Twist>("/mobile_base/cmd_vel", 1);
+    client = nh.serviceClient<mobile_base::OdomSetPoint>("/mobile_base/odom_set_point");
     ros::ServiceServer moveService = nh.advertiseService("/mobile_base/move_to_pose", moveCallback);
 
     ros::spin();

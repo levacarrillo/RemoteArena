@@ -6,31 +6,45 @@
 
 float current_speed;
 
-float max_linear_speed;
+float max_linear_vel;
 float speed_increment;
 float linear_alpha;
+
+float MAX_TIME_LIMIT;
+float ANGLE_TOLERANCY;
+float DISTANCE_TOLERANCY;
 
 float max_angular_vel;
 float angular_alpha;
 
 
 bool setParameters() {
+    // PARAMETERS FOR LIMIT TIME
+    if(ros::param::has("/mobile_base/max_time_limit")) ros::param::get("/mobile_base/max_time_limit", MAX_TIME_LIMIT);
+    else { ROS_ERROR("profiles.->THERE'S NO PARAMETERS FOR /mobile_base/max_time_limit"); return false; }
+    // PARAMETERS FOR POSITION'S TOLERANCY
+    if(ros::param::has("/mobile_base/angle_tolerancy")) ros::param::get("/mobile_base/angle_tolerancy", ANGLE_TOLERANCY);
+    else { ROS_ERROR("profiles.->THERE'S NO PARAMETERS FOR /mobile_base/angle_tolerancy"); return false; }
+
+    if(ros::param::has("/mobile_base/distance_tolerancy")) ros::param::get("/mobile_base/distance_tolerancy", DISTANCE_TOLERANCY);
+    else { ROS_ERROR("profiles.->THERE'S NO PARAMETERS FOR /mobile_base/distance_tolerancy"); return false; }
+
     // PARAMETERS FOR LINEAR ADVANCE
-    if(ros::param::has("/mobile_base/max_linear_speed")) ros::param::get("/mobile_base/max_linear_speed", max_linear_speed);
-    else { ROS_ERROR("There's no parameter for /mobile_base/max_linear_speed"); return false; }
+    if(ros::param::has("/mobile_base/max_linear_vel")) ros::param::get("/mobile_base/max_linear_vel", max_linear_vel);
+    else { ROS_ERROR("profiles.->THERE'S NO PARAMETERS FOR /mobile_base/max_linear_vel"); return false; }
 
     if(ros::param::has("/mobile_base/speed_increment")) ros::param::get("/mobile_base/speed_increment", speed_increment);
-    else { ROS_ERROR("There's no parameter for /mobile_base/speed_increment"); return false; }
+    else { ROS_ERROR("profiles.->THERE'S NO PARAMETERS FOR /mobile_base/speed_increment"); return false; }
 
     if(ros::param::has("/mobile_base/linear_alpha")) ros::param::get("/mobile_base/linear_alpha", linear_alpha);
-    else { ROS_ERROR("There's no parameter for /mobile_base/linear_alpha"); return false; }
+    else { ROS_ERROR("profiles.->THERE'S NO PARAMETERS FOR /mobile_base/linear_alpha"); return false; }
 
     // PARAMETERS FOR ANGULAR TWIST
     if(ros::param::has("/mobile_base/max_angular_vel")) ros::param::get("/mobile_base/max_angular_vel", max_angular_vel);
-    else { ROS_ERROR("There's no parameter for /mobile_base/max_angular_vel"); return false; }
+    else { ROS_ERROR("profiles.->THERE'S NO PARAMETERS FOR /mobile_base/max_angular_vel"); return false; }
 
     if(ros::param::has("/mobile_base/angular_alpha")) ros::param::get("/mobile_base/angular_alpha", angular_alpha);
-    else { ROS_ERROR("There's no parameter for /mobile_base/angular_alpha"); return false; }
+    else { ROS_ERROR("profiles.->THERE'S NO PARAMETERS FOR /mobile_base/angular_alpha"); return false; }
 
     return true;
 }
@@ -38,18 +52,18 @@ bool setParameters() {
 bool isRunning() {
     bool enable_movements = false;
     if(ros::param::has("/mobile_base/enable_movements")) ros::param::get("/mobile_base/enable_movements", enable_movements);
-    else { ROS_ERROR("There's no parameter for /mobile_base/enable_movements"); return false; }
+    else { ROS_ERROR("profiles.->THERE'S NO PARAMETERS FOR /mobile_base/enable_movements"); return false; }
     return enable_movements;
 }
 
 float uniformProfile(float goal) {
     float dir = goal / fabs(goal);
-    return dir * max_linear_speed;
+    return dir * max_linear_vel;
 }
 
 float trapezoidalProfile(float curr, float goal) {
     float dir = goal / fabs(goal);
-    if (current_speed < max_linear_speed) current_speed += speed_increment;
+    if (current_speed < max_linear_vel) current_speed += speed_increment;
 
     if (curr >= goal) current_speed = 0;
     return dir * current_speed;

@@ -12,7 +12,7 @@ class MotionPlanner {
         ros::Subscriber lidar_sub;
         ros::ServiceClient movement_client, light_client;
         bool enable_movements;
-        float max_advance;
+        float max_advance_distance;
         float max_turn_angle;
         std::string behavior;
         float light_readings[8];
@@ -43,9 +43,9 @@ class MotionPlanner {
             srv.request.distance = advance;
             if (movement_client.call(srv)) {
                 if(srv.response.done) std::cout << "ROBOT MOVEMENT DONE" << std::endl;
-                else ROS_ERROR("FAILED TO ROBOT MOVEMENT");
+                else ROS_ERROR("motion_planner.->FAILED TO ROBOT MOVEMENT");
             } else {
-                ROS_ERROR("Failed to call service /mobile_base/move_to_pose");
+                ROS_ERROR("motion_planner.->FAILED TO CALL SERVICE /mobile_base/move_to_pose");
             }
         }
 
@@ -58,7 +58,7 @@ class MotionPlanner {
                     light_readings[i] = srv.response.light_readings[i];
                 }
             } else {
-                ROS_ERROR("FAILED TO CALL SERVICE /hardware/light_readings");
+                ROS_ERROR("motion_planner.->FAILED TO CALL SERVICE /hardware/light_readings");
             }
             return light_readings;
         }
@@ -70,7 +70,7 @@ class MotionPlanner {
 
         Behaviors get_behavior() {
             if (!nh_.getParam("/motion_planner/behavior", behavior)) {
-                ROS_ERROR("FAILED TO GET PARAMETER /behavior");
+                ROS_ERROR("motion_planner.->FAILED TO GET PARAMETER /motion_planner/behavior");
                 return NOT_DEFINED;
             }
             if (behavior == "none")                return NONE;
@@ -84,22 +84,22 @@ class MotionPlanner {
         }
 
         float get_max_advance() {
-            if (!nh_.getParam("/motion_planner/max_advance", max_advance)) {
-                ROS_ERROR("FAILED TO GET PARAMETER /motion_planner/max_advance OF ROBOT");
+            if (!nh_.getParam("/motion_planner/max_advance_distance", max_advance_distance)) {
+                ROS_ERROR("motion_planner.->FAILED TO GET PARAMETER /motion_planner/max_advance_distance OF ROBOT");
             }
-            return max_advance;
+            return max_advance_distance;
         }
         
         float get_max_turn_angle() {
             if (!nh_.getParam("/motion_planner/max_turn_angle", max_turn_angle)) {
-                ROS_ERROR("FAILED TO GET PARAMETER /motion_planner/max_turn_angle OF ROBOT");
+                ROS_ERROR("motion_planner.->FAILED TO GET PARAMETER /motion_planner/max_turn_angle OF ROBOT");
             }
             return max_turn_angle;
         }
 
         bool is_running() {
             if (!nh_.getParam("/mobile_base/enable_movements", enable_movements)) {
-                ROS_ERROR("FAILED TO GET PARAMETER /mobile_base/enable_movements");
+                ROS_ERROR("motion_planner.->FAILED TO GET PARAMETER /mobile_base/enable_movements");
                 return false;
             }
             return enable_movements;
