@@ -12,6 +12,7 @@
 # And these subdirectories
 !include/
 !launch/
+!params/
 !src/
 !srv/
 !state_machines/

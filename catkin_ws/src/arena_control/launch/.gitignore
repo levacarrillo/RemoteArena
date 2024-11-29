@@ -6,5 +6,4 @@
 !LICENSE
 !readme.MD
 
-!hardware_test.launch
-!hardware.launch
+!*.launch

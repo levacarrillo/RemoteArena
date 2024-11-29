@@ -6,6 +6,6 @@
 !LICENSE
 !readme.MD
 
-!startup_simul_test.launch
+!*.launch
 
 # And these subdirectories
