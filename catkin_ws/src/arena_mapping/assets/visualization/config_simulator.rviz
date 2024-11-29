@@ -8,6 +8,7 @@ Panels:
         - /Status1
         - /Grid1/Offset1
         - /Map1
+        - /TF1
         - /TF1/Frames1
         - /Marker1
         - /LaserScan1
@@ -118,7 +119,7 @@ Visualization Manager:
         map:
           Value: true
         odom:
-          Value: false
+          Value: true
       Marker Alpha: 1
       Marker Scale: 1
       Name: TF
@@ -211,17 +212,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 1.2691185474395752
-        Y: 0.39921140670776367
+        X: 0.5056356191635132
+        Y: 0.3983037769794464
         Z: 0.5849634408950806
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7147961258888245
+      Pitch: 1.5697963237762451
       Target Frame: <Fixed Frame>
-      Yaw: 4.708590507507324
+      Yaw: 4.713589668273926
     Saved: ~
 Window Geometry:
   Displays:

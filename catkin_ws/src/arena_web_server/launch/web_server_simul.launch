@@ -1,6 +1,6 @@
 <launch>
     <!-- Play the recorded topics -->
-    <include file="$(find arena_mapping)/launch/startup_simul.launch" />
+    <include file="$(find arena_mapping)/launch/arena_mapping_simul.launch" />
     
     <group ns="web_server">
         <!-- Nodes to start web characteristics -->

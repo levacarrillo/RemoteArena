@@ -1,22 +1,19 @@
 <launch>
-    <!-- Launch simulated mobile base -->
-    <include file="$(find mobile_base)/launch/mobile_base.launch" />
+
+    <include file="$(find motion_planner)/launch/motion_planner_simul.launch" />
     
     <group ns="arena_mapping">
-        <!-- Rosbag to play the arena's recordings -->
-        <!-- <node name="play_bag" pkg="rosbag" type="play" args="$(find arena_mapping)/rosbags/bag_only_camera.bag" respawn="true" /> -->
-
-        <!-- Nodes to Rviz visualization -->
+        <!-- NODES TO RVIZ VISUALIZATION -->
         <node name="rviz" pkg="rviz" type="rviz" args="-d $(find arena_mapping)/assets/visualization/config_simulator.rviz" />
         <node name="map_server" pkg="map_server" type="map_server" args="$(find arena_mapping)/assets/maps/arena_map.yaml" >
             <param name="frame_id" value="map" />
         </node>
+        
         <node name="arena_simul_markers" pkg="arena_mapping" type="arena_simul_markers.py" />
-        <!-- Nodes to detect main characteristics -->
+
+        <!-- NODES TO DETECT VISUAL'S MAIN CHARACTERISTICS -->
         <!-- <node name="aruco_detector"  pkg="arena_mapping" type="aruco_detector.py" output="screen" respawn="true" /> -->
         <node name="obstacles_color_detector" pkg="arena_mapping" type="obstacles_color_detector.py" output="screen" respawn="true" />
     </group>
     
-    <!-- Motion planner simulator -->
-    <include file="$(find motion_planner)/launch/motion_planner.launch" />
 </launch>
