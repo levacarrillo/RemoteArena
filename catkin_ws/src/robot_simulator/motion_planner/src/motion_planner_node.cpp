@@ -68,17 +68,12 @@ int main(int argc, char* argv[]) {
             if (!enable_movements) robot.stop_algorithm();
             
             if(behavior != NONE) {
-                // std::cout << "[";
-                // for (size_t i=0; i<8; i++) {
-                //     std::cout << lidar_readings[i] << ",";
-                // }
-                // std::cout << "]" << std::endl;
-                std::cout << "motion_planner.-> BEHAVIOR SELECTED->" << behavior << std::endl;
                 std::cout << "\n \n  MOTION PLANNER \n____________________________\n" << std::endl;
+                std::cout << "motion_planner.-> BEHAVIOR SELECTED->" << behavior << std::endl;
                 // std::cout << "Light" << std::endl;
                 // std::cout << "Robot: " << std::endl;
                 // std::cout << "Step" << std::endl;
-                std::cout << "motion_planner.-> Movement: twist: " << movement.twist << "\tadvance: " << movement.advance << "\n" << std::endl;
+                // std::cout << "motion_planner.-> Movement: twist: " << movement.twist << "\tadvance: " << movement.advance << "\n" << std::endl;
                 robot.move_to_pose(movement.twist, movement.advance);
             }
         }

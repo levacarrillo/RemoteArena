@@ -66,7 +66,7 @@ int get_light_direction(float *light_readings){
             sensor = i;
     }
 
-    // std::cout << "Sensor->" << sensor << std::endl;
+    // std::cout << "motion_planner_utilities.-> Sensor: " << sensor << "\tAngle: " << sensor * 360 / 8 << std::endl;
 
     if(sensor == 0)      return GO_FOWARD;
     else if(sensor == 1) return GO_FOWARD;

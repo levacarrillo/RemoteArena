@@ -31,8 +31,10 @@ bool light_follower(float intensity, float* light_values, movement* movements, f
         if (sensor_max_value > 4) {
             sensor_max_value = - (sizeof(light_values) - sensor_max_value);
         }
-
-        movements->twist   = sensor_max_value * M_PI / 16;
+        // std::cout << "light_follower.-> sensor_max_value: " << sensor_max_value << "\tAngle: " << sensor_max_value * 180 / 8 << std::endl;
+        // std::cout << "light_follower.-> THRESHOLD_FOLLOWER: " << THRESHOLD_FOLLOWER << "\tIntensity: " << intensity << std::endl;
+        // movements->twist   = sensor_max_value * M_PI / 16;
+        movements->twist   = sensor_max_value * M_PI / 8;
         movements->advance = max_advance;
         
         finished = false;
