@@ -17,6 +17,7 @@ class MotionPlanner {
         float max_turn_angle;
         float light_readings[8];
         float max_intensity;
+        float threshold_follower;
 
         float lidar_readings[3];
 
@@ -108,6 +109,13 @@ class MotionPlanner {
         void stop_algorithm() {
             nh_.setParam("/mobile_base/enable_movements", false);
             ros::Duration(1);
+        }
+
+        float get_threshold_follower() {
+            if (!nh_.getParam("/motion_planner/threshold_follower", threshold_follower)) {
+                ROS_ERROR("motion_planner.->FAILED TO GET PARAMETER /motion_planner/threshold_follower PARAMETER");
+            }
+            return threshold_follower;
         }
 };
 

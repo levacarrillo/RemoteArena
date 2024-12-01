@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
                     enable_movements = true;
                 break;
                 case LIGHT_FOLLOWER:
-                    enable_movements = !light_follower(max_intensity, light_readings, &movement, robot.get_max_advance());
+                    enable_movements = !light_follower(max_intensity, light_readings, &movement, robot.get_max_advance(), robot.get_threshold_follower());
                 break;
                 case SM_DESTINATION:
                     enable_movements = !sm_destination(max_intensity, light_destination, &movement, &next_state, robot.get_max_advance(), robot.get_max_turn_angle());
