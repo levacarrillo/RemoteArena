@@ -6,8 +6,6 @@
 !LICENSE
 !readme.MD
 
+!LightReadings.srv
+
 # And these subdirectories
-!arena_control/
-!arena_mapping/
-!arena_web_server/
-!robot_simulator/

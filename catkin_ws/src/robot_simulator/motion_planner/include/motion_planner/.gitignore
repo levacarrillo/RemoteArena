@@ -6,8 +6,6 @@
 !LICENSE
 !readme.MD
 
+!motion_planner.h
+!motion_planner_utilities.h
 # And these subdirectories
-!arena_control/
-!arena_mapping/
-!arena_web_server/
-!robot_simulator/

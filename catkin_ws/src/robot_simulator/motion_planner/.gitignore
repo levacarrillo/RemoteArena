@@ -6,8 +6,14 @@
 !LICENSE
 !readme.MD
 
+!CMakeLists.txt
+!package.xml
+
 # And these subdirectories
-!arena_control/
-!arena_mapping/
-!arena_web_server/
-!robot_simulator/
+!include/
+!launch/
+!params/
+!src/
+!srv/
+!state_machines/
+!utilities/

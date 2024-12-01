@@ -6,8 +6,5 @@
 !LICENSE
 !readme.MD
 
+!structures.h
 # And these subdirectories
-!arena_control/
-!arena_mapping/
-!arena_web_server/
-!robot_simulator/

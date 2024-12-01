@@ -1,0 +1,12 @@
+# Ignore everything
+*
+
+# But these files
+!.gitignore
+!LICENSE
+!readme.MD
+
+!laser_scan_node.cpp
+!light_sensors_node.cpp
+
+# And these subdirectories

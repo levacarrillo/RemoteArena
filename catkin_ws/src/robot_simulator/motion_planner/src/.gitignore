@@ -6,8 +6,7 @@
 !LICENSE
 !readme.MD
 
+!light_processing_node.cpp
+!motion_planner_node.cpp
+
 # And these subdirectories
-!arena_control/
-!arena_mapping/
-!arena_web_server/
-!robot_simulator/

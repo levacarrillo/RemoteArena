@@ -6,8 +6,10 @@
 !LICENSE
 !readme.MD
 
+!light_follower.h
+!sm_avoid_obstacles.h
+!sm_avoidance_destination.h
+!sm_destination.h
+!user_sm.h
+
 # And these subdirectories
-!arena_control/
-!arena_mapping/
-!arena_web_server/
-!robot_simulator/
