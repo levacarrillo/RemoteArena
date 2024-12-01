@@ -9,5 +9,4 @@
 !CMakeLists.txt
 !package.xml
 
-!profiles.h
-!robot_setup.h
+!*.h

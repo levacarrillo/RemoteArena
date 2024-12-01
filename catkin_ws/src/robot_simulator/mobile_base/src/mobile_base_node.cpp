@@ -4,9 +4,9 @@
 #include <geometry_msgs/TransformStamped.h>
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2_ros/transform_broadcaster.h>
-#include <sensor_msgs/JointState.h>
+// #include <sensor_msgs/JointState.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
-#include <mobile_base/robot_setup.h>
+#include <mobile_base/mobile_base_utils.h>
 #include <mobile_base/OdomSetPoint.h>
 #include <tf2_ros/transform_listener.h>
 #include <geometry_msgs/TransformStamped.h>
@@ -68,7 +68,7 @@ int main(int argc, char ** argv) {
     ros::Rate rate(30);
 
     ros::Subscriber subCmdVel = nh.subscribe("/mobile_base/cmd_vel", 1, callbackCmdVel);
-    ros::Publisher pubJointState   = nh.advertise<sensor_msgs::JointState>("/joint_states", 1);
+    // ros::Publisher pubJointState   = nh.advertise<sensor_msgs::JointState>("/joint_states", 1);
     ros::ServiceServer odomService = nh.advertiseService("/mobile_base/odom_set_point", odomCallback);
     
     pubOdom  = nh.advertise<nav_msgs::Odometry>("odom", 1);
@@ -78,11 +78,11 @@ int main(int argc, char ** argv) {
 	std::string jointNames[2] = {"left_wheel_joint_connect", "right_wheel_joint_connect"};
 	float jointPositions[2] = {0.0, 0.0};
 
-	sensor_msgs::JointState jointState;
 	nav_msgs::Odometry odom;
+	// sensor_msgs::JointState jointState;
 
-	jointState.name.insert(jointState.name.begin(), jointNames, jointNames + 2);
-	jointState.position.insert(jointState.position.begin(), jointPositions, jointPositions + 2);
+	// jointState.name.insert(jointState.name.begin(), jointNames, jointNames + 2);
+	// jointState.position.insert(jointState.position.begin(), jointPositions, jointPositions + 2);
 
     static tf2_ros::StaticTransformBroadcaster br;
     br.sendTransform(getTFStamped("map", "odom", robot_pose_x, robot_pose_y, robot_pose_w));
@@ -91,7 +91,7 @@ int main(int argc, char ** argv) {
         double dt = rate.expectedCycleTime().toSec();
 
         publishOdom(odom, dt);
-        pubJointState.publish(jointState);
+        // pubJointState.publish(jointState);
 
         rate.sleep();
         ros::spinOnce();

@@ -43,6 +43,6 @@ add_dependencies(mobile_base_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_E
 target_link_libraries(mobile_base_node ${catkin_LIBRARIES})
 
 
-add_executable(move_minibot_node src/move_minibot_node.cpp)
-add_dependencies(move_minibot_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(move_minibot_node ${catkin_LIBRARIES})
+add_executable(simple_move_node src/simple_move_node.cpp)
+add_dependencies(simple_move_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(simple_move_node ${catkin_LIBRARIES})

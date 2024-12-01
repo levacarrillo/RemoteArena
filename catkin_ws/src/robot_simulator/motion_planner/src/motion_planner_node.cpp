@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
                     enable_movements = !user_sm(max_intensity, light_readings, lidar_readings, 3, 0.3, light_destination, obstacles_detected, &movement, &next_state, robot.get_max_advance(), robot.get_max_turn_angle());
                 break;
                 default:
-                    std::cout << " *************** NO BEHAVIOR DEFINED *************** " << std::endl;
+                    std::cout << " *************** motion_planner.->  NO BEHAVIOR DEFINED *************** " << std::endl;
                     movement.twist = 0.0;
                     movement.advance = 0.0;
                 break;
@@ -73,12 +73,12 @@ int main(int argc, char* argv[]) {
                 //     std::cout << lidar_readings[i] << ",";
                 // }
                 // std::cout << "]" << std::endl;
-                std::cout << "BEHAVIOR SELECTED->" << behavior << std::endl;
+                std::cout << "motion_planner.-> BEHAVIOR SELECTED->" << behavior << std::endl;
                 std::cout << "\n \n  MOTION PLANNER \n____________________________\n" << std::endl;
                 // std::cout << "Light" << std::endl;
                 // std::cout << "Robot: " << std::endl;
                 // std::cout << "Step" << std::endl;
-                std::cout << "Movement: twist: " << movement.twist << " advance: " << movement.advance << "\n" << std::endl;
+                std::cout << "motion_planner.-> Movement: twist: " << movement.twist << "\tadvance: " << movement.advance << "\n" << std::endl;
                 robot.move_to_pose(movement.twist, movement.advance);
             }
         }

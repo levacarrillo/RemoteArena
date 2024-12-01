@@ -11,10 +11,10 @@ class MotionPlanner {
         ros::NodeHandle &nh_;
         ros::Subscriber lidar_sub;
         ros::ServiceClient movement_client, light_client;
+        std::string behavior;
         bool enable_movements;
         float max_advance_distance;
         float max_turn_angle;
-        std::string behavior;
         float light_readings[8];
         float max_intensity;
 
@@ -42,7 +42,7 @@ class MotionPlanner {
             srv.request.theta    = theta;
             srv.request.distance = advance;
             if (movement_client.call(srv)) {
-                if(srv.response.done) std::cout << "ROBOT MOVEMENT DONE" << std::endl;
+                if(srv.response.done) std::cout << "motion_planner.-> ROBOT MOVEMENT DONE" << std::endl;
                 else ROS_ERROR("motion_planner.->FAILED TO ROBOT MOVEMENT");
             } else {
                 ROS_ERROR("motion_planner.->FAILED TO CALL SERVICE /mobile_base/move_to_pose");

@@ -93,7 +93,7 @@ class ROS:
             
 
     def set_light_bulbs_state(self, rest_data):
-        print(rest_data)
+        # print(rest_data)
         lights_array = rest_data['lights']
         if 1 in lights_array:
             rospy.set_param('/hardware/light_bulbs', [True, False])
