@@ -22,7 +22,8 @@ float robot_pose_x;
 float robot_pose_y;
 float robot_pose_w;
 
-// THIS POSES ARE FOR ROBOT'S SIMULATION
+// SETTING UP PARAMETERS
+// THESE POSES ARE ONLY FOR ROBOT'S SIMULATION
 bool setInitialPose() {
     if(ros::param::has("/mobile_base/robot_pose_x")) ros::param::get("/mobile_base/robot_pose_x", robot_pose_x);
     else { ROS_ERROR("There's no parameter for /mobile_base/robot_pose_x"); return false; }
@@ -91,11 +92,12 @@ float sigmoideProfile(float angle_error, float alpha) {
     return max_angular_vel * (2 / (1 + exp( -angle_error / alpha)) - 1);
 }
 
-geometry_msgs::Twist getAngularVelocity(float angle_error) {
+geometry_msgs::Twist getAngularVelocity(float goal_angle, float angle_error) {
     geometry_msgs::Twist angular_vel;
     angular_vel.linear.x = 0.0;
     angular_vel.linear.y = 0.0;
     angular_vel.angular.z = sigmoideProfile(angle_error, angular_alpha);
+    // angular_vel.angular.z = uniformProfile(goal_angle);
 
     return angular_vel;
 }

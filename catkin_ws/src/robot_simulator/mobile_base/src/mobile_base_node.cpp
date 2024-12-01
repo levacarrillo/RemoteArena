@@ -75,8 +75,8 @@ int main(int argc, char ** argv) {
 
     if (!setInitialPose()) { return -1; }
 
-	std::string jointNames[2] = {"left_wheel_joint_connect", "right_wheel_joint_connect"};
-	float jointPositions[2] = {0.0, 0.0};
+	// std::string jointNames[2] = {"left_wheel_joint_connect", "right_wheel_joint_connect"};
+	// float jointPositions[2] = {0.0, 0.0};
 
 	nav_msgs::Odometry odom;
 	// sensor_msgs::JointState jointState;

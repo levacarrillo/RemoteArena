@@ -4,7 +4,7 @@ enable_movements: false
 max_time_limit: 10000
 # POSITION TOLERANCY
 angle_tolerancy: 0.008726
-distance_tolerancy: 0.05
+distance_tolerancy: 0.001
 # PARAMETERS FOR LINEAR ADVANCE
 max_linear_vel: 0.1
 speed_increment: 0.005
