@@ -84,6 +84,10 @@ def move_robot_to_pose():
 def run_executable():
     return jsonify(ros.run_command(request.get_json()))
 
+@app.route('/select_behavior', methods=['POST'])
+def select_behavior():
+    return jsonify(ros.select_behavior(request.get_json()))
+
 
 if __name__ == '__main__':
     user = User(app)

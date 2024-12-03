@@ -1,0 +1,10 @@
+<launch>
+    <!-- Play the recorded topics -->
+    <include file="$(find arena_mapping)/launch/arena_simul_real_robot.launch" />
+    
+    <group ns="web_server">
+        <!-- Nodes to start web characteristics -->
+        <node name="web_video_server" pkg="web_video_server" type="web_video_server" output="screen" />
+        <node name="web_controller" pkg="arena_web_server" type="web_controller.py" output="screen" />
+    </group>
+</launch>

@@ -20,11 +20,12 @@ class ROS:
         self.batt_percent = "0%"
         self.cpu_temp = "--"
         self.laser_scan = []
+        self.selected_behavior = "light_follower"
 
         self.rate = rospy.Rate(10)
         self.movement_time = 1.3 #sec
-        self.linear_vel  = 0.2
-        self.angular_vel = 0.4
+        self.linear_vel  = 0.15
+        self.angular_vel = 1.2
 
     def cpu_temp_callback(self, data):
         self.cpu_temp = data.data + '°C'
@@ -35,10 +36,13 @@ class ROS:
     def scan_callback(self, data):
         self.laser_scan = data.ranges
 
+    def select_behavior(self, rest_data):
+        self.selected_behavior = rest_data['behavior']
 
     def run_command(self, rest_data):
         exec_command = rest_data['command']
         if exec_command == 'run_algorithm':
+            rospy.set_param('/motion_planner/behavior', self.selected_behavior)
             rospy.set_param('/mobile_base/enable_movements', True)
         elif exec_command == 'stop':
             rospy.set_param('/mobile_base/enable_movements', False)

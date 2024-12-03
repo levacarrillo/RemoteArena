@@ -23,7 +23,6 @@ float robot_pose_y;
 float robot_pose_w;
 
 // SETTING UP PARAMETERS
-// THESE POSES ARE ONLY FOR ROBOT'S SIMULATION
 bool setInitialPose() {
     if(ros::param::has("/mobile_base/robot_pose_x")) ros::param::get("/mobile_base/robot_pose_x", robot_pose_x);
     else { ROS_ERROR("There's no parameter for /mobile_base/robot_pose_x"); return false; }

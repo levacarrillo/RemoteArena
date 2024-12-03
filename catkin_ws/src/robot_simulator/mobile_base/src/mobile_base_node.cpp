@@ -19,7 +19,8 @@ double vx = 0.0, vth = 0.0;
 ros::Publisher pubOdom;
 
 
-void publishOdom(nav_msgs::Odometry odom, double dt) {
+void publishOdom(double dt) {
+    nav_msgs::Odometry odom;
     robotX += vx * cos(robotT) * dt;
     robotY += vx * sin(robotT) * dt;
     robotT += vth * dt;
@@ -77,8 +78,6 @@ int main(int argc, char ** argv) {
 
 	// std::string jointNames[2] = {"left_wheel_joint_connect", "right_wheel_joint_connect"};
 	// float jointPositions[2] = {0.0, 0.0};
-
-	nav_msgs::Odometry odom;
 	// sensor_msgs::JointState jointState;
 
 	// jointState.name.insert(jointState.name.begin(), jointNames, jointNames + 2);
@@ -89,8 +88,7 @@ int main(int argc, char ** argv) {
     
     while(ros::ok()) {
         double dt = rate.expectedCycleTime().toSec();
-
-        publishOdom(odom, dt);
+        publishOdom(dt);
         // pubJointState.publish(jointState);
 
         rate.sleep();
