@@ -1,10 +1,11 @@
 <launch>
-    <!-- Robot' description -->
+    <!-- SIMULATOR FOR ROBOT'S HARDWARE -->
+    <include file="$(find hardware)/launch/hardware_simul.launch" />
+    <!-- ROBOT'S DESCRIPTION -->
     <param name="robot_description" command="cat '$(find mobile_base)/assets/urdf/minibot.urdf'" />
 
     <group ns="mobile_base">
         <rosparam command="load" file="$(find mobile_base)/assets/params/movement_params.yaml" />
-        <rosparam command="load" file="$(find mobile_base)/assets/params/setup_simul.yaml" />
 
         <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
             <remap from="joint_states" to="/joint_states" />

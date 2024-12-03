@@ -6,6 +6,5 @@
 !LICENSE
 !readme.MD
 
-!config_plot_pid.xml
-!config_plot_profiles.xml
-!config_simulator.rviz
+!*.xml
+!*.rviz

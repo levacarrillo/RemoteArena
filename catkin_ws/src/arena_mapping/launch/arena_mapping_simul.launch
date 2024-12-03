@@ -4,7 +4,7 @@
     
     <group ns="arena_mapping">
         <!-- NODES TO RVIZ VISUALIZATION -->
-        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find arena_mapping)/assets/visualization/config_simulator.rviz" />
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find arena_mapping)/assets/visualization/config_visualization.rviz" />
         <node name="map_server" pkg="map_server" type="map_server" args="$(find arena_mapping)/assets/maps/arena_map.yaml" >
             <param name="frame_id" value="map" />
         </node>
