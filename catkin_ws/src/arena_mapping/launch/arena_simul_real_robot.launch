@@ -9,6 +9,8 @@
         <node name="map_server" pkg="map_server" type="map_server" args="$(find arena_mapping)/assets/maps/arena_map.yaml" >
             <param name="frame_id" value="map" />
         </node>
+        <!-- Node to plot data from the real robot's wheels -->
+        <!-- <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler" args="layout '$(find arena_control)/assets/visualization/config_plot_pid.xml'" /> -->
         <!-- <node name="arena_simul_markers" pkg="arena_mapping" type="arena_simul_markers.py" /> -->
 
         <!-- Nodes to detect main characteristics -->

@@ -3,21 +3,21 @@
  <tabbed_widget parent="main_window" name="Main Window">
   <Tab containers="1" tab_name="PID's">
    <Container>
-    <DockSplitter count="2" sizes="0.500717;0.499283" orientation="-">
+    <DockSplitter orientation="-" count="2" sizes="0.500752;0.499248">
      <DockArea name="...">
-      <plot mode="TimeSeries" style="Lines" flip_y="false" flip_x="false">
-       <range bottom="-0.100000" right="8.047763" left="3.069917" top="0.100000"/>
+      <plot flip_x="false" flip_y="false" style="Lines" mode="TimeSeries">
+       <range left="353.711822" bottom="0.084325" top="0.631130" right="372.588536"/>
        <limitY/>
-       <curve color="#1f77b4" name="/curr_speeds/data[0]"/>
-       <curve color="#d62728" name="/curr_speeds/data[1]"/>
+       <curve color="#d62728" name="/hardware/curr_speeds/data[0]"/>
+       <curve color="#1ac938" name="/hardware/curr_speeds/data[1]"/>
       </plot>
      </DockArea>
      <DockArea name="...">
-      <plot mode="TimeSeries" style="Lines" flip_y="false" flip_x="false">
-       <range bottom="-0.100000" right="8.047763" left="3.069917" top="0.100000"/>
+      <plot flip_x="false" flip_y="false" style="Lines" mode="TimeSeries">
+       <range left="353.711822" bottom="-0.100000" top="0.100000" right="372.588536"/>
        <limitY/>
-       <curve color="#1ac938" name="/curr_speeds/data[4]"/>
-       <curve color="#ff7f0e" name="/curr_speeds/data[5]"/>
+       <curve color="#ff7f0e" name="/hardware/curr_speeds/data[4]"/>
+       <curve color="#f14cc1" name="/hardware/curr_speeds/data[5]"/>
       </plot>
      </DockArea>
     </DockSplitter>
@@ -48,7 +48,7 @@
    <max_array_size value="104"/>
    <boolean_strings_to_number value="true"/>
    <remove_suffix_from_strings value="true"/>
-   <selected_topics value="/curr_speeds"/>
+   <selected_topics value="/hardware/curr_speeds"/>
   </plugin>
   <plugin ID="UDP Server"/>
   <plugin ID="WebSocket Server"/>
